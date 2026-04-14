@@ -1,14 +1,24 @@
 <!DOCTYPE html>
-<html lang="en" class="dark theme-indigo">
+<html lang="en" class="dark theme-blue">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NOVA Web Studio</title>
-    
-    <!-- Premium Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="theme-color" content="#000000">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="NOVA">
+    <title>NOVA by Aravind - Ultimate Edition</title>
+
+    <!-- Dynamic PWA Icon & Manifest -->
+    <script>
+        (function() {
+            const svgData = `<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><rect width='512' height='512' rx='112' fill='#1C1C1E'/><path d='M256 120l25 111 111 25-111 25-25 111-25-111-111-25 111-25z' fill='#0A84FF'/></svg>`;
+            const svgUrl = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(svgData);
+            const iconLink = document.createElement('link');
+            iconLink.rel = 'icon'; iconLink.type = 'image/svg+xml'; iconLink.href = svgUrl;
+            document.head.appendChild(iconLink);
+        })();
+    </script>
     
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -17,306 +27,462 @@
             darkMode: 'class',
             theme: {
                 extend: {
-                    fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
-                        mono: ['Fira Code', 'monospace'],
+                    fontFamily: { 
+                        sans: ['-apple-system', 'BlinkMacSystemFont', '"SF Pro Text"', 'system-ui', 'sans-serif'], 
+                        mono: ['ui-monospace', 'SFMono-Regular', 'Menlo', 'Monaco', 'monospace'] 
                     },
                     colors: {
-                        brand: { 400: 'var(--brand-400)', 500: 'var(--brand-500)', 600: 'var(--brand-600)' },
-                        dark: {
-                            bg: '#030305',        /* Pitch black backdrop */
-                            surface: '#0a0a0f',   /* Glass panels */
-                            border: '#1a1a24',    /* Crisp borders */
-                            text: '#f4f4f5',
-                            muted: '#8b8b9e'
+                        apple: {
+                            blue: 'var(--sys-color)',
+                            bg: '#000000',
+                            glass: 'rgba(20, 20, 25, 0.55)', 
+                            glassLight: 'rgba(255, 255, 255, 0.08)',
+                            border: 'rgba(255, 255, 255, 0.12)',
+                            text: '#FFFFFF',
+                            label: 'rgba(235, 235, 245, 0.65)'
                         }
                     },
-                    boxShadow: { 
-                        'glow': '0 0 20px var(--brand-glow)',
-                        'inner-glow': 'inset 0 1px 1px rgba(255,255,255,0.1)'
+                    boxShadow: {
+                        'glass': '0 30px 60px -12px rgba(0, 0, 0, 0.9), inset 0 1px 0 rgba(255, 255, 255, 0.15)',
+                        'card': '0 15px 35px -5px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.1)',
+                        'card-hover': '0 30px 60px -10px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(255, 255, 255, 0.25)',
                     }
                 }
             }
         }
     </script>
-    <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
     
     <style>
         :root {
-            /* Indigo Theme (Default) */
-            --brand-400: #818cf8; --brand-500: #6366f1; --brand-600: #4f46e5;
-            --brand-glow: rgba(99, 102, 241, 0.25); --brand-bg: rgba(99, 102, 241, 0.1);
+            /* Apple System Colors & Liquid Glows */
+            --sys-color: #0A84FF; --glow-1: #0A84FF; --glow-2: #5E5CE6; --glow-3: #32ADE6; --glow-4: #0A84FF;
+            /* Apple Spring Physics */
+            --spring-bounce: cubic-bezier(0.175, 0.885, 0.32, 1.15);
+            --spring-smooth: cubic-bezier(0.25, 1, 0.3, 1);
         }
-        .theme-emerald { --brand-400: #34d399; --brand-500: #10b981; --brand-600: #059669; --brand-glow: rgba(16, 185, 129, 0.25); --brand-bg: rgba(16, 185, 129, 0.1); }
-        .theme-rose { --brand-400: #fb7185; --brand-500: #f43f5e; --brand-600: #e11d48; --brand-glow: rgba(244, 63, 94, 0.25); --brand-bg: rgba(244, 63, 94, 0.1); }
-        .theme-amber { --brand-400: #fbbf24; --brand-500: #f59e0b; --brand-600: #d97706; --brand-glow: rgba(245, 158, 11, 0.25); --brand-bg: rgba(245, 158, 11, 0.1); }
+        .theme-blue { --sys-color: #0A84FF; --glow-1: #0A84FF; --glow-2: #5E5CE6; --glow-3: #32ADE6; --glow-4: #0A84FF; }
+        .theme-purple { --sys-color: #BF5AF2; --glow-1: #BF5AF2; --glow-2: #FF375F; --glow-3: #5E5CE6; --glow-4: #BF5AF2; }
+        .theme-pink { --sys-color: #FF375F; --glow-1: #FF375F; --glow-2: #FF9F0A; --glow-3: #BF5AF2; --glow-4: #FF375F; }
+        .theme-orange { --sys-color: #FF9F0A; --glow-1: #FF9F0A; --glow-2: #FF375F; --glow-3: #FFD60A; --glow-4: #FF9F0A; }
 
         /* Scrollbars */
         ::-webkit-scrollbar { width: 6px; height: 6px; }
         ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: #2a2a3b; border-radius: 10px; }
-        ::-webkit-scrollbar-thumb:hover { background: var(--brand-500); }
+        ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 10px; transition: background 0.3s; }
+        ::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.3); }
         .scrollbar-hide::-webkit-scrollbar { display: none; }
+        .touch-pan-x { -webkit-overflow-scrolling: touch; }
         
-        body { background-color: var(--dark-bg); color: var(--dark-text); overflow: hidden; }
+        body { background-color: #000; color: #FFF; overflow: hidden; overscroll-behavior: none; }
 
-        /* Ambient Background Glow */
-        .ambient-light {
-            position: fixed; top: -20vh; left: -10vw; width: 50vw; height: 50vh;
-            background: var(--brand-500); filter: blur(150px); opacity: 0.15;
-            pointer-events: none; z-index: 0; transition: background 0.5s ease;
+        /* Hardware Accelerated Liquid Mesh Background */
+        .liquid-bg { position: fixed; inset: 0; z-index: 0; overflow: hidden; background: #030305; pointer-events: none; }
+        .blob { 
+            position: absolute; border-radius: 50%; filter: blur(90px); opacity: 0.55; 
+            animation: float 22s cubic-bezier(0.4, 0, 0.2, 1) infinite alternate; 
+            transition: background-color 1s ease; 
+            will-change: transform; mix-blend-mode: screen; transform-style: preserve-3d;
+        }
+        .blob-1 { background: var(--glow-1); width: 65vw; height: 65vw; top: -15%; left: -10%; animation-delay: 0s; }
+        .blob-2 { background: var(--glow-2); width: 55vw; height: 55vw; bottom: -15%; right: -10%; animation-delay: -5s; }
+        .blob-3 { background: var(--glow-3); width: 50vw; height: 50vw; top: 25%; left: 25%; animation-delay: -10s; }
+        
+        @keyframes float {
+            0% { transform: translate3d(0, 0, 0) scale(1) rotate(0deg); }
+            33% { transform: translate3d(15vw, 10vh, 0) scale(1.1) rotate(15deg); }
+            66% { transform: translate3d(-10vw, 20vh, 0) scale(0.9) rotate(-10deg); }
+            100% { transform: translate3d(-15vw, -5vh, 0) scale(1.05) rotate(5deg); }
         }
 
-        /* NOVA Animated Title Graphics */
-        .nova-title {
-            font-size: 1.35rem; font-weight: 800; letter-spacing: -0.04em;
-            background: linear-gradient(to right, #ffffff, var(--brand-400), var(--brand-600), #ffffff);
-            background-size: 300% auto; color: transparent;
-            -webkit-background-clip: text; background-clip: text;
-            animation: shine 4s linear infinite;
+        /* Realistic Frosted Glass with Noise Texture */
+        .glass-panel {
+            background: var(--apple-glass);
+            backdrop-filter: blur(50px) saturate(200%);
+            -webkit-backdrop-filter: blur(50px) saturate(200%);
         }
-        @keyframes shine { to { background-position: 300% center; } }
+        .glass-noise::before {
+            content: ""; position: absolute; inset: 0; pointer-events: none; z-index: -1;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E");
+            border-radius: inherit; mix-blend-mode: overlay;
+        }
 
-        /* Custom Editor Component */
-        .editor-container { position: relative; width: 100%; height: 100%; overflow: hidden; background: #050508; z-index: 10; }
+        /* View Transitions */
+        .view-transition { transition: opacity 0.4s var(--spring-smooth), transform 0.5s var(--spring-bounce); transform-origin: center center; }
+        .view-hidden { opacity: 0; transform: scale(0.96) translateY(20px); pointer-events: none; position: absolute; inset: 0; }
+        .view-active { opacity: 1; transform: scale(1) translateY(0); pointer-events: auto; position: relative; height: 100%; width: 100%; display: flex; flex-direction: column; }
+
+        /* Staggered Entrance Animation for Cards */
+        @keyframes slideUpFade {
+            from { opacity: 0; transform: translateY(30px) scale(0.95); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        .animate-stagger { opacity: 0; animation: slideUpFade 0.6s var(--spring-bounce) forwards; }
+
+        /* Editor Component */
+        .editor-container { position: relative; width: 100%; height: 100%; overflow: hidden; z-index: 10; }
         .editor-textarea, .editor-pre {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            padding: 1.5rem; font-family: 'Fira Code', monospace; font-size: 14px; line-height: 1.6;
+            padding: 1.5rem 1rem; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, monospace; 
+            font-size: 15px; line-height: 1.6; letter-spacing: 0.3px;
             white-space: pre; word-wrap: normal; overflow-wrap: normal; overflow: auto;
             tab-size: 2; margin: 0; border: none; outline: none;
         }
-        .editor-textarea {
-            color: transparent; background: transparent; caret-color: var(--brand-400); z-index: 2; resize: none;
-        }
-        .editor-textarea::selection { background-color: var(--brand-bg); color: transparent; }
-        .editor-pre { z-index: 1; pointer-events: none; color: #a1a1aa; }
+        .editor-textarea { color: transparent; background: transparent; caret-color: var(--sys-color); z-index: 2; resize: none; }
+        .editor-textarea::selection { background-color: rgba(255, 255, 255, 0.2); color: transparent; border-radius: 4px; }
+        .editor-pre { z-index: 1; pointer-events: none; color: #FFFFFF; }
         
-        /* Syntax Colors (Vibrant Dark Theme) */
-        .syn-keyword { color: #ff7b72; font-weight: 500; } 
-        .syn-string { color: #a5d6ff; } 
-        .syn-number { color: #79c0ff; }
-        .syn-comment { color: #8b949e; font-style: italic; } 
-        .syn-function { color: #d2a8ff; font-weight: 500; }
-        .syn-tag { color: #7ee787; } 
-        .syn-attr { color: #79c0ff; } 
-        .syn-property { color: #d2a8ff; }
+        /* Syntax Colors */
+        .syn-keyword { color: #FF7AB2; font-weight: 600; } 
+        .syn-string { color: #FF8170; } 
+        .syn-number { color: #D9C97C; }
+        .syn-comment { color: #9DA9B4; font-style: italic; } 
+        .syn-function { color: #5DD8FF; font-weight: 500; }
+        .syn-tag { color: #5DD8FF; } 
+        .syn-attr { color: #D9C97C; } 
+        .syn-property { color: #5DD8FF; }
 
         /* Interactive Elements */
-        #resizer { width: 4px; cursor: col-resize; background: transparent; transition: background 0.2s ease; position: relative; z-index: 30; }
-        #resizer:hover, #resizer.dragging { background: var(--brand-500); box-shadow: var(--glow); }
-        .modal-backdrop { backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); background: rgba(3,3,5,0.7); }
+        .ios-btn { transition: all 0.25s cubic-bezier(0.25, 0.8, 0.25, 1); cursor: pointer; transform-origin: center; }
+        .ios-btn:active { transform: scale(0.92); opacity: 0.8; }
         
-        /* Loader */
-        .loader-bar {
-            height: 2px; background: linear-gradient(90deg, transparent, var(--brand-400), #fff, var(--brand-400), transparent);
-            width: 100%; position: absolute; top: 0; left: -100%; animation: loading 1.5s infinite; z-index: 50; display: none;
+        .project-card { transition: all 0.4s var(--spring-bounce); cursor: pointer; }
+        .project-card:hover { transform: translateY(-8px) scale(1.02); box-shadow: var(--tw-shadow-card-hover); border-color: rgba(255,255,255,0.25); }
+        .project-card:active { transform: scale(0.97) translateY(0); transition: all 0.1s ease; }
+        
+        #resizer { 
+            width: 16px; margin-left: -8px; margin-right: -8px; 
+            cursor: col-resize; background: transparent; position: relative; z-index: 30; 
+            display: flex; justify-content: center; align-items: center;
         }
-        @keyframes loading { 100% { left: 100%; } }
+        #resizer .resizer-line { width: 4px; height: 40px; background: rgba(255,255,255,0.2); border-radius: 4px; transition: all 0.3s; }
+        #resizer:active .resizer-line, #resizer.dragging .resizer-line { background: var(--sys-color); height: 100%; width: 3px; box-shadow: 0 0 12px var(--sys-color); }
+        
+        .modal-backdrop { backdrop-filter: blur(30px) saturate(150%); -webkit-backdrop-filter: blur(30px) saturate(150%); background: rgba(0,0,0,0.6); transition: opacity 0.4s ease; }
+        .modal-content { transition: transform 0.5s var(--spring-bounce), opacity 0.4s ease; }
+        .modal-enter { transform: scale(0.9) translateY(30px); opacity: 0; }
+        .modal-active { transform: scale(1) translateY(0); opacity: 1; }
+        
+        /* Drag & Drop Import Overlay */
+        #drop-zone {
+            position: fixed; inset: 0; z-index: 9999; background: rgba(0,0,0,0.8); backdrop-filter: blur(20px);
+            display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.3s ease;
+        }
+        
+        /* Viewport Sizing for Preview */
+        .viewport-container { display: flex; align-items: center; justify-content: center; width: 100%; height: 100%; background: transparent; transition: padding 0.5s var(--spring-smooth); }
+        .viewport-mobile iframe { max-width: 375px; max-height: 812px; border-radius: 40px; border: 12px solid rgba(255,255,255,0.1); box-shadow: 0 30px 60px rgba(0,0,0,0.8); transition: all 0.5s var(--spring-smooth); }
+        .viewport-tablet iframe { max-width: 820px; max-height: 1180px; border-radius: 24px; border: 12px solid rgba(255,255,255,0.1); box-shadow: 0 30px 60px rgba(0,0,0,0.8); transition: all 0.5s var(--spring-smooth); }
+        .viewport-desktop iframe { max-width: 100%; max-height: 100%; border-radius: 0; border: none; transition: all 0.5s var(--spring-smooth); }
+        
+        /* Loader Sweep Animation */
+        .loader-bar {
+            height: 3px; background: var(--sys-color);
+            width: 40%; position: absolute; top: 0; left: -40%; 
+            animation: loadingSweep 1.2s var(--spring-smooth) infinite; z-index: 50; display: none;
+            box-shadow: 0 0 15px var(--sys-color); border-radius: 0 3px 3px 0;
+        }
+        @keyframes loadingSweep { 
+            0% { left: -40%; width: 0%; }
+            50% { width: 40%; }
+            100% { left: 100%; width: 10%; } 
+        }
+
+        .run-pulse { animation: subtlePulse 2s infinite; color: var(--sys-color) !important; opacity: 1 !important; }
+        @keyframes subtlePulse {
+            0% { box-shadow: 0 0 0 0 rgba(var(--sys-color-rgb), 0.4); }
+            70% { box-shadow: 0 0 0 8px rgba(var(--sys-color-rgb), 0); }
+            100% { box-shadow: 0 0 0 0 rgba(var(--sys-color-rgb), 0); }
+        }
+
+        /* Toast Spring */
+        .toast-pill { transform: translateY(-150%) scale(0.9); opacity: 0; transition: all 0.5s var(--spring-bounce); }
+        .toast-active { transform: translateY(0) scale(1); opacity: 1; }
+
+        /* Gradients */
+        .proj-gradient-0 { background: linear-gradient(135deg, #FF9A9E, #FECFEF); }
+        .proj-gradient-1 { background: linear-gradient(135deg, #a18cd1, #fbc2eb); }
+        .proj-gradient-2 { background: linear-gradient(135deg, #84fab0, #8fd3f4); }
+        .proj-gradient-3 { background: linear-gradient(135deg, #fccb90, #d57eeb); }
+        .proj-gradient-4 { background: linear-gradient(135deg, #e0c3fc, #8ec5fc); }
     </style>
 </head>
-<body class="flex flex-col h-[100dvh] w-screen font-sans selection:bg-brand-500/30">
+<body class="flex flex-col h-[100dvh] w-screen font-sans selection:bg-apple-blue/40 pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)] pl-[env(safe-area-inset-left)] pr-[env(safe-area-inset-right)]">
 
-    <!-- Ambient Lighting Effect -->
-    <div class="ambient-light"></div>
+    <!-- LIQUID MESH BACKGROUND -->
+    <div class="liquid-bg">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+        <div class="blob blob-3"></div>
+    </div>
 
-    <!-- Graphical Top Header -->
-    <header class="h-16 flex-shrink-0 bg-dark-surface/80 backdrop-blur-md border-b border-dark-border flex items-center justify-between px-4 z-40 relative">
-        <div class="flex items-center gap-3">
-            <button onclick="toggleMobileSidebar()" class="md:hidden p-1.5 text-dark-muted hover:text-white rounded-md transition-colors"><i data-lucide="menu" class="w-5 h-5"></i></button>
-            
-            <!-- NOVA Logo Graphic -->
-            <div onclick="UI.toggleProjectModal()" class="flex items-center gap-3 group cursor-pointer p-1 rounded-xl hover:bg-white/5 transition-all">
-                <div class="relative flex items-center justify-center w-9 h-9 rounded-xl bg-gradient-to-br from-dark-surface to-[#000] border border-white/10 shadow-glow group-hover:scale-105 transition-transform duration-300">
-                    <i data-lucide="sparkles" class="w-4 h-4 text-white drop-shadow-[0_0_8px_rgba(255,255,255,0.8)]" style="color: var(--brand-400)"></i>
-                    <div class="absolute inset-0 rounded-xl ring-1 ring-inset ring-white/10"></div>
-                </div>
-                <div class="flex flex-col leading-tight hidden sm:flex">
-                    <div class="flex items-center gap-1.5">
-                        <span class="nova-title">NOVA</span>
-                        <span class="text-[9px] font-bold tracking-widest text-white/70 bg-white/10 px-1.5 py-0.5 rounded shadow-inner-glow">STUDIO</span>
-                    </div>
-                    <div class="flex items-center gap-1">
-                        <span id="current-project-title" class="text-[11px] text-dark-muted font-medium truncate max-w-[150px] group-hover:text-white transition-colors">Loading...</span>
-                        <i data-lucide="chevron-down" class="w-3 h-3 text-dark-muted group-hover:text-brand-400 transition-colors"></i>
-                    </div>
-                </div>
+    <!-- DRAG & DROP OVERLAY -->
+    <div id="drop-zone">
+        <div class="bg-white/10 border-2 border-dashed border-apple-blue rounded-[3rem] p-12 flex flex-col items-center shadow-glass backdrop-blur-3xl transform scale-105 transition-transform duration-300" id="drop-box">
+            <div class="w-20 h-20 bg-apple-blue/20 rounded-full flex items-center justify-center mb-6 shadow-[0_0_30px_var(--sys-color)]">
+                <i data-lucide="cloud-download" class="w-10 h-10 text-apple-blue animate-bounce"></i>
             </div>
-        </div>
-        
-        <div class="flex items-center gap-3 md:gap-4">
-            <!-- Theme Color Selector -->
-            <div class="hidden lg:flex items-center gap-2 bg-[#000]/40 px-2.5 py-1.5 rounded-full border border-dark-border shadow-inner">
-                <button onclick="setTheme('indigo')" class="w-3.5 h-3.5 rounded-full bg-[#6366f1] ring-2 ring-transparent hover:ring-[#6366f1]/50 transition-all"></button>
-                <button onclick="setTheme('emerald')" class="w-3.5 h-3.5 rounded-full bg-[#10b981] ring-2 ring-transparent hover:ring-[#10b981]/50 transition-all"></button>
-                <button onclick="setTheme('rose')" class="w-3.5 h-3.5 rounded-full bg-[#f43f5e] ring-2 ring-transparent hover:ring-[#f43f5e]/50 transition-all"></button>
-                <button onclick="setTheme('amber')" class="w-3.5 h-3.5 rounded-full bg-[#f59e0b] ring-2 ring-transparent hover:ring-[#f59e0b]/50 transition-all"></button>
-            </div>
-
-            <!-- Run / Build Controls -->
-            <div class="hidden sm:flex items-center gap-3 bg-[#000]/40 px-3 py-1.5 rounded-xl border border-dark-border shadow-inner">
-                <label class="flex items-center gap-2 text-xs font-semibold cursor-pointer text-dark-muted hover:text-white transition-colors">
-                    <input type="checkbox" id="auto-run-toggle" checked class="accent-brand-500 w-3.5 h-3.5 cursor-pointer"> Live Sync
-                </label>
-                <div class="w-px h-4 bg-dark-border"></div>
-                <button id="run-btn" disabled class="flex items-center gap-1.5 text-xs font-bold transition-all text-dark-muted opacity-50 cursor-not-allowed uppercase tracking-wider">
-                    <i data-lucide="zap" class="w-3.5 h-3.5 fill-current"></i> Build
-                </button>
-            </div>
-
-            <!-- View Modes -->
-            <div class="flex items-center space-x-1 border border-dark-border rounded-xl bg-[#000]/40 p-1 shadow-inner">
-                <button onclick="UI.setViewMode('editor')" id="btn-view-editor" class="p-1.5 rounded-lg text-dark-muted hover:text-white hover:bg-white/5 transition-all" title="Code"><i data-lucide="code-2" class="w-4 h-4"></i></button>
-                <button onclick="UI.setViewMode('split')" id="btn-view-split" class="hidden md:block p-1.5 rounded-lg bg-dark-surface border border-dark-border text-brand-400 shadow-glow transition-all" title="Split View"><i data-lucide="layout" class="w-4 h-4"></i></button>
-                <button onclick="UI.setViewMode('preview')" id="btn-view-preview" class="p-1.5 rounded-lg text-dark-muted hover:text-white hover:bg-white/5 transition-all" title="Preview"><i data-lucide="play" class="w-4 h-4 md:hidden"></i><i data-lucide="monitor" class="w-4 h-4 hidden md:block"></i></button>
-            </div>
-        </div>
-    </header>
-
-    <!-- Main Workspace Area -->
-    <main class="flex-1 flex overflow-hidden relative z-10">
-        
-        <!-- Sidebar (File Explorer) -->
-        <aside id="sidebar" class="absolute md:relative w-64 md:w-[240px] h-full flex-shrink-0 flex flex-col bg-dark-surface/90 backdrop-blur-xl border-r border-dark-border z-40 transform -translate-x-full md:translate-x-0 transition-transform duration-300">
-            <div class="px-4 py-3 border-b border-dark-border flex justify-between items-center bg-[#000]/20">
-                <span class="text-[10px] font-bold text-dark-muted tracking-[0.25em] uppercase">Files</span>
-                <div class="flex gap-1">
-                    <button onclick="Workspace.createFile()" class="text-dark-muted hover:text-brand-400 hover:bg-brand-500/10 rounded p-1 transition-colors" title="New File"><i data-lucide="file-plus" class="w-4 h-4"></i></button>
-                    <button onclick="toggleMobileSidebar()" class="md:hidden text-dark-muted hover:text-white hover:bg-white/10 rounded p-1 transition-colors"><i data-lucide="x" class="w-4 h-4"></i></button>
-                </div>
-            </div>
-            <div id="file-list" class="flex-1 overflow-y-auto py-3 px-2 space-y-1"></div>
-        </aside>
-
-        <div id="sidebar-overlay" onclick="toggleMobileSidebar()" class="absolute inset-0 bg-black/60 z-30 hidden md:hidden backdrop-blur-sm transition-opacity opacity-0"></div>
-
-        <!-- Dynamic Container for Editor and Preview -->
-        <div id="workspace-container" class="flex-1 flex flex-col md:flex-row min-w-0 w-full relative">
-            
-            <!-- CODE EDITOR SECTION -->
-            <section id="editor-section" class="flex flex-col min-w-0 w-full md:w-1/2 h-full z-10 bg-[#050508]">
-                <!-- Tabs -->
-                <div class="flex items-center justify-between border-b border-dark-border bg-dark-surface pr-2 shadow-sm">
-                    <div id="editor-tabs" class="flex items-center overflow-x-auto scrollbar-hide flex-1 pt-1 pl-1"></div>
-                    <div class="flex items-center gap-1 pl-2 border-l border-dark-border hidden md:flex">
-                        <button onclick="Workspace.copyContent()" class="p-1.5 text-dark-muted hover:text-brand-400 rounded-lg hover:bg-brand-500/10 transition-colors" title="Copy code"><i data-lucide="copy" class="w-4 h-4"></i></button>
-                    </div>
-                </div>
-                
-                <!-- Editor Core -->
-                <div class="flex-1 flex overflow-hidden relative editor-container">
-                    <div id="line-numbers" class="w-12 flex-shrink-0 flex flex-col items-end pr-3 py-[1.5rem] text-[14px] font-mono select-none bg-[#030305] text-dark-muted border-r border-dark-border overflow-hidden opacity-40 z-10 leading-[1.6]"></div>
-                    <div class="relative flex-1 h-full overflow-hidden">
-                        <pre id="editor-pre" class="editor-pre" aria-hidden="true"><code></code></pre>
-                        <textarea id="code-editor" class="editor-textarea" spellcheck="false" autocapitalize="off" autocomplete="off"></textarea>
-                    </div>
-                </div>
-            </section>
-
-            <!-- DRAGGABLE SPLITTER -->
-            <div id="resizer" class="hidden md:flex justify-center items-center group">
-                <div class="h-8 w-1 rounded-full bg-white/20 group-hover:bg-white/50 transition-colors"></div>
-            </div>
-
-            <!-- LIVE PREVIEW SECTION -->
-            <section id="preview-section" class="flex flex-col min-w-0 w-full md:w-1/2 h-full bg-dark-bg md:border-l border-dark-border relative z-10 hidden md:flex">
-                <div id="loader" class="loader-bar"></div>
-                
-                <!-- Mock Browser Bar -->
-                <div class="h-12 border-b border-dark-border bg-dark-surface flex items-center px-4 gap-4 flex-shrink-0 shadow-sm">
-                    <div class="flex gap-2 opacity-80">
-                        <div class="w-3 h-3 rounded-full bg-[#ff5f56] border border-[#e0443e]"></div>
-                        <div class="w-3 h-3 rounded-full bg-[#ffbd2e] border border-[#dea123]"></div>
-                        <div class="w-3 h-3 rounded-full bg-[#27c93f] border border-[#1aab29]"></div>
-                    </div>
-                    <div class="flex-1 flex items-center gap-2 bg-[#000]/40 border border-dark-border rounded-lg px-3 py-1.5 max-w-md mx-auto relative group shadow-inner">
-                        <i data-lucide="lock" class="w-3 h-3 text-brand-400 opacity-80"></i>
-                        <span class="text-[12px] text-dark-muted font-mono truncate select-none">nova.local <span class="opacity-30">/ index.html</span></span>
-                        <button onclick="Engine.run()" class="absolute right-2 opacity-0 group-hover:opacity-100 text-dark-muted hover:text-brand-400 transition-opacity"><i data-lucide="rotate-cw" class="w-3.5 h-3.5"></i></button>
-                    </div>
-                    <button onclick="Workspace.openNewTab()" class="text-dark-muted hover:text-white bg-white/5 p-1.5 rounded-lg transition-colors border border-white/5 hover:border-white/20"><i data-lucide="external-link" class="w-4 h-4"></i></button>
-                </div>
-
-                <!-- Iframe -->
-                <div class="flex-1 relative bg-white overflow-hidden" id="iframe-wrapper">
-                    <!-- Checkboard pattern for transparency indication -->
-                    <div class="absolute inset-0 opacity-5 pointer-events-none" style="background-image: linear-gradient(45deg, #000 25%, transparent 25%), linear-gradient(-45deg, #000 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #000 75%), linear-gradient(-45deg, transparent 75%, #000 75%); background-size: 20px 20px; background-position: 0 0, 0 10px, 10px -10px, -10px 0px;"></div>
-                    <iframe id="preview-frame" sandbox="allow-scripts allow-modals allow-same-origin" class="w-full h-full border-none absolute inset-0 bg-transparent"></iframe>
-                </div>
-                
-                <!-- Terminal/Console -->
-                <div class="h-[30%] min-h-[120px] max-h-[60%] flex flex-col border-t border-dark-border bg-[#030305] relative">
-                    <div class="absolute top-0 left-0 w-full h-1.5 cursor-row-resize -mt-1 z-10 hover:bg-brand-500/50 transition-colors"></div>
-                    <div class="flex justify-between items-center px-4 py-2 bg-dark-surface/50 border-b border-dark-border text-[11px] text-dark-text tracking-wider uppercase font-bold backdrop-blur-sm">
-                        <div class="flex items-center gap-2"><i data-lucide="terminal" class="w-4 h-4 text-brand-400"></i> Dev Console</div>
-                        <button onclick="Engine.clearConsole()" class="text-dark-muted hover:text-red-400 flex gap-1 items-center transition-colors"><i data-lucide="trash-2" class="w-3 h-3"></i> Clear</button>
-                    </div>
-                    <div id="console-output" class="flex-1 overflow-y-auto p-3 font-mono text-[12px] leading-relaxed flex flex-col gap-1.5 shadow-inner"></div>
-                </div>
-            </section>
-        </div>
-    </main>
-
-    <!-- CUSTOM DIALOG UI -->
-    <div id="dialog-overlay" class="hidden fixed inset-0 modal-backdrop z-[100] flex items-center justify-center p-4 opacity-0 transition-opacity duration-300">
-        <div id="dialog-box" class="bg-dark-surface border border-dark-border rounded-2xl shadow-2xl w-full max-w-sm overflow-hidden transform scale-95 transition-transform duration-300 p-6 flex flex-col gap-4 relative">
-            <!-- Glow effect -->
-            <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-brand-500 to-transparent opacity-50"></div>
-            
-            <h3 id="dialog-title" class="text-xl font-bold text-white tracking-tight">Title</h3>
-            <p id="dialog-message" class="text-sm text-dark-muted leading-relaxed">Message</p>
-            <input type="text" id="dialog-input" class="hidden w-full bg-[#000]/50 border border-dark-border rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 transition-all mt-2 shadow-inner">
-            <div class="flex justify-end gap-3 mt-4">
-                <button id="dialog-cancel" class="px-5 py-2.5 rounded-xl text-sm font-semibold text-dark-muted hover:text-white hover:bg-white/5 transition-colors">Cancel</button>
-                <button id="dialog-confirm" class="px-5 py-2.5 rounded-xl text-sm font-semibold bg-brand-600 hover:bg-brand-500 text-white transition-all shadow-[0_0_15px_var(--brand-glow)] hover:shadow-[0_0_25px_var(--brand-glow)]">Confirm</button>
-            </div>
+            <h2 class="text-3xl font-bold text-white mb-2 tracking-tight">Drop files to import</h2>
+            <p class="text-apple-label font-medium text-lg">Automatically adds to your workspace</p>
         </div>
     </div>
 
-    <!-- PROJECT MANAGER MODAL -->
-    <div id="project-modal" class="hidden fixed inset-0 modal-backdrop z-[60] flex items-center justify-center p-4 opacity-0 transition-opacity duration-300">
-        <div class="bg-dark-surface border border-dark-border rounded-2xl shadow-2xl w-full max-w-3xl overflow-hidden flex flex-col max-h-[85vh] transform scale-95 transition-transform duration-300 relative" id="project-modal-content">
-            <div class="px-6 py-5 border-b border-dark-border flex justify-between items-center bg-[#050508]/50">
+    <!-- MAIN APP CONTAINER -->
+    <div class="absolute inset-0 flex flex-col overflow-hidden">
+        
+        <!-- ========================================== -->
+        <!-- VIEW 1: HOME DASHBOARD                     -->
+        <!-- ========================================== -->
+        <div id="home-view" class="view-transition view-active glass-panel glass-noise z-20 m-0 md:m-4 md:mb-6 md:rounded-[3rem] shadow-glass border-0 md:border md:border-apple-border">
+            
+            <!-- Home Header -->
+            <header class="h-20 flex-shrink-0 flex items-center justify-between px-6 md:px-8 z-40 border-b border-white/5 relative">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-2xl bg-apple-blue flex items-center justify-center shadow-[0_0_20px_var(--sys-color)] transition-all duration-300">
+                        <i data-lucide="sparkles" class="w-5 h-5 text-white"></i>
+                    </div>
+                    <span class="font-bold text-[24px] tracking-tight text-white">NOVA</span>
+                </div>
+                
+                <!-- Right Controls (Theme & Profile) -->
                 <div class="flex items-center gap-4">
-                    <div class="bg-brand-500/10 p-2 rounded-xl text-brand-400 border border-brand-500/20 shadow-glow"><i data-lucide="layers" class="w-6 h-6"></i></div>
-                    <div>
-                        <h2 class="text-xl font-bold text-white tracking-tight">Nova Workspaces</h2>
-                        <p class="text-[12px] text-dark-muted mt-0.5">Manage your local browser projects</p>
+                    <div class="hidden sm:flex items-center gap-2 bg-black/20 px-3 py-1.5 rounded-full border border-white/5 shadow-inner">
+                        <button onclick="setTheme('blue')" class="w-4 h-4 rounded-full bg-[#0A84FF] ios-btn ring-2 ring-transparent focus:ring-[#0A84FF]/50"></button>
+                        <button onclick="setTheme('purple')" class="w-4 h-4 rounded-full bg-[#BF5AF2] ios-btn ring-2 ring-transparent focus:ring-[#BF5AF2]/50"></button>
+                        <button onclick="setTheme('pink')" class="w-4 h-4 rounded-full bg-[#FF375F] ios-btn ring-2 ring-transparent focus:ring-[#FF375F]/50"></button>
+                        <button onclick="setTheme('orange')" class="w-4 h-4 rounded-full bg-[#FF9F0A] ios-btn ring-2 ring-transparent focus:ring-[#FF9F0A]/50"></button>
+                    </div>
+                    <div class="h-10 w-10 rounded-full bg-gradient-to-br from-gray-800 to-black border border-white/10 flex items-center justify-center shadow-[0_0_15px_rgba(0,0,0,0.5)] ios-btn" title="Developed by Aravind">
+                        <span class="text-white font-extrabold text-[13px] tracking-wide">AR</span>
                     </div>
                 </div>
-                <div class="flex items-center gap-2">
-                    <button onclick="Workspace.exportProject()" class="text-sm font-semibold flex items-center gap-2 text-dark-text hover:text-brand-400 bg-white/5 hover:bg-white/10 px-4 py-2 rounded-xl transition-all border border-white/5"><i data-lucide="download-cloud" class="w-4 h-4"></i> Export</button>
-                    <button onclick="UI.toggleProjectModal()" class="text-dark-muted hover:text-white p-2 rounded-xl hover:bg-white/10 transition-colors"><i data-lucide="x" class="w-5 h-5"></i></button>
+            </header>
+
+            <!-- Home Content Area -->
+            <div class="flex-1 overflow-y-auto touch-pan-y p-6 md:p-12 relative">
+                <div class="max-w-7xl mx-auto">
+                    
+                    <div class="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-6 animate-stagger" style="animation-delay: 0.1s">
+                        <div>
+                            <h1 class="text-4xl md:text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-white to-white/60 tracking-tight mb-2">Workspaces</h1>
+                            <p class="text-apple-label text-[16px] md:text-[18px]">Manage and launch your local browser projects.</p>
+                            <!-- Aravind Developer Badge -->
+                            <div class="mt-5 inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-black/40 border border-white/10 backdrop-blur-xl shadow-inner transition-all hover:bg-black/60 cursor-default">
+                                <div class="w-5 h-5 rounded-full bg-apple-blue flex items-center justify-center shadow-[0_0_8px_var(--sys-color)]">
+                                    <i data-lucide="code-2" class="w-3 h-3 text-white"></i>
+                                </div>
+                                <span class="text-[13px] font-medium text-apple-label">Developed by <span class="text-white font-bold tracking-wider">ARAVIND</span></span>
+                            </div>
+                        </div>
+                        <button onclick="Workspace.createProject()" class="ios-btn bg-apple-blue hover:bg-blue-500 text-white px-7 py-3.5 rounded-full font-bold text-[16px] flex items-center justify-center gap-2 shadow-[0_5px_20px_var(--sys-color)]">
+                            <i data-lucide="plus" class="w-5 h-5"></i> New Workspace
+                        </button>
+                    </div>
+
+                    <!-- Projects Grid -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 md:gap-8" id="home-project-grid">
+                        <!-- Populated by JS -->
+                    </div>
+
                 </div>
             </div>
+        </div>
+
+
+        <!-- ========================================== -->
+        <!-- VIEW 2: IDE WORKSPACE                      -->
+        <!-- ========================================== -->
+        <div id="ide-view" class="view-transition view-hidden glass-panel glass-noise z-30 m-0 md:m-4 md:mb-6 md:rounded-[3rem] shadow-glass border-0 md:border md:border-apple-border">
             
-            <div class="p-5 bg-[#030305] flex gap-3 border-b border-dark-border">
-                <div class="relative flex-1">
-                    <i data-lucide="folder-plus" class="absolute left-4 top-1/2 transform -translate-y-1/2 w-4 h-4 text-dark-muted"></i>
-                    <input type="text" id="new-project-name" placeholder="Name your new workspace..." class="w-full bg-dark-surface border border-dark-border rounded-xl pl-11 pr-4 py-3 text-sm text-white focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 transition-all shadow-inner" onkeydown="if(event.key === 'Enter') Workspace.createProject()">
+            <!-- IDE Top Navigation Bar -->
+            <header class="h-16 flex-shrink-0 flex items-center justify-between px-4 md:px-6 z-40 border-b border-apple-border relative">
+                <div class="flex items-center gap-2 md:gap-4 w-1/3">
+                    
+                    <!-- Back to Home Button -->
+                    <button onclick="UI.switchView('home')" class="ios-btn p-2.5 text-apple-label hover:text-white bg-black/20 hover:bg-black/40 rounded-full border border-white/5 shadow-inner" title="Back to Home">
+                        <i data-lucide="layout-grid" class="w-5 h-5"></i>
+                    </button>
+
+                    <div class="w-px h-6 bg-white/10 mx-1 hidden md:block"></div>
+
+                    <button onclick="UI.toggleMobileSidebar()" class="md:hidden ios-btn p-2.5 text-apple-text bg-white/10 rounded-full"><i data-lucide="sidebar" class="w-5 h-5"></i></button>
+                    <button onclick="UI.toggleDesktopSidebar()" class="hidden md:block ios-btn p-2 text-apple-label hover:text-white rounded-lg" title="Toggle Sidebar (Cmd+B)"><i data-lucide="sidebar" class="w-5 h-5"></i></button>
+                    
+                    <!-- Project Title Display -->
+                    <div class="flex items-center gap-2 py-1.5 px-3 rounded-full bg-transparent">
+                        <span id="ide-project-title" class="text-[15px] font-bold text-white truncate max-w-[120px] md:max-w-[200px]">Loading...</span>
+                    </div>
                 </div>
-                <button onclick="Workspace.createProject()" class="bg-brand-600 hover:bg-brand-500 text-white px-6 py-3 rounded-xl text-sm font-bold flex items-center gap-2 transition-all shadow-glow hover:scale-[1.02]">Create</button>
+                
+                <!-- Center Segmented Control -->
+                <div class="hidden md:flex justify-center w-1/3">
+                    <div class="flex items-center bg-black/30 p-1.5 rounded-xl border border-white/5 backdrop-blur-md shadow-inner">
+                        <button onclick="UI.setViewMode('editor')" id="btn-view-editor" class="px-6 py-1.5 rounded-lg text-[13px] font-bold text-white bg-white/20 shadow-sm transition-all ios-btn">Code</button>
+                        <button onclick="UI.setViewMode('split')" id="btn-view-split" class="px-6 py-1.5 rounded-lg text-[13px] font-bold text-apple-label hover:text-white transition-all ios-btn">Split</button>
+                        <button onclick="UI.setViewMode('preview')" id="btn-view-preview" class="px-6 py-1.5 rounded-lg text-[13px] font-bold text-apple-label hover:text-white transition-all ios-btn">Preview</button>
+                    </div>
+                </div>
+                
+                <!-- Right Controls -->
+                <div class="flex items-center justify-end gap-3 w-1/3">
+                    <div class="flex items-center gap-2 bg-apple-blue/10 border border-apple-blue/20 rounded-full px-3 py-1.5 shadow-inner">
+                        <label class="hidden sm:flex items-center gap-1.5 text-[12px] font-semibold text-apple-blue ios-btn cursor-pointer">
+                            <input type="checkbox" id="auto-run-toggle" checked class="accent-apple-blue w-3.5 h-3.5"> Auto
+                        </label>
+                        <div class="w-px h-4 bg-apple-blue/30 hidden sm:block mx-1.5"></div>
+                        <button id="run-btn" disabled class="ios-btn flex items-center gap-1.5 text-[14px] font-bold text-apple-blue opacity-50 cursor-not-allowed transition-all">
+                            <i data-lucide="play" class="w-4 h-4 fill-current"></i> <span class="hidden sm:block">Run</span>
+                        </button>
+                    </div>
+                    
+                    <button onclick="UI.toggleMobileView()" class="md:hidden ios-btn p-2.5 text-white bg-white/10 rounded-full shadow-inner"><i data-lucide="arrow-left-right" class="w-4 h-4"></i></button>
+                </div>
+            </header>
+
+            <!-- Main Inner Area -->
+            <main class="flex-1 flex overflow-hidden relative z-10">
+                
+                <!-- Sidebar (Files List) -->
+                <aside id="sidebar" class="absolute md:relative w-[320px] md:w-[260px] h-full flex-shrink-0 flex flex-col bg-black/20 border-r border-apple-border z-40 transform -translate-x-full md:translate-x-0 transition-transform duration-500 ease-[cubic-bezier(0.32,0.72,0,1)]">
+                    <div class="px-5 pt-6 pb-4 flex justify-between items-center">
+                        <span class="text-[13px] font-bold text-apple-label uppercase tracking-widest">Explorer</span>
+                        <button onclick="Workspace.createFile()" class="ios-btn text-white bg-white/10 hover:bg-white/20 p-1.5 rounded-full shadow-sm" title="New File"><i data-lucide="plus" class="w-4 h-4"></i></button>
+                    </div>
+                    <div id="file-list" class="flex-1 overflow-y-auto touch-pan-y px-3 space-y-1 pb-4"></div>
+                    
+                    <!-- Sidebar Footer (Developer Credit) -->
+                    <div class="p-4 border-t border-apple-border bg-black/10">
+                        <div class="flex items-center gap-3 px-2 opacity-80 hover:opacity-100 transition-opacity cursor-default">
+                            <div class="w-8 h-8 rounded-full bg-gradient-to-tr from-gray-800 to-black flex items-center justify-center border border-white/10 shadow-[0_0_10px_rgba(0,0,0,0.5)]">
+                                <span class="text-[10px] font-bold text-white tracking-widest">AR</span>
+                            </div>
+                            <span class="text-[12px] font-medium text-apple-label">Crafted by <span class="text-white font-bold tracking-wide">Aravind</span></span>
+                        </div>
+                    </div>
+                </aside>
+
+                <div id="sidebar-overlay" onclick="UI.toggleMobileSidebar()" class="absolute inset-0 bg-black/50 z-30 hidden md:hidden backdrop-blur-md transition-opacity opacity-0"></div>
+
+                <!-- Editor & Preview Splitter -->
+                <div id="workspace-container" class="flex-1 flex flex-col md:flex-row min-w-0 w-full relative">
+                    
+                    <!-- CODE EDITOR -->
+                    <section id="editor-section" class="flex flex-col min-w-0 w-full md:w-1/2 h-full z-10 glass-dark border-r border-apple-border relative">
+                        <!-- Tabs -->
+                        <div class="flex items-center justify-between bg-black/40 border-b border-apple-border h-12 pr-2 backdrop-blur-md z-20">
+                            <div id="editor-tabs" class="flex items-center h-full gap-1 pt-1.5 px-2 overflow-x-auto touch-pan-x scrollbar-hide flex-1"></div>
+                            <div class="flex items-center gap-1 pl-2 border-l border-white/10 hidden md:flex">
+                                <button onclick="Workspace.copyContent()" class="ios-btn p-1.5 text-apple-label hover:text-white rounded-lg hover:bg-white/10 transition-colors" title="Copy File Code"><i data-lucide="copy" class="w-4 h-4"></i></button>
+                                <button onclick="Workspace.downloadCurrentFile()" class="ios-btn p-1.5 text-apple-label hover:text-white rounded-lg hover:bg-white/10 transition-colors" title="Download This File"><i data-lucide="download" class="w-4 h-4"></i></button>
+                            </div>
+                        </div>
+                        
+                        <div class="flex-1 flex overflow-hidden relative editor-container bg-transparent">
+                            <div id="line-numbers" class="w-12 flex-shrink-0 flex flex-col items-end pr-3 py-[1.5rem] text-[13px] font-mono select-none text-apple-label opacity-40 z-10 leading-[1.6]"></div>
+                            <div class="relative flex-1 h-full overflow-hidden">
+                                <pre id="editor-pre" class="editor-pre" aria-hidden="true"><code></code></pre>
+                                <textarea id="code-editor" class="editor-textarea" spellcheck="false" autocapitalize="off" autocomplete="off" autocorrect="off"></textarea>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- SPLITTER -->
+                    <div id="resizer" class="hidden md:flex">
+                        <div class="resizer-line"></div>
+                    </div>
+
+                    <!-- LIVE PREVIEW -->
+                    <section id="preview-section" class="flex flex-col min-w-0 w-full md:w-1/2 h-full relative z-10 hidden md:flex bg-black/10">
+                        <div id="loader" class="loader-bar"></div>
+                        
+                        <!-- Safari Bar -->
+                        <div class="h-12 bg-black/40 flex items-center px-4 justify-between border-b border-apple-border z-20 backdrop-blur-xl">
+                            <div class="flex items-center gap-1 w-1/4">
+                                <button onclick="Preview.setViewport('mobile')" id="vp-mobile" class="ios-btn p-1.5 rounded-lg text-apple-label hover:bg-white/10" title="iPhone"><i data-lucide="smartphone" class="w-4 h-4"></i></button>
+                                <button onclick="Preview.setViewport('tablet')" id="vp-tablet" class="ios-btn p-1.5 rounded-lg text-apple-label hover:bg-white/10" title="iPad"><i data-lucide="tablet" class="w-4 h-4"></i></button>
+                                <button onclick="Preview.setViewport('desktop')" id="vp-desktop" class="ios-btn p-1.5 rounded-lg text-apple-blue bg-apple-blue/10" title="Mac"><i data-lucide="monitor" class="w-4 h-4"></i></button>
+                            </div>
+
+                            <div class="flex-1 max-w-sm mx-2 bg-black/50 border border-white/10 rounded-full h-8 flex items-center justify-center px-4 gap-2 ios-btn shadow-inner cursor-pointer" onclick="Engine.run()">
+                                <i data-lucide="lock" class="w-3 h-3 text-apple-label opacity-60"></i>
+                                <span class="text-[12px] font-medium text-apple-label">nova.local</span>
+                                <i data-lucide="rotate-cw" class="w-3.5 h-3.5 text-apple-label opacity-60 ml-auto"></i>
+                            </div>
+
+                            <div class="w-1/4 flex justify-end gap-1">
+                                <button onclick="Workspace.exportProject()" class="ios-btn p-1.5 text-apple-label hover:text-white bg-white/5 rounded-lg" title="Export HTML"><i data-lucide="download-cloud" class="w-4 h-4"></i></button>
+                                <button onclick="Workspace.openNewTab()" class="ios-btn p-1.5 text-apple-label hover:text-white bg-white/5 rounded-lg" title="Open in new tab"><i data-lucide="external-link" class="w-4 h-4"></i></button>
+                            </div>
+                        </div>
+
+                        <!-- Viewport -->
+                        <div class="flex-1 relative overflow-hidden bg-transparent" id="iframe-wrapper">
+                            <div class="absolute inset-0 opacity-5 pointer-events-none" style="background-image: linear-gradient(45deg, #FFF 25%, transparent 25%), linear-gradient(-45deg, #FFF 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #FFF 75%), linear-gradient(-45deg, transparent 75%, #FFF 75%); background-size: 20px 20px;"></div>
+                            <div id="viewport-container" class="viewport-container viewport-desktop">
+                                <iframe id="preview-frame" sandbox="allow-scripts allow-modals allow-same-origin" class="w-full h-full bg-white transition-all duration-500 ease-[cubic-bezier(0.32,0.72,0,1)]"></iframe>
+                            </div>
+                        </div>
+                        
+                        <!-- Console -->
+                        <div class="h-[30%] min-h-[120px] max-h-[60%] flex flex-col bg-black/40 backdrop-blur-2xl border-t border-apple-border relative z-20">
+                            <div class="absolute top-0 left-0 w-full h-2 cursor-row-resize -mt-1 z-10"></div>
+                            <div class="flex justify-between items-center px-4 py-2 border-b border-white/5 bg-black/30">
+                                <div class="flex items-center gap-2"><i data-lucide="terminal-square" class="w-4 h-4 text-apple-label"></i><span class="text-[12px] text-apple-label font-bold tracking-widest uppercase">Console</span></div>
+                                <button onclick="Engine.clearConsole()" class="ios-btn p-1 text-apple-label hover:text-white"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+                            </div>
+                            <div id="console-output" class="flex-1 overflow-y-auto touch-pan-y p-3 font-mono text-[13px] leading-relaxed flex flex-col gap-1.5"></div>
+                        </div>
+                    </section>
+                </div>
+            </main>
+        </div>
+    </div> <!-- End Main Wrapper -->
+
+    <!-- NATIVE DIALOG (Bouncy Spring) -->
+    <div id="dialog-overlay" class="hidden fixed inset-0 modal-backdrop z-[100] flex items-center justify-center p-4 opacity-0 transition-opacity duration-400">
+        <div id="dialog-box" class="bg-[rgba(30,30,35,0.85)] backdrop-blur-3xl rounded-[2rem] w-full max-w-[320px] overflow-hidden modal-content modal-enter flex flex-col text-center shadow-glass border border-white/10 relative">
+            <div class="p-6 flex flex-col gap-2">
+                <h3 id="dialog-title" class="text-[20px] font-bold text-white tracking-tight">Title</h3>
+                <p id="dialog-message" class="text-[14px] text-apple-label leading-snug">Message</p>
+                <input type="text" id="dialog-input" autocorrect="off" autocapitalize="none" class="hidden w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-[16px] text-white focus:outline-none focus:border-apple-blue focus:ring-1 focus:ring-apple-blue transition-all mt-4 shadow-inner">
             </div>
-            
-            <div class="flex-1 overflow-y-auto p-4 grid gap-3" id="project-list" style="grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));"></div>
+            <div class="flex border-t border-white/10 bg-black/20">
+                <button id="dialog-cancel" class="flex-1 py-4 text-[17px] font-medium text-apple-label hover:text-white ios-btn border-r border-white/10">Cancel</button>
+                <button id="dialog-confirm" class="flex-1 py-4 text-[17px] font-bold text-apple-blue hover:text-white ios-btn">Confirm</button>
+            </div>
         </div>
     </div>
 
-    <!-- Animated Toast -->
-    <div id="toast" class="fixed bottom-8 right-8 px-5 py-4 rounded-xl shadow-[0_10px_30px_rgba(0,0,0,0.5)] flex items-center gap-3 z-[110] text-white bg-dark-surface border border-dark-border toast-enter transition-all duration-300">
-        <div id="toast-icon-wrapper" class="p-1.5 rounded-lg bg-brand-500/20 text-brand-400 shadow-glow"><i id="toast-icon" data-lucide="check" class="w-5 h-5"></i></div>
-        <span id="toast-message" class="text-sm font-semibold pr-2">Success</span>
+    <!-- Notification Pill -->
+    <div class="fixed top-6 left-1/2 transform -translate-x-1/2 z-[110] pointer-events-none w-full max-w-xs flex justify-center px-4">
+        <div id="toast" class="bg-[rgba(20,20,25,0.9)] backdrop-blur-2xl border border-white/10 px-5 py-3.5 rounded-full shadow-[0_15px_40px_rgba(0,0,0,0.8)] flex items-center gap-3 toast-pill">
+            <div id="toast-icon-wrap" class="bg-apple-blue/20 p-1 rounded-full"><i id="toast-icon" data-lucide="check" class="w-4 h-4 text-apple-blue"></i></div>
+            <span id="toast-message" class="text-[15px] font-semibold text-white tracking-tight">Success</span>
+        </div>
     </div>
 
-    <!-- Engine Script -->
     <script>
-        // --- HIGH-PERFORMANCE SYNTAX HIGHLIGHTER ---
+        // --- RELATIVE TIME HELPER ---
+        function timeAgo(dateParam) {
+            if (!dateParam) return null;
+            const date = typeof dateParam === 'object' ? dateParam : new Date(dateParam);
+            const seconds = Math.round((new Date() - date) / 1000);
+            const minutes = Math.round(seconds / 60);
+            const hours = Math.round(minutes / 60);
+            const days = Math.round(hours / 24);
+
+            if (seconds < 30) return 'Just now';
+            if (minutes < 60) return `${minutes}m ago`;
+            if (hours < 24) return `${hours}h ago`;
+            if (days < 7) return `${days}d ago`;
+            return date.toLocaleDateString();
+        }
+
+        // --- SYNTAX HIGHLIGHTER ---
         const Highlighter = {
             highlight: (code, lang) => {
                 if (!code) return '';
-                // Escape HTML first
                 let html = code.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-                
                 if (lang === 'html') {
                     html = html.replace(/(&lt;\/?)([a-zA-Z0-9-]+)(\s|&gt;)/g, '$1<span class="syn-tag">$2</span>$3');
                     html = html.replace(/([a-zA-Z-]+)=/g, '<span class="syn-attr">$1</span>=');
@@ -328,18 +494,23 @@
                     html = html.replace(/([\.#@][a-zA-Z0-9_-]+)/g, '<span class="syn-tag">$1</span>');
                     html = html.replace(/\/\*[\s\S]*?\*\//g, match => `<span class="syn-comment">${match}</span>`);
                 } else if (lang === 'javascript' || lang === 'js') {
-                    const keywords = /\b(const|let|var|function|return|if|else|for|while|class|import|export|from|new|true|false|null|undefined|async|await|try|catch)\b/g;
+                    const keywords = /\b(const|let|var|function|return|if|else|for|while|class|import|export|from|new|true|false|null|undefined|async|await|try|catch|window|document)\b/g;
                     html = html.replace(keywords, '<span class="syn-keyword">$1</span>');
                     html = html.replace(/(&quot;.*?&quot;|&#39;.*?&#39;|`.*?`)/g, '<span class="syn-string">$1</span>');
                     html = html.replace(/\b([0-9]+)\b/g, '<span class="syn-number">$1</span>');
                     html = html.replace(/([a-zA-Z0-9_]+)\s*\(/g, '<span class="syn-function">$1</span>(');
                     html = html.replace(/(\/\/.*|\/\*[\s\S]*?\*\/)/g, match => `<span class="syn-comment">${match}</span>`);
+                } else if (lang === 'json') {
+                    html = html.replace(/(&quot;.*?&quot;)\s*:/g, '<span class="syn-property">$1</span>:');
+                    html = html.replace(/:\s*(&quot;.*?&quot;)/g, ': <span class="syn-string">$1</span>');
+                    html = html.replace(/:\s*([0-9\.]+)/g, ': <span class="syn-number">$1</span>');
+                    html = html.replace(/:\s*(true|false|null)/g, ': <span class="syn-keyword">$1</span>');
                 }
                 return html;
             }
         };
 
-        // --- GLASSMORPHISM DIALOG MANAGER ---
+        // --- DIALOGS (SPRING ANIMATED) ---
         const Dialog = {
             els: {
                 overlay: document.getElementById('dialog-overlay'), box: document.getElementById('dialog-box'),
@@ -348,26 +519,25 @@
             },
             show: (type, title, message, defaultVal = '') => new Promise((resolve) => {
                 Dialog.els.title.innerText = title; Dialog.els.msg.innerText = message;
-                
                 if (type === 'prompt') { Dialog.els.input.classList.remove('hidden'); Dialog.els.input.value = defaultVal; } 
                 else { Dialog.els.input.classList.add('hidden'); }
-                Dialog.els.cancel.classList.toggle('hidden', type === 'alert');
+                Dialog.els.cancel.style.display = type === 'alert' ? 'none' : 'block';
 
                 const cleanup = () => {
-                    Dialog.els.overlay.classList.add('opacity-0'); Dialog.els.box.classList.add('scale-95');
-                    setTimeout(() => Dialog.els.overlay.classList.add('hidden'), 300);
-                    Dialog.els.confirm.onclick = null; Dialog.els.cancel.onclick = null; Dialog.els.input.onkeydown = null;
+                    Dialog.els.overlay.classList.add('opacity-0'); 
+                    Dialog.els.box.classList.replace('modal-active', 'modal-enter');
+                    setTimeout(() => Dialog.els.overlay.classList.add('hidden'), 400);
                 };
+                const finish = (val) => { cleanup(); resolve(val); };
 
-                const confirm = () => { cleanup(); resolve(type === 'prompt' ? Dialog.els.input.value : true); };
-                const cancel = () => { cleanup(); resolve(type === 'prompt' ? null : false); };
-
-                Dialog.els.confirm.onclick = confirm; Dialog.els.cancel.onclick = cancel;
-                Dialog.els.input.onkeydown = (e) => { if (e.key === 'Enter') confirm(); if (e.key === 'Escape') cancel(); };
+                Dialog.els.confirm.onclick = () => finish(type === 'prompt' ? Dialog.els.input.value : true);
+                Dialog.els.cancel.onclick = () => finish(type === 'prompt' ? null : false);
+                Dialog.els.input.onkeydown = (e) => { if (e.key === 'Enter') Dialog.els.confirm.click(); if (e.key === 'Escape') Dialog.els.cancel.click(); };
 
                 Dialog.els.overlay.classList.remove('hidden');
                 requestAnimationFrame(() => {
-                    Dialog.els.overlay.classList.remove('opacity-0'); Dialog.els.box.classList.remove('scale-95');
+                    Dialog.els.overlay.classList.remove('opacity-0'); 
+                    Dialog.els.box.classList.replace('modal-enter', 'modal-active');
                     if (type === 'prompt') Dialog.els.input.focus();
                 });
             }),
@@ -378,58 +548,100 @@
 
         // --- TEMPLATES ---
         const Templates = {
-            nova: [
-                { id: '1', name: 'index.html', language: 'html', content: `<!DOCTYPE html>\n<html>\n<head>\n  <title>Nova Preview</title>\n</head>\n<body>\n  <div class="nova-card">\n    <div class="logo">✦</div>\n    <h1>Welcome to NOVA</h1>\n    <p>A beautifully engineered, single-file development environment.</p>\n    <button onclick="testLog()">Test Console System</button>\n  </div>\n</body>\n</html>` },
-                { id: '2', name: 'style.css', language: 'css', content: `@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap');\n\nbody {\n  background: #030305; color: #fff; font-family: 'Inter', sans-serif;\n  display: grid; place-items: center; min-height: 100vh; margin: 0;\n  background-image: radial-gradient(circle at center, rgba(99,102,241,0.1) 0%, transparent 50%);\n}\n\n.nova-card {\n  background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05);\n  padding: 3rem; border-radius: 2rem; text-align: center; max-width: 400px;\n  backdrop-filter: blur(20px); box-shadow: 0 20px 40px rgba(0,0,0,0.5);\n}\n\n.logo {\n  font-size: 3rem; color: #818cf8; margin-bottom: 1rem;\n  animation: spin 6s linear infinite; display: inline-block;\n  text-shadow: 0 0 20px rgba(129,140,248,0.5);\n}\n@keyframes spin { 100% { transform: rotate(360deg); } }\n\nh1 { font-size: 2rem; margin: 0 0 0.5rem; background: linear-gradient(to right, #fff, #818cf8); -webkit-background-clip: text; color: transparent; }\np { color: #8b8b9e; line-height: 1.6; margin-bottom: 2rem; }\n\nbutton {\n  background: #6366f1; color: #fff; border: none; padding: 0.8rem 2rem;\n  border-radius: 1rem; font-weight: 700; cursor: pointer; transition: all 0.3s;\n  box-shadow: 0 0 20px rgba(99,102,241,0.3);\n}\nbutton:hover { background: #4f46e5; transform: scale(1.05); }` },
-                { id: '3', name: 'script.js', language: 'javascript', content: `console.info('NOVA Engine initialized successfully.');\n\nfunction testLog() {\n  const user = { name: "Developer", engine: "Nova Studio v2.0" };\n  console.log("Button clicked!");\n  console.warn("Processing data:", user);\n}` }
+            apple: [
+                { id: '1', name: 'index.html', language: 'html', content: `<!DOCTYPE html>\n<html lang="en">\n<head>\n  <meta charset="UTF-8">\n  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">\n  <title>App</title>\n</head>\n<body>\n  <div class="glass-card">\n    <div class="icon">🚀</div>\n    <h1>NOVA by Aravind</h1>\n    <p>A flagship browser-based development environment.</p>\n    <button onclick="runTest()">Initialize System</button>\n  </div>\n</body>\n</html>` },
+                { id: '2', name: 'style.css', language: 'css', content: `body {\n  background: transparent; color: #FFFFFF;\n  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;\n  display: flex; justify-content: center; align-items: center;\n  min-height: 100vh; margin: 0; -webkit-font-smoothing: antialiased;\n}\n.glass-card {\n  background: rgba(255,255,255,0.05); padding: 40px; border-radius: 32px;\n  text-align: center; max-width: 320px; width: 100%;\n  backdrop-filter: blur(40px) saturate(200%);\n  border: 1px solid rgba(255,255,255,0.1);\n  box-shadow: 0 20px 40px rgba(0,0,0,0.3);\n}\n.icon {\n  font-size: 48px; margin-bottom: 16px; filter: drop-shadow(0 0 10px rgba(10,132,255,0.8));\n}\nh1 {\n  font-size: 26px; font-weight: 800; margin: 0 0 8px;\n  letter-spacing: 0.5px;\n}\np {\n  color: rgba(235, 235, 245, 0.7); font-size: 15px;\n  line-height: 20px; margin-bottom: 32px;\n}\nbutton {\n  background: #0A84FF; color: #FFFFFF; border: none;\n  padding: 14px 20px; border-radius: 16px; font-size: 16px;\n  font-weight: 700; width: 100%; cursor: pointer; transition: 0.2s;\n  box-shadow: 0 4px 15px rgba(10,132,255,0.4);\n}\nbutton:active { transform: scale(0.96); opacity: 0.8; }` },
+                { id: '3', name: 'main.js', language: 'javascript', content: `console.info('Application crafted by Aravind loaded.');\n\nfunction runTest() {\n  const payload = { developer: "Aravind", os: "iPadOS 18", blur: "Active", haptic: true };\n  console.log("System initialized.");\n  console.warn("Telemetry Data:", payload);\n}` }
             ]
         };
 
         // --- APP STATE ---
         const State = {
             projects: {}, currentProjId: null, files: [], activeFileId: null,
-            autoRun: true, consoleLogs: [], runTimer: null, blobUrl: null, theme: 'indigo'
+            autoRun: true, consoleLogs: [], runTimer: null, blobUrl: null, theme: 'blue',
+            viewport: 'desktop', mobileViewMode: 'editor', currentView: 'home' 
         };
 
         const Els = {
+            homeView: document.getElementById('home-view'), ideView: document.getElementById('ide-view'),
             fileList: document.getElementById('file-list'), tabs: document.getElementById('editor-tabs'),
             editor: document.getElementById('code-editor'), pre: document.getElementById('editor-pre'), codePre: document.querySelector('#editor-pre code'),
             lines: document.getElementById('line-numbers'), iframe: document.getElementById('preview-frame'),
             consoleOut: document.getElementById('console-output'), loader: document.getElementById('loader'),
-            runBtn: document.getElementById('run-btn'), projTitle: document.getElementById('current-project-title')
+            runBtn: document.getElementById('run-btn'), ideProjTitle: document.getElementById('ide-project-title'),
+            sidebar: document.getElementById('sidebar'), vpContainer: document.getElementById('viewport-container')
+        };
+
+        // --- VIEWPORT MANAGER ---
+        const Preview = {
+            setViewport: (mode) => {
+                State.viewport = mode;
+                Els.vpContainer.className = `viewport-container viewport-${mode}`;
+                ['vp-mobile', 'vp-tablet', 'vp-desktop'].forEach(id => {
+                    document.getElementById(id).className = "ios-btn p-1.5 rounded-lg text-apple-label hover:bg-white/10";
+                });
+                document.getElementById(`vp-${mode}`).className = "ios-btn p-1.5 rounded-lg text-apple-blue bg-apple-blue/10";
+            }
         };
 
         // --- UI CONTROLLER ---
         const UI = {
             init: () => {
                 lucide.createIcons();
-                UI.setupEditor(); UI.setupSplitter();
+                UI.setupEditor(); UI.setupSplitter(); UI.setupShortcuts(); UI.setupDragAndDrop();
                 
                 document.getElementById('auto-run-toggle').addEventListener('change', (e) => {
-                    State.autoRun = e.target.checked; Els.runBtn.disabled = State.autoRun;
-                    Els.runBtn.className = State.autoRun ? "flex items-center gap-1.5 text-xs font-bold transition-all text-dark-muted opacity-50 cursor-not-allowed uppercase tracking-wider" : "flex items-center gap-1.5 text-xs font-bold transition-all text-brand-400 hover:text-white bg-brand-500/20 px-3 py-1.5 rounded-xl border border-brand-500/30 uppercase tracking-wider shadow-glow";
+                    State.autoRun = e.target.checked; 
+                    UI.updateRunButtonState();
                     if(State.autoRun) Engine.run();
                 });
-                Els.runBtn.addEventListener('click', () => { if(!State.autoRun) Engine.run(); });
-                window.addEventListener('message', Engine.handleMessage);
+                
+                if (window.innerWidth < 768) UI.setViewMode('editor');
+            },
+
+            updateRunButtonState: () => {
+                if (State.autoRun) {
+                    Els.runBtn.disabled = true;
+                    Els.runBtn.classList.remove('run-pulse');
+                    Els.runBtn.className = "ios-btn flex items-center gap-1.5 text-[14px] font-bold text-apple-blue opacity-50 cursor-not-allowed transition-all";
+                } else {
+                    Els.runBtn.disabled = false;
+                    Els.runBtn.className = "ios-btn flex items-center gap-1.5 text-[14px] font-bold text-apple-blue hover:scale-105 run-pulse transition-all";
+                }
             },
             
             showToast: (msg, type = 'success') => {
                 const toast = document.getElementById('toast');
                 document.getElementById('toast-message').innerText = msg;
-                const iconWrap = document.getElementById('toast-icon-wrapper');
+                const icon = document.getElementById('toast-icon');
+                const wrap = document.getElementById('toast-icon-wrap');
                 
                 if (type === 'error') {
-                    iconWrap.className = 'p-1.5 rounded-lg bg-red-500/20 text-red-400 shadow-[0_0_15px_rgba(239,68,68,0.2)]';
-                    document.getElementById('toast-icon').setAttribute('data-lucide', 'alert-circle');
+                    icon.setAttribute('data-lucide', 'alert-circle');
+                    icon.className = 'w-4 h-4 text-[#FF3B30]';
+                    wrap.className = 'bg-[#FF3B30]/20 p-1 rounded-full';
                 } else {
-                    iconWrap.className = 'p-1.5 rounded-lg bg-brand-500/20 text-brand-400 shadow-glow';
-                    document.getElementById('toast-icon').setAttribute('data-lucide', 'check');
+                    icon.setAttribute('data-lucide', 'check');
+                    icon.className = 'w-4 h-4 text-apple-blue';
+                    wrap.className = 'bg-apple-blue/20 p-1 rounded-full';
                 }
                 lucide.createIcons();
                 
-                toast.classList.add('toast-active'); toast.classList.remove('toast-enter');
-                setTimeout(() => { toast.classList.remove('toast-active'); toast.classList.add('toast-enter'); }, 3000);
+                toast.classList.add('toast-active');
+                setTimeout(() => toast.classList.remove('toast-active'), 2500);
+            },
+
+            switchView: (viewName) => {
+                State.currentView = viewName;
+                if (viewName === 'home') {
+                    Els.ideView.classList.replace('view-active', 'view-hidden');
+                    Els.homeView.classList.replace('view-hidden', 'view-active');
+                    Workspace.renderHomeGrid();
+                } else if (viewName === 'ide') {
+                    Els.homeView.classList.replace('view-active', 'view-hidden');
+                    Els.ideView.classList.replace('view-hidden', 'view-active');
+                    Workspace.loadActive();
+                }
             },
 
             render: () => {
@@ -443,28 +655,28 @@
             },
 
             getIcon: (name) => {
-                if (name.endsWith('.html')) return '<i data-lucide="file-code-2" class="w-4 h-4 text-[#ff7b72]"></i>';
-                if (name.endsWith('.css')) return '<i data-lucide="palette" class="w-4 h-4 text-[#79c0ff]"></i>';
-                if (name.endsWith('.js')) return '<i data-lucide="file-json" class="w-4 h-4 text-[#d2a8ff]"></i>';
-                return '<i data-lucide="file-text" class="w-4 h-4 text-gray-400"></i>';
+                if (name.endsWith('.html')) return '<i data-lucide="file-code-2" class="w-4 h-4 text-[#FF7AB2]"></i>';
+                if (name.endsWith('.css')) return '<i data-lucide="file-json" class="w-4 h-4 text-[#5DD8FF]"></i>';
+                if (name.endsWith('.js')) return '<i data-lucide="braces" class="w-4 h-4 text-[#D9C97C]"></i>';
+                if (name.endsWith('.json')) return '<i data-lucide="database" class="w-4 h-4 text-[#FFD60A]"></i>';
+                return '<i data-lucide="file-text" class="w-4 h-4 text-apple-label"></i>';
             },
 
             renderFiles: () => {
                 Els.fileList.innerHTML = State.files.map(f => `
-                    <div onclick="Workspace.setActive('${f.id}')" class="flex justify-between items-center px-3 py-2.5 rounded-xl cursor-pointer text-[13px] group transition-all ${State.activeFileId === f.id ? 'bg-brand-500/15 text-white font-semibold border border-brand-500/30 shadow-inner' : 'hover:bg-white/5 text-dark-muted hover:text-white border border-transparent'}">
-                        <div class="flex items-center gap-2.5 overflow-hidden">${UI.getIcon(f.name)}<span class="truncate">${f.name}</span></div>
-                        <button onclick="Workspace.deleteFile(event, '${f.id}')" class="opacity-0 group-hover:opacity-100 hover:text-red-400 p-1 transition-all"><i data-lucide="trash" class="w-3.5 h-3.5"></i></button>
+                    <div onclick="Workspace.setActive('${f.id}'); window.innerWidth < 768 ? UI.toggleMobileSidebar() : null" class="flex items-center px-3 py-3 cursor-pointer group rounded-xl mb-1 transition-all duration-300 ${State.activeFileId === f.id ? 'bg-white/15 text-white shadow-inner border border-white/10' : 'text-apple-label hover:bg-white/10 border border-transparent'}">
+                        <div class="mr-3 opacity-100">${UI.getIcon(f.name)}</div>
+                        <span class="text-[14px] font-semibold flex-1 truncate tracking-wide">${f.name}</span>
                     </div>
                 `).join('');
             },
 
             renderTabs: () => {
                 Els.tabs.innerHTML = State.files.map(f => `
-                    <div onclick="Workspace.setActive('${f.id}')" class="flex items-center px-4 py-2.5 cursor-pointer border-r border-dark-border text-[13px] whitespace-nowrap min-w-fit transition-all relative rounded-t-lg mt-1 ml-1 ${State.activeFileId === f.id ? 'bg-[#050508] text-white font-semibold' : 'bg-transparent hover:bg-white/5 text-dark-muted'}">
-                        ${State.activeFileId === f.id ? '<div class="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-brand-400 to-brand-600 rounded-t-lg shadow-glow"></div>' : ''}
-                        <span class="mr-2.5">${UI.getIcon(f.name)}</span>
-                        <span ondblclick="Workspace.renameFile(event, '${f.id}')" class="select-none">${f.name}</span>
-                        <div class="w-5 ml-4 flex justify-center"><button onclick="Workspace.deleteFile(event, '${f.id}')" class="opacity-0 hover:opacity-100 text-dark-muted hover:text-red-400 transition-all ${State.activeFileId === f.id ? 'opacity-50' : ''}"><i data-lucide="x" class="w-3.5 h-3.5"></i></button></div>
+                    <div onclick="Workspace.setActive('${f.id}')" class="flex items-center h-full px-4 cursor-pointer rounded-t-xl transition-colors border-r border-white/5 min-w-[130px] max-w-[180px] ${State.activeFileId === f.id ? 'bg-black/50 text-white border-t border-white/10' : 'text-apple-label hover:bg-black/20'}">
+                        <span class="mr-2 opacity-90">${UI.getIcon(f.name)}</span>
+                        <span class="text-[13px] font-medium truncate flex-1" ondblclick="Workspace.renameFile(event, '${f.id}')">${f.name}</span>
+                        <button onclick="Workspace.deleteFile(event, '${f.id}')" class="ml-2 opacity-0 hover:opacity-100 hover:text-[#FF3B30] ios-btn p-1 ${State.activeFileId === f.id ? 'opacity-60' : ''}"><i data-lucide="x" class="w-3.5 h-3.5"></i></button>
                     </div>
                 `).join('');
             },
@@ -481,7 +693,13 @@
                         f.content = e.target.value;
                         Els.codePre.innerHTML = Highlighter.highlight(f.content, f.language);
                         UI.updateLines(); Workspace.save();
-                        if (State.autoRun) { clearTimeout(State.runTimer); Els.loader.style.display = 'block'; State.runTimer = setTimeout(Engine.run, 800); }
+                        
+                        if (State.autoRun) { 
+                            clearTimeout(State.runTimer); Els.loader.style.display = 'block'; 
+                            State.runTimer = setTimeout(Engine.run, 800); 
+                        } else {
+                            Els.runBtn.classList.add('run-pulse');
+                        }
                     }
                 });
 
@@ -511,28 +729,96 @@
                 let drag = false; const resizer = document.getElementById('resizer');
                 const es = document.getElementById('editor-section'); const ps = document.getElementById('preview-section');
                 
-                resizer.addEventListener('mousedown', () => { drag = true; resizer.classList.add('dragging'); document.body.style.cursor = 'col-resize'; Els.iframe.style.pointerEvents = 'none'; });
-                document.addEventListener('mousemove', (e) => {
+                const startDrag = () => { drag = true; resizer.classList.add('dragging'); document.body.style.cursor = 'col-resize'; Els.iframe.style.pointerEvents = 'none'; };
+                const onDrag = (e) => {
                     if (!drag) return;
+                    const clientX = e.type.includes('touch') ? e.touches[0].clientX : e.clientX;
                     const w = document.getElementById('workspace-container').getBoundingClientRect();
-                    let nw = ((e.clientX - w.left) / w.width) * 100;
+                    let nw = ((clientX - w.left) / w.width) * 100;
                     if (nw < 20) nw = 20; if (nw > 80) nw = 80;
                     es.style.width = `${nw}%`; ps.style.width = `${100 - nw}%`;
+                };
+                const stopDrag = () => { if (drag) { drag = false; resizer.classList.remove('dragging'); document.body.style.cursor = 'default'; Els.iframe.style.pointerEvents = 'auto'; } };
+
+                resizer.addEventListener('mousedown', startDrag); resizer.addEventListener('touchstart', startDrag, {passive: true});
+                document.addEventListener('mousemove', onDrag); document.addEventListener('touchmove', (e) => { if(drag) { e.preventDefault(); onDrag(e); } }, {passive: false});
+                document.addEventListener('mouseup', stopDrag); document.addEventListener('touchend', stopDrag);
+            },
+
+            setupDragAndDrop: () => {
+                const zone = document.getElementById('drop-zone');
+                const box = document.getElementById('drop-box');
+                window.addEventListener('dragover', (e) => { 
+                    e.preventDefault(); 
+                    zone.classList.replace('opacity-0', 'opacity-100'); 
+                    zone.classList.replace('pointer-events-none', 'pointer-events-auto');
+                    box.classList.replace('scale-105', 'scale-100');
                 });
-                document.addEventListener('mouseup', () => { if (drag) { drag = false; resizer.classList.remove('dragging'); document.body.style.cursor = 'default'; Els.iframe.style.pointerEvents = 'auto'; } });
+                window.addEventListener('dragleave', (e) => { 
+                    if(e.target === zone) {
+                        zone.classList.replace('opacity-100', 'opacity-0'); 
+                        zone.classList.replace('pointer-events-auto', 'pointer-events-none');
+                        box.classList.replace('scale-100', 'scale-105');
+                    }
+                });
+                window.addEventListener('drop', (e) => {
+                    e.preventDefault(); 
+                    zone.classList.replace('opacity-100', 'opacity-0'); 
+                    zone.classList.replace('pointer-events-auto', 'pointer-events-none');
+                    box.classList.replace('scale-100', 'scale-105');
+                    
+                    if (e.dataTransfer.files.length > 0) {
+                        // Check if we need to create a new project (if dropping on home)
+                        const creatingNew = State.currentView === 'home';
+                        let newProjId = null;
+                        
+                        if (creatingNew) {
+                            newProjId = 'proj_' + Date.now();
+                            State.projects[newProjId] = { id: newProjId, name: 'Imported Project', files: [], updated: Date.now() };
+                        }
+
+                        Array.from(e.dataTransfer.files).forEach(file => {
+                            const reader = new FileReader();
+                            reader.onload = (ev) => {
+                                if (creatingNew) {
+                                    Workspace.importFileTo(file.name, ev.target.result, newProjId);
+                                } else {
+                                    Workspace.importFile(file.name, ev.target.result);
+                                }
+                            };
+                            reader.readAsText(file);
+                        });
+
+                        if (creatingNew) {
+                            setTimeout(() => { Workspace.openProj(newProjId); UI.showToast("Project Imported"); }, 100);
+                        }
+                    }
+                });
+            },
+
+            setupShortcuts: () => {
+                window.addEventListener('keydown', (e) => {
+                    if ((e.ctrlKey || e.metaKey) && e.key === 's') { e.preventDefault(); Engine.run(); UI.showToast("Saved & Built"); }
+                    if ((e.ctrlKey || e.metaKey) && e.key === 'b') { e.preventDefault(); UI.toggleDesktopSidebar(); }
+                });
             },
 
             setViewMode: (m) => {
-                ['btn-view-editor', 'btn-view-split', 'btn-view-preview'].forEach(id => document.getElementById(id).className = "p-1.5 rounded-lg text-dark-muted hover:text-white hover:bg-white/5 transition-all");
-                document.getElementById(`btn-view-${m}`).className = "p-1.5 rounded-lg bg-dark-surface border border-dark-border text-brand-400 shadow-glow transition-all";
+                ['btn-view-editor', 'btn-view-split', 'btn-view-preview'].forEach(id => {
+                    const el = document.getElementById(id);
+                    if(el) { el.className = "px-6 py-1.5 rounded-lg text-[13px] font-bold text-apple-label hover:text-white transition-all ios-btn"; el.style.backgroundColor = 'transparent'; el.style.boxShadow = 'none'; }
+                });
+                const activeBtn = document.getElementById(`btn-view-${m}`);
+                if(activeBtn) { activeBtn.style.backgroundColor = 'rgba(255,255,255,0.2)'; activeBtn.style.color = '#fff'; activeBtn.style.boxShadow = '0 1px 3px rgba(0,0,0,0.1)'; }
                 
                 const es = document.getElementById('editor-section'); const ps = document.getElementById('preview-section'); const r = document.getElementById('resizer');
                 
                 if (window.innerWidth < 768) {
-                    es.style.display = (m === 'editor' || m === 'split') ? 'flex' : 'none';
+                    es.style.display = (m === 'editor') ? 'flex' : 'none';
                     ps.style.display = (m === 'preview') ? 'flex' : 'none';
-                    if(m === 'split') { ps.style.display = 'none'; UI.showToast("Split not available on mobile","error"); }
+                    if(m === 'split') { UI.showToast("Rotate device for split view","error"); return; }
                     es.style.width = '100%'; ps.style.width = '100%'; r.style.display = 'none';
+                    State.mobileViewMode = m;
                 } else {
                     es.style.display = (m === 'split' || m === 'editor') ? 'flex' : 'none';
                     ps.style.display = (m === 'split' || m === 'preview') ? 'flex' : 'none';
@@ -541,15 +827,24 @@
                 }
             },
 
-            toggleProjectModal: () => {
-                const m = document.getElementById('project-modal');
-                if (m.classList.contains('hidden')) {
-                    Workspace.renderList(); m.classList.remove('hidden');
-                    requestAnimationFrame(() => { m.classList.remove('opacity-0'); document.getElementById('project-modal-content').classList.remove('scale-95'); });
+            toggleMobileView: () => {
+                const nextMode = State.mobileViewMode === 'editor' ? 'preview' : 'editor';
+                UI.setViewMode(nextMode);
+            },
+
+            toggleMobileSidebar: () => {
+                const s = Els.sidebar; const o = document.getElementById('sidebar-overlay');
+                if (s.classList.contains('-translate-x-full')) {
+                    s.classList.remove('-translate-x-full'); o.classList.remove('hidden'); requestAnimationFrame(()=>o.classList.remove('opacity-0'));
                 } else {
-                    m.classList.add('opacity-0'); document.getElementById('project-modal-content').classList.add('scale-95');
-                    setTimeout(() => m.classList.add('hidden'), 300);
+                    s.classList.add('-translate-x-full'); o.classList.add('opacity-0'); setTimeout(()=>o.classList.add('hidden'), 300);
                 }
+            },
+
+            toggleDesktopSidebar: () => {
+                if(window.innerWidth < 768) return;
+                const isHidden = Els.sidebar.style.display === 'none';
+                Els.sidebar.style.display = isHidden ? 'flex' : 'none';
             }
         };
 
@@ -557,51 +852,82 @@
         const Workspace = {
             init: () => {
                 try {
-                    const s = localStorage.getItem('nova_ide_data');
-                    if (s) { State.projects = JSON.parse(s); State.currentProjId = localStorage.getItem('nova_active_proj') || Object.keys(State.projects)[0]; }
+                    const s = localStorage.getItem('nova_final_data');
+                    if (s) { State.projects = JSON.parse(s); State.currentProjId = localStorage.getItem('nova_final_proj') || Object.keys(State.projects)[0]; }
                 } catch (e) {}
 
                 if (!State.projects || Object.keys(State.projects).length === 0) {
                     const id = 'proj_' + Date.now();
-                    State.projects = { [id]: { id, name: 'Welcome to Nova', files: Templates.nova, updated: Date.now() } };
+                    State.projects = { [id]: { id, name: 'NOVA by Aravind', files: Templates.apple, updated: Date.now() } };
                     State.currentProjId = id; Workspace.save();
                 }
-                Workspace.loadActive();
+                
+                // Boot to Home screen
+                UI.switchView('home');
             },
 
             save: () => {
                 try {
-                    if (State.currentProjId && State.projects[State.currentProjId]) {
+                    if (State.currentProjId && State.projects[State.currentProjId] && State.currentView === 'ide') {
                         State.projects[State.currentProjId].files = State.files;
                         State.projects[State.currentProjId].updated = Date.now();
                     }
-                    localStorage.setItem('nova_ide_data', JSON.stringify(State.projects));
-                    localStorage.setItem('nova_active_proj', State.currentProjId);
-                } catch (e) { UI.showToast("Storage quota exceeded", "error"); }
+                    localStorage.setItem('nova_final_data', JSON.stringify(State.projects));
+                    localStorage.setItem('nova_final_proj', State.currentProjId);
+                } catch (e) { console.error(e); }
             },
 
             loadActive: () => {
                 const p = State.projects[State.currentProjId];
                 if (!p) return;
                 State.files = p.files || []; State.activeFileId = State.files.length > 0 ? State.files[0].id : null;
-                Els.projTitle.innerText = p.name;
+                Els.ideProjTitle.innerText = p.name;
                 UI.render(); Engine.run();
             },
 
             setActive: (id) => { State.activeFileId = id; UI.render(); },
 
             createFile: async () => {
-                const name = await Dialog.prompt("New File", "Enter file name (e.g. app.js):", "new_file.html");
+                const name = await Dialog.prompt("New File", "Enter a name for the new file:", "script.js");
                 if (name && name.trim()) {
                     const ext = name.split('.').pop().toLowerCase();
                     const f = { id: Date.now().toString(), name: name.trim(), language: ext === 'js' ? 'javascript' : ext, content: '' };
-                    State.files.push(f); State.activeFileId = f.id; Workspace.save(); UI.render(); UI.showToast("File created");
+                    State.files.push(f); State.activeFileId = f.id; Workspace.save(); UI.render();
+                }
+            },
+
+            importFile: (name, content) => { Workspace.importFileTo(name, content, State.currentProjId); },
+
+            importFileTo: (name, content, targetProjId) => {
+                const ext = name.split('.').pop().toLowerCase();
+                const validExts = ['html', 'css', 'js', 'json', 'txt'];
+                if(!validExts.includes(ext)) return UI.showToast(`Unsupported file type: .${ext}`, "error");
+
+                const targetProj = State.projects[targetProjId];
+                if(!targetProj) return;
+
+                let existing = targetProj.files.find(f => f.name === name);
+                if (existing) {
+                    existing.content = content; 
+                    if(State.currentView === 'ide' && State.currentProjId === targetProjId) State.activeFileId = existing.id;
+                } else {
+                    const f = { id: Date.now().toString() + Math.random(), name: name, language: ext === 'js' ? 'javascript' : ext, content: content };
+                    targetProj.files.push(f);
+                    if(State.currentView === 'ide' && State.currentProjId === targetProjId) State.activeFileId = f.id;
+                }
+                
+                targetProj.updated = Date.now();
+                Workspace.save(); 
+                
+                if (State.currentView === 'ide' && State.currentProjId === targetProjId) {
+                    UI.render(); UI.showToast(`${name} imported`);
+                    if(State.autoRun) Engine.run();
                 }
             },
 
             renameFile: async (e, id) => {
                 e.stopPropagation(); const f = State.files.find(x => x.id === id);
-                const name = await Dialog.prompt("Rename File", "Enter new name:", f.name);
+                const name = await Dialog.prompt("Rename File", "Enter a new name for this file:", f.name);
                 if (name && name.trim()) { 
                     f.name = name.trim(); 
                     f.language = f.name.split('.').pop().toLowerCase() === 'js' ? 'javascript' : f.name.split('.').pop().toLowerCase();
@@ -611,78 +937,117 @@
 
             deleteFile: async (e, id) => {
                 e.stopPropagation();
-                if (State.files.length <= 1) return Dialog.alert("Access Denied", "Cannot delete the last file in the workspace.");
+                if (State.files.length <= 1) return Dialog.alert("Action Not Allowed", "You cannot delete the last file in the workspace.");
                 const f = State.files.find(x => x.id === id);
-                if (await Dialog.confirm("Delete File", `Remove ${f.name} permanently?`)) {
+                if (await Dialog.confirm("Delete File", `Are you sure you want to delete "${f.name}"?`)) {
                     State.files = State.files.filter(x => x.id !== id);
                     if (State.activeFileId === id) State.activeFileId = State.files[0].id;
                     Workspace.save(); UI.render();
                 }
             },
 
-            renderList: () => {
+            renderHomeGrid: () => {
                 const sorted = Object.values(State.projects).sort((a,b) => b.updated - a.updated);
-                document.getElementById('project-list').innerHTML = sorted.map(p => {
-                    const active = p.id === State.currentProjId;
+                const grid = document.getElementById('home-project-grid');
+                
+                grid.innerHTML = sorted.map((p, index) => {
+                    const gradClass = `proj-gradient-${index % 5}`;
+                    const timeString = timeAgo(p.updated);
+                    const delay = index * 0.05; // Stagger delay
+                    
                     return `
-                    <div class="relative flex flex-col p-4 rounded-2xl transition-all border ${active ? 'bg-brand-500/10 border-brand-500/30 shadow-[inset_0_0_20px_rgba(99,102,241,0.05)]' : 'bg-dark-surface border-dark-border hover:border-white/10 hover:bg-white/5'}">
-                        <div class="flex items-start justify-between cursor-pointer" onclick="Workspace.switchProj('${p.id}')">
-                            <div class="flex items-center gap-3">
-                                <div class="p-2.5 rounded-xl bg-[#000]/50 text-brand-400 border border-dark-border shadow-inner"><i data-lucide="${active ? 'folder-open' : 'folder'}" class="w-5 h-5"></i></div>
-                                <div>
-                                    <h3 class="text-white text-[15px] font-bold flex items-center gap-2">${p.name} ${active ? '<span class="px-2 py-0.5 rounded-md text-[9px] bg-brand-500 text-white uppercase font-bold shadow-glow">Active</span>' : ''}</h3>
-                                    <p class="text-xs text-dark-muted mt-1">${p.files.length} files • Updated ${new Date(p.updated).toLocaleDateString()}</p>
-                                </div>
+                    <div class="project-card animate-stagger relative rounded-[2rem] bg-black/40 border border-white/10 overflow-hidden shadow-card flex flex-col h-[260px]" style="animation-delay: ${delay}s" onclick="Workspace.openProj('${p.id}')">
+                        <!-- Card Header (Visual) -->
+                        <div class="h-32 ${gradClass} relative flex items-center justify-center">
+                            <div class="absolute inset-0 bg-black/20"></div>
+                            <div class="w-14 h-14 bg-white/20 backdrop-blur-md rounded-2xl flex items-center justify-center shadow-inner border border-white/20 z-10 transition-transform duration-500 hover:scale-110">
+                                <i data-lucide="layout-template" class="w-7 h-7 text-white"></i>
                             </div>
                         </div>
-                        <div class="absolute top-4 right-4 flex gap-1">
-                            <button onclick="Workspace.renameProj('${p.id}')" class="p-2 text-dark-muted hover:text-white hover:bg-white/10 rounded-lg transition-colors"><i data-lucide="edit-2" class="w-4 h-4"></i></button>
-                            <button onclick="Workspace.deleteProj('${p.id}')" class="p-2 text-dark-muted hover:text-red-400 hover:bg-red-400/10 rounded-lg transition-colors"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+                        
+                        <!-- Card Body (Details) -->
+                        <div class="p-6 flex-1 flex flex-col justify-between">
+                            <div>
+                                <h3 class="text-white text-[19px] font-bold truncate mb-1.5">${p.name}</h3>
+                                <p class="text-[13px] text-apple-label font-medium">${p.files.length} items • Edited ${timeString}</p>
+                            </div>
+                            
+                            <!-- Quick Actions -->
+                            <div class="flex items-center justify-end gap-2 mt-4 opacity-0 hover:opacity-100 transition-opacity" style="opacity: 0.8">
+                                <button onclick="event.stopPropagation(); Workspace.renameProj('${p.id}')" class="ios-btn p-2.5 rounded-full bg-white/10 hover:bg-white/20 text-white shadow-sm" title="Rename"><i data-lucide="pencil" class="w-4 h-4"></i></button>
+                                <button onclick="event.stopPropagation(); Workspace.exportHomeProj('${p.id}')" class="ios-btn p-2.5 rounded-full bg-white/10 hover:bg-white/20 text-white shadow-sm" title="Export"><i data-lucide="download" class="w-4 h-4"></i></button>
+                                <button onclick="event.stopPropagation(); Workspace.deleteProj('${p.id}')" class="ios-btn p-2.5 rounded-full bg-red-500/20 hover:bg-red-500/40 text-[#FF3B30] shadow-sm" title="Delete"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+                            </div>
                         </div>
                     </div>`;
                 }).join('');
+                
+                if(sorted.length === 0) {
+                    grid.innerHTML = `<div class="col-span-full text-center py-20 animate-stagger"><i data-lucide="layers" class="w-16 h-16 text-white/20 mx-auto mb-4"></i><h3 class="text-xl font-bold text-white mb-2">No Workspaces</h3><p class="text-apple-label">Create a new workspace or drop files to get started.</p></div>`;
+                }
                 lucide.createIcons();
             },
 
-            createProject: () => {
-                const input = document.getElementById('new-project-name');
-                const name = input.value.trim() || 'Untitled Workspace';
-                const id = 'proj_' + Date.now();
-                State.projects[id] = { id, name, files: [{id:'1',name:'index.html',language:'html',content:'<h1>New Workspace</h1>'}], updated: Date.now() };
-                input.value = ''; Workspace.save(); Workspace.switchProj(id); UI.showToast("Workspace created");
-            },
-
-            switchProj: (id) => {
-                if (id === State.currentProjId) return UI.toggleProjectModal();
-                Workspace.save(); State.currentProjId = id; Workspace.loadActive(); Workspace.save(); UI.toggleProjectModal();
-            },
-
-            renameProj: async (id) => {
-                const name = await Dialog.prompt("Rename Workspace", "Enter new name:", State.projects[id].name);
-                if (name && name.trim()) { State.projects[id].name = name.trim(); Workspace.save(); Workspace.renderList(); if(State.currentProjId === id) Els.projTitle.innerText = name.trim(); }
-            },
-
-            deleteProj: async (id) => {
-                if (Object.keys(State.projects).length <= 1) return Dialog.alert("Action Denied", "Cannot delete your only workspace.");
-                if (await Dialog.confirm("Delete Workspace", `Delete "${State.projects[id].name}" permanently?`)) {
-                    delete State.projects[id];
-                    if (State.currentProjId === id) { State.currentProjId = Object.keys(State.projects)[0]; Workspace.loadActive(); }
-                    Workspace.save(); Workspace.renderList(); UI.showToast("Workspace deleted");
+            createProject: async () => {
+                const name = await Dialog.prompt("New Workspace", "Enter a name for the workspace:", "Untitled App");
+                if(name) {
+                    const id = 'proj_' + Date.now();
+                    State.projects[id] = { id, name: name.trim(), files: [{id:'1',name:'index.html',language:'html',content:'<h1>New App by Aravind</h1>'}], updated: Date.now() };
+                    Workspace.save(); Workspace.openProj(id); UI.showToast("Created");
                 }
             },
 
-            copyContent: async () => { try { await navigator.clipboard.writeText(Els.editor.value); UI.showToast("Copied code"); } catch(e){ UI.showToast("Copy failed", "error"); } },
-            
-            exportProject: () => {
-                if(!State.blobUrl) return UI.showToast("Build required", "error");
-                fetch(State.blobUrl).then(r => r.blob()).then(b => {
-                    const a = document.createElement('a'); a.href = URL.createObjectURL(b);
-                    a.download = `${State.projects[State.currentProjId].name.replace(/\s+/g,'-')}.html`;
-                    a.click(); URL.revokeObjectURL(a.href); UI.showToast("Exported as HTML");
-                });
+            openProj: (id) => {
+                State.currentProjId = id;
+                Workspace.save(); 
+                UI.switchView('ide');
+            },
+
+            renameProj: async (id) => {
+                const name = await Dialog.prompt("Rename Workspace", "Enter a new name:", State.projects[id].name);
+                if (name && name.trim()) { 
+                    State.projects[id].name = name.trim(); Workspace.save(); Workspace.renderHomeGrid(); 
+                    if(State.currentProjId === id) Els.ideProjTitle.innerText = name.trim(); 
+                }
+            },
+
+            deleteProj: async (id) => {
+                if (Object.keys(State.projects).length <= 1) return Dialog.alert("Action Not Allowed", "You must have at least one workspace.");
+                if (await Dialog.confirm("Delete Workspace", `Delete "${State.projects[id].name}" permanently?`)) {
+                    delete State.projects[id];
+                    if (State.currentProjId === id) { State.currentProjId = Object.keys(State.projects)[0]; }
+                    Workspace.save(); Workspace.renderHomeGrid(); UI.showToast("Deleted");
+                }
             },
             
-            openNewTab: () => { if(State.blobUrl) window.open(State.blobUrl, '_blank'); else UI.showToast("Build required", "error"); }
+            copyContent: async () => { try { await navigator.clipboard.writeText(Els.editor.value); UI.showToast("Copied code"); } catch(e){ UI.showToast("Copy failed", "error"); } },
+
+            downloadCurrentFile: () => {
+                const f = State.files.find(x => x.id === State.activeFileId);
+                if(!f) return;
+                const blob = new Blob([f.content], { type: 'text/plain' });
+                const a = document.createElement('a'); a.href = URL.createObjectURL(blob);
+                a.download = f.name; a.click(); URL.revokeObjectURL(a.href);
+                UI.showToast("File Downloaded");
+            },
+            
+            exportHomeProj: (id) => {
+                const p = State.projects[id];
+                const html = p.files.find(f => f.name === 'index.html')?.content || '';
+                const css = p.files.filter(f => f.name.endsWith('.css')).map(f => f.content).join('\n');
+                const js = p.files.filter(f => f.name.endsWith('.js')).map(f => f.content).join('\n');
+                
+                const doc = `<!DOCTYPE html>\n<html>\n<head>\n<meta charset="utf-8">\n<meta name="viewport" content="width=device-width, initial-scale=1.0">\n<style>${css}</style>\n</head>\n<body>\n${html}\n<script>${js}<\/script>\n</body>\n</html>`;
+                
+                const blob = new Blob([doc], { type: 'text/html' });
+                const a = document.createElement('a'); a.href = URL.createObjectURL(blob);
+                a.download = `${p.name.replace(/\s+/g,'-')}.html`;
+                a.click(); URL.revokeObjectURL(a.href); UI.showToast("Exported to Files");
+            },
+
+            exportProject: () => { Workspace.exportHomeProj(State.currentProjId); },
+            
+            openNewTab: () => { if(State.blobUrl) window.open(State.blobUrl, '_blank'); else { Engine.run(); setTimeout(()=>window.open(State.blobUrl, '_blank'), 500); } }
         };
 
         // --- COMPILER ENGINE ---
@@ -691,15 +1056,16 @@
                 const html = State.files.find(f => f.name === 'index.html')?.content || State.files.filter(f=>f.name.endsWith('.html'))[0]?.content || '';
                 const css = State.files.filter(f => f.name.endsWith('.css')).map(f => f.content).join('\n');
                 const js = State.files.filter(f => f.name.endsWith('.js')).map(f => f.content).join('\n');
-                return `<!DOCTYPE html>\n<html>\n<head>\n<meta charset="utf-8">\n<style>${css}</style>\n<script>\nwindow.onerror=function(m,u,l){window.parent.postMessage({src:'nova',type:'error',msg:m+' (Line: '+l+')'},'*');return false;};\nconst ol=console.log,ow=console.warn,oe=console.error,oi=console.info;\nfunction fmt(a){return Array.from(a).map(x=>{if(typeof x==='object'){try{return JSON.stringify(x,null,2)}catch(e){return String(x)}}return String(x)}).join(' ')}\nconsole.log=function(...a){window.parent.postMessage({src:'nova',type:'log',msg:fmt(a)},'*');ol.apply(console,a)};\nconsole.warn=function(...a){window.parent.postMessage({src:'nova',type:'warn',msg:fmt(a)},'*');ow.apply(console,a)};\nconsole.error=function(...a){window.parent.postMessage({src:'nova',type:'error',msg:fmt(a)},'*');oe.apply(console,a)};\nconsole.info=function(...a){window.parent.postMessage({src:'nova',type:'info',msg:fmt(a)},'*');oi.apply(console,a)};\n<\/script>\n</head>\n<body>\n${html}\n<script>${js}<\/script>\n</body>\n</html>`;
+                return `<!DOCTYPE html>\n<html>\n<head>\n<meta charset="utf-8">\n<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">\n<style>${css}</style>\n<script>\nwindow.onerror=function(m,u,l){window.parent.postMessage({src:'nova',type:'error',msg:m+' (Line: '+l+')'},'*');return false;};\nconst ol=console.log,ow=console.warn,oe=console.error,oi=console.info;\nfunction fmt(a){return Array.from(a).map(x=>{if(typeof x==='object'){try{return JSON.stringify(x,null,2)}catch(e){return String(x)}}return String(x)}).join(' ')}\nconsole.log=function(...a){window.parent.postMessage({src:'nova',type:'log',msg:fmt(a)},'*');ol.apply(console,a)};\nconsole.warn=function(...a){window.parent.postMessage({src:'nova',type:'warn',msg:fmt(a)},'*');ow.apply(console,a)};\nconsole.error=function(...a){window.parent.postMessage({src:'nova',type:'error',msg:fmt(a)},'*');oe.apply(console,a)};\nconsole.info=function(...a){window.parent.postMessage({src:'nova',type:'info',msg:fmt(a)},'*');oi.apply(console,a)};\n<\/script>\n</head>\n<body>\n${html}\n<script>${js}<\/script>\n</body>\n</html>`;
             },
             run: () => {
                 Els.loader.style.display = 'block'; Engine.clearConsole();
+                Els.runBtn.classList.remove('run-pulse');
                 const blob = new Blob([Engine.getDoc()], { type: 'text/html' });
                 if (State.blobUrl) URL.revokeObjectURL(State.blobUrl);
                 State.blobUrl = URL.createObjectURL(blob);
                 Els.iframe.src = State.blobUrl;
-                setTimeout(() => { Els.loader.style.display = 'none'; if(!State.autoRun) UI.showToast("Build successful"); }, 300);
+                setTimeout(() => { Els.loader.style.display = 'none'; if(!State.autoRun) UI.showToast("Compiled"); }, 400);
             },
             handleMessage: (e) => {
                 if (e.data && e.data.src === 'nova') {
@@ -708,14 +1074,14 @@
                 }
             },
             renderConsole: () => {
-                if (!State.consoleLogs.length) { Els.consoleOut.innerHTML = '<div class="text-dark-muted italic opacity-50 text-center mt-4">Waiting for console output...</div>'; return; }
+                if (!State.consoleLogs.length) { Els.consoleOut.innerHTML = '<div class="text-apple-label italic opacity-50 text-center mt-4 text-[13px]">No Output</div>'; return; }
                 Els.consoleOut.innerHTML = State.consoleLogs.map(l => {
-                    let st = 'text-gray-300', ic = '<i data-lucide="chevron-right" class="w-3 h-3 text-gray-500 mt-0.5"></i>', bg = 'hover:bg-white/5 px-2 py-1.5 rounded-lg';
-                    if(l.type==='error'){ st='text-red-400'; ic='<i data-lucide="x-circle" class="w-3.5 h-3.5 text-red-500 mt-0.5"></i>'; bg='bg-red-500/10 px-2 py-1.5 rounded-lg border border-red-500/20'; }
-                    if(l.type==='warn'){ st='text-yellow-400'; ic='<i data-lucide="alert-triangle" class="w-3.5 h-3.5 text-yellow-500 mt-0.5"></i>'; bg='bg-yellow-500/10 px-2 py-1.5 rounded-lg border border-yellow-500/20'; }
-                    if(l.type==='info'){ st='text-blue-400'; ic='<i data-lucide="info" class="w-3.5 h-3.5 text-blue-500 mt-0.5"></i>'; }
-                    const msg = l.msg.includes('\n') ? `<pre class="mt-1 font-mono text-[11px] bg-black/50 p-2.5 rounded-lg border border-white/5 overflow-x-auto shadow-inner">${l.msg}</pre>` : `<span>${l.msg}</span>`;
-                    return `<div class="flex gap-2 items-start ${bg} break-words transition-colors">${ic}<div class="flex-1 min-w-0 ${st}">${msg}</div><span class="opacity-30 text-[9px] mt-1 whitespace-nowrap font-medium">${l.time}</span></div>`;
+                    let st = 'text-white', ic = '<i data-lucide="chevron-right" class="w-3 h-3 text-apple-label mt-0.5"></i>';
+                    if(l.type==='error'){ st='text-[#FF3B30]'; ic='<i data-lucide="x-circle" class="w-3.5 h-3.5 text-[#FF3B30] mt-0.5"></i>'; }
+                    if(l.type==='warn'){ st='text-[#FFCC00]'; ic='<i data-lucide="alert-triangle" class="w-3.5 h-3.5 text-[#FFCC00] mt-0.5"></i>'; }
+                    if(l.type==='info'){ st='text-apple-blue'; ic='<i data-lucide="info" class="w-3.5 h-3.5 text-apple-blue mt-0.5"></i>'; }
+                    const msg = l.msg.includes('\n') ? `<pre class="mt-1 font-mono text-[11px] bg-black/40 p-3 rounded-xl border border-white/5 overflow-x-auto shadow-inner">${l.msg}</pre>` : `<span>${l.msg}</span>`;
+                    return `<div class="flex gap-2 items-start border-b border-white/5 py-2 break-words">${ic}<div class="flex-1 min-w-0 ${st}">${msg}</div><span class="text-apple-label text-[10px] mt-1 whitespace-nowrap font-medium">${l.time}</span></div>`;
                 }).join('');
                 lucide.createIcons(); Els.consoleOut.scrollTop = Els.consoleOut.scrollHeight;
             },
@@ -723,18 +1089,7 @@
         };
 
         // --- GLOBAL HELPERS ---
-        function toggleMobileSidebar() {
-            const s = document.getElementById('sidebar'); const o = document.getElementById('sidebar-overlay');
-            if (s.classList.contains('-translate-x-full')) {
-                s.classList.remove('-translate-x-full'); o.classList.remove('hidden'); requestAnimationFrame(()=>o.classList.remove('opacity-0'));
-            } else {
-                s.classList.add('-translate-x-full'); o.classList.add('opacity-0'); setTimeout(()=>o.classList.add('hidden'), 300);
-            }
-        }
-        function setTheme(t) {
-            document.documentElement.className = `dark theme-${t}`; State.theme = t;
-            UI.showToast(`${t.charAt(0).toUpperCase()+t.slice(1)} theme active`);
-        }
+        function setTheme(t) { document.documentElement.className = `dark theme-${t}`; State.theme = t; }
 
         // Boot
         UI.init(); Workspace.init();
