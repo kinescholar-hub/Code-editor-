@@ -14,9 +14,47 @@
         (function() {
             const svgData = `<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><rect width='512' height='512' rx='112' fill='#1C1C1E'/><path d='M256 120l25 111 111 25-111 25-25 111-25-111-111-25 111-25z' fill='#0A84FF'/></svg>`;
             const svgUrl = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(svgData);
+            
+            // Standard Favicon for browsers
             const iconLink = document.createElement('link');
             iconLink.rel = 'icon'; iconLink.type = 'image/svg+xml'; iconLink.href = svgUrl;
             document.head.appendChild(iconLink);
+
+            // Generate PNG for Mobile Home Screens (iOS/Android)
+            const img = new Image();
+            img.onload = () => {
+                const canvas = document.createElement('canvas');
+                canvas.width = 512; canvas.height = 512;
+                canvas.getContext('2d').drawImage(img, 0, 0);
+                
+                try {
+                    const pngUrl = canvas.toDataURL('image/png');
+                    
+                    // Inject Apple Touch Icon
+                    const appleLink = document.createElement('link');
+                    appleLink.rel = 'apple-touch-icon';
+                    appleLink.href = pngUrl;
+                    document.head.appendChild(appleLink);
+                    
+                    // Inject Web App Manifest
+                    const manifest = {
+                        name: "NOVA Web Studio",
+                        short_name: "NOVA",
+                        start_url: window.location.href.split('?')[0] || ".",
+                        display: "standalone",
+                        background_color: "#000000",
+                        theme_color: "#000000",
+                        icons: [{ src: pngUrl, sizes: "512x512", type: "image/png", purpose: "any maskable" }]
+                    };
+                    const manifestLink = document.createElement('link');
+                    manifestLink.rel = 'manifest';
+                    manifestLink.href = "data:application/manifest+json;charset=utf-8," + encodeURIComponent(JSON.stringify(manifest));
+                    document.head.appendChild(manifestLink);
+                } catch(e) {
+                    console.warn("Canvas export failed for PWA icon.");
+                }
+            };
+            img.src = svgUrl;
         })();
     </script>
     
@@ -73,6 +111,7 @@
         ::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.3); }
         .scrollbar-hide::-webkit-scrollbar { display: none; }
         .touch-pan-x { -webkit-overflow-scrolling: touch; }
+        .touch-pan-y { -webkit-overflow-scrolling: touch; }
         
         body { background-color: #000; color: #FFF; overflow: hidden; overscroll-behavior: none; }
 
@@ -143,15 +182,16 @@
         .syn-property { color: #5DD8FF; }
 
         /* Interactive Elements */
-        .ios-btn { transition: all 0.25s cubic-bezier(0.25, 0.8, 0.25, 1); cursor: pointer; transform-origin: center; }
+        .ios-btn { transition: all 0.25s cubic-bezier(0.25, 0.8, 0.25, 1); cursor: pointer; transform-origin: center; user-select: none; -webkit-user-select: none; }
         .ios-btn:active { transform: scale(0.92); opacity: 0.8; }
         
-        .project-card { transition: all 0.4s var(--spring-bounce); cursor: pointer; }
+        .project-card { transition: all 0.4s var(--spring-bounce); cursor: pointer; user-select: none; -webkit-user-select: none; }
         .project-card:hover { transform: translateY(-8px) scale(1.02); box-shadow: var(--tw-shadow-card-hover); border-color: rgba(255,255,255,0.25); }
         .project-card:active { transform: scale(0.97) translateY(0); transition: all 0.1s ease; }
         
+        /* Dynamic Resizer / Touch Area Optimized */
         #resizer { 
-            width: 16px; margin-left: -8px; margin-right: -8px; 
+            width: 24px; margin-left: -12px; margin-right: -12px; /* Generous touch area */
             cursor: col-resize; background: transparent; position: relative; z-index: 30; 
             display: flex; justify-content: center; align-items: center;
         }
@@ -218,12 +258,12 @@
 
     <!-- DRAG & DROP OVERLAY -->
     <div id="drop-zone">
-        <div class="bg-white/10 border-2 border-dashed border-apple-blue rounded-[3rem] p-12 flex flex-col items-center shadow-glass backdrop-blur-3xl transform scale-105 transition-transform duration-300" id="drop-box">
-            <div class="w-20 h-20 bg-apple-blue/20 rounded-full flex items-center justify-center mb-6 shadow-[0_0_30px_var(--sys-color)]">
-                <i data-lucide="cloud-download" class="w-10 h-10 text-apple-blue animate-bounce"></i>
+        <div class="bg-white/10 border-2 border-dashed border-apple-blue rounded-[2rem] md:rounded-[3rem] p-8 md:p-12 flex flex-col items-center shadow-glass backdrop-blur-3xl transform scale-105 transition-transform duration-300 w-[90vw] max-w-[500px]" id="drop-box">
+            <div class="w-16 h-16 md:w-20 md:h-20 bg-apple-blue/20 rounded-full flex items-center justify-center mb-4 md:mb-6 shadow-[0_0_30px_var(--sys-color)]">
+                <i data-lucide="cloud-download" class="w-8 h-8 md:w-10 md:h-10 text-apple-blue animate-bounce"></i>
             </div>
-            <h2 class="text-3xl font-bold text-white mb-2 tracking-tight">Drop files to import</h2>
-            <p class="text-apple-label font-medium text-lg">Automatically adds to your workspace</p>
+            <h2 class="text-2xl md:text-3xl font-bold text-white mb-2 tracking-tight text-center">Drop files to import</h2>
+            <p class="text-apple-label font-medium text-sm md:text-lg text-center">Automatically adds to workspace</p>
         </div>
     </div>
 
@@ -233,54 +273,54 @@
         <!-- ========================================== -->
         <!-- VIEW 1: HOME DASHBOARD                     -->
         <!-- ========================================== -->
-        <div id="home-view" class="view-transition view-active glass-panel glass-noise z-20 m-0 md:m-4 md:mb-6 md:rounded-[3rem] shadow-glass border-0 md:border md:border-apple-border">
+        <div id="home-view" class="view-transition view-active glass-panel glass-noise z-20 m-0 md:m-4 md:mb-6 md:rounded-[2.5rem] lg:rounded-[3rem] shadow-glass border-0 md:border md:border-apple-border">
             
             <!-- Home Header -->
-            <header class="h-20 flex-shrink-0 flex items-center justify-between px-6 md:px-8 z-40 border-b border-white/5 relative">
+            <header class="h-16 md:h-20 flex-shrink-0 flex items-center justify-between px-4 md:px-8 z-40 border-b border-white/5 relative">
                 <div class="flex items-center gap-3">
-                    <div class="w-10 h-10 rounded-2xl bg-apple-blue flex items-center justify-center shadow-[0_0_20px_var(--sys-color)] transition-all duration-300">
-                        <i data-lucide="sparkles" class="w-5 h-5 text-white"></i>
+                    <div class="w-8 h-8 md:w-10 md:h-10 rounded-xl md:rounded-2xl bg-apple-blue flex items-center justify-center shadow-[0_0_20px_var(--sys-color)] transition-all duration-300">
+                        <i data-lucide="sparkles" class="w-4 h-4 md:w-5 md:h-5 text-white"></i>
                     </div>
-                    <span class="font-bold text-[24px] tracking-tight text-white">NOVA</span>
+                    <span class="font-bold text-[20px] md:text-[24px] tracking-tight text-white">NOVA</span>
                 </div>
                 
                 <!-- Right Controls (Theme & Profile) -->
-                <div class="flex items-center gap-4">
+                <div class="flex items-center gap-3 md:gap-4">
                     <div class="hidden sm:flex items-center gap-2 bg-black/20 px-3 py-1.5 rounded-full border border-white/5 shadow-inner">
                         <button onclick="setTheme('blue')" class="w-4 h-4 rounded-full bg-[#0A84FF] ios-btn ring-2 ring-transparent focus:ring-[#0A84FF]/50"></button>
                         <button onclick="setTheme('purple')" class="w-4 h-4 rounded-full bg-[#BF5AF2] ios-btn ring-2 ring-transparent focus:ring-[#BF5AF2]/50"></button>
                         <button onclick="setTheme('pink')" class="w-4 h-4 rounded-full bg-[#FF375F] ios-btn ring-2 ring-transparent focus:ring-[#FF375F]/50"></button>
                         <button onclick="setTheme('orange')" class="w-4 h-4 rounded-full bg-[#FF9F0A] ios-btn ring-2 ring-transparent focus:ring-[#FF9F0A]/50"></button>
                     </div>
-                    <div class="h-10 w-10 rounded-full bg-gradient-to-br from-gray-800 to-black border border-white/10 flex items-center justify-center shadow-[0_0_15px_rgba(0,0,0,0.5)] ios-btn" title="Developed by Aravind">
-                        <span class="text-white font-extrabold text-[13px] tracking-wide">AR</span>
+                    <div class="h-8 w-8 md:h-10 md:w-10 rounded-full bg-gradient-to-br from-gray-800 to-black border border-white/10 flex items-center justify-center shadow-[0_0_15px_rgba(0,0,0,0.5)] ios-btn" title="Developed by Aravind">
+                        <span class="text-white font-extrabold text-[11px] md:text-[13px] tracking-wide">AR</span>
                     </div>
                 </div>
             </header>
 
             <!-- Home Content Area -->
-            <div class="flex-1 overflow-y-auto touch-pan-y p-6 md:p-12 relative">
+            <div class="flex-1 overflow-y-auto touch-pan-y p-4 md:p-8 lg:p-12 relative">
                 <div class="max-w-7xl mx-auto">
                     
-                    <div class="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-6 animate-stagger" style="animation-delay: 0.1s">
+                    <div class="flex flex-col sm:flex-row sm:items-end justify-between mb-8 md:mb-10 gap-4 md:gap-6 animate-stagger" style="animation-delay: 0.1s">
                         <div>
-                            <h1 class="text-4xl md:text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-white to-white/60 tracking-tight mb-2">Workspaces</h1>
-                            <p class="text-apple-label text-[16px] md:text-[18px]">Manage and launch your local browser projects.</p>
+                            <h1 class="text-3xl md:text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-white to-white/60 tracking-tight mb-1 md:mb-2">Workspaces</h1>
+                            <p class="text-apple-label text-[14px] md:text-[18px]">Manage and launch your local browser projects.</p>
                             <!-- Aravind Developer Badge -->
-                            <div class="mt-5 inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-black/40 border border-white/10 backdrop-blur-xl shadow-inner transition-all hover:bg-black/60 cursor-default">
-                                <div class="w-5 h-5 rounded-full bg-apple-blue flex items-center justify-center shadow-[0_0_8px_var(--sys-color)]">
-                                    <i data-lucide="code-2" class="w-3 h-3 text-white"></i>
+                            <div class="mt-4 inline-flex items-center gap-2 md:gap-2.5 px-3 md:px-4 py-1.5 md:py-2 rounded-full bg-black/40 border border-white/10 backdrop-blur-xl shadow-inner transition-all hover:bg-black/60 cursor-default">
+                                <div class="w-4 h-4 md:w-5 md:h-5 rounded-full bg-apple-blue flex items-center justify-center shadow-[0_0_8px_var(--sys-color)]">
+                                    <i data-lucide="code-2" class="w-2.5 h-2.5 md:w-3 md:h-3 text-white"></i>
                                 </div>
-                                <span class="text-[13px] font-medium text-apple-label">Developed by <span class="text-white font-bold tracking-wider">ARAVIND</span></span>
+                                <span class="text-[11px] md:text-[13px] font-medium text-apple-label">Developed by <span class="text-white font-bold tracking-wider">ARAVIND</span></span>
                             </div>
                         </div>
-                        <button onclick="Workspace.createProject()" class="ios-btn bg-apple-blue hover:bg-blue-500 text-white px-7 py-3.5 rounded-full font-bold text-[16px] flex items-center justify-center gap-2 shadow-[0_5px_20px_var(--sys-color)]">
-                            <i data-lucide="plus" class="w-5 h-5"></i> New Workspace
+                        <button onclick="Workspace.createProject()" class="ios-btn bg-apple-blue hover:bg-blue-500 text-white px-5 md:px-7 py-2.5 md:py-3.5 rounded-full font-bold text-[14px] md:text-[16px] flex items-center justify-center gap-2 shadow-[0_5px_20px_var(--sys-color)] w-full sm:w-auto">
+                            <i data-lucide="plus" class="w-4 h-4 md:w-5 md:h-5"></i> New Workspace
                         </button>
                     </div>
 
                     <!-- Projects Grid -->
-                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 md:gap-8" id="home-project-grid">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6 lg:gap-8" id="home-project-grid">
                         <!-- Populated by JS -->
                     </div>
 
@@ -292,50 +332,52 @@
         <!-- ========================================== -->
         <!-- VIEW 2: IDE WORKSPACE                      -->
         <!-- ========================================== -->
-        <div id="ide-view" class="view-transition view-hidden glass-panel glass-noise z-30 m-0 md:m-4 md:mb-6 md:rounded-[3rem] shadow-glass border-0 md:border md:border-apple-border">
+        <div id="ide-view" class="view-transition view-hidden glass-panel glass-noise z-30 m-0 md:m-4 md:mb-6 md:rounded-[2.5rem] lg:rounded-[3rem] shadow-glass border-0 md:border md:border-apple-border">
             
             <!-- IDE Top Navigation Bar -->
-            <header class="h-16 flex-shrink-0 flex items-center justify-between px-4 md:px-6 z-40 border-b border-apple-border relative">
-                <div class="flex items-center gap-2 md:gap-4 w-1/3">
-                    
-                    <!-- Back to Home Button -->
-                    <button onclick="UI.switchView('home')" class="ios-btn p-2.5 text-apple-label hover:text-white bg-black/20 hover:bg-black/40 rounded-full border border-white/5 shadow-inner" title="Back to Home">
-                        <i data-lucide="layout-grid" class="w-5 h-5"></i>
+            <header class="h-14 md:h-16 flex-shrink-0 flex items-center justify-between px-2 md:px-6 z-40 border-b border-apple-border relative">
+                <!-- Left Section -->
+                <div class="flex items-center gap-1 md:gap-4 w-auto lg:w-1/3 min-w-0">
+                    <!-- Back to Home -->
+                    <button onclick="UI.switchView('home')" class="ios-btn p-2 md:p-2.5 text-apple-label hover:text-white bg-black/20 hover:bg-black/40 rounded-full border border-white/5 shadow-inner flex-shrink-0" title="Back to Home">
+                        <i data-lucide="layout-grid" class="w-4 h-4 md:w-5 md:h-5"></i>
                     </button>
 
-                    <div class="w-px h-6 bg-white/10 mx-1 hidden md:block"></div>
+                    <div class="w-px h-5 bg-white/10 mx-1 hidden md:block flex-shrink-0"></div>
 
-                    <button onclick="UI.toggleMobileSidebar()" class="md:hidden ios-btn p-2.5 text-apple-text bg-white/10 rounded-full"><i data-lucide="sidebar" class="w-5 h-5"></i></button>
-                    <button onclick="UI.toggleDesktopSidebar()" class="hidden md:block ios-btn p-2 text-apple-label hover:text-white rounded-lg" title="Toggle Sidebar (Cmd+B)"><i data-lucide="sidebar" class="w-5 h-5"></i></button>
+                    <!-- Mobile Sidebar Toggle -->
+                    <button onclick="UI.toggleMobileSidebar()" class="md:hidden ios-btn p-2 text-apple-text bg-white/10 rounded-full flex-shrink-0"><i data-lucide="sidebar" class="w-4 h-4"></i></button>
+                    <!-- Desktop Sidebar Toggle -->
+                    <button onclick="UI.toggleDesktopSidebar()" class="hidden md:block ios-btn p-2 text-apple-label hover:text-white rounded-lg flex-shrink-0" title="Toggle Sidebar (Cmd+B)"><i data-lucide="sidebar" class="w-5 h-5"></i></button>
                     
-                    <!-- Project Title Display -->
-                    <div class="flex items-center gap-2 py-1.5 px-3 rounded-full bg-transparent">
-                        <span id="ide-project-title" class="text-[15px] font-bold text-white truncate max-w-[120px] md:max-w-[200px]">Loading...</span>
+                    <!-- Project Title -->
+                    <div class="flex items-center py-1.5 px-2 md:px-3 rounded-full bg-transparent min-w-0">
+                        <span id="ide-project-title" class="text-[13px] md:text-[15px] font-bold text-white truncate max-w-[100px] sm:max-w-[150px] md:max-w-[200px]">Loading...</span>
                     </div>
                 </div>
                 
                 <!-- Center Segmented Control -->
-                <div class="hidden md:flex justify-center w-1/3">
-                    <div class="flex items-center bg-black/30 p-1.5 rounded-xl border border-white/5 backdrop-blur-md shadow-inner">
-                        <button onclick="UI.setViewMode('editor')" id="btn-view-editor" class="px-6 py-1.5 rounded-lg text-[13px] font-bold text-white bg-white/20 shadow-sm transition-all ios-btn">Code</button>
-                        <button onclick="UI.setViewMode('split')" id="btn-view-split" class="px-6 py-1.5 rounded-lg text-[13px] font-bold text-apple-label hover:text-white transition-all ios-btn">Split</button>
-                        <button onclick="UI.setViewMode('preview')" id="btn-view-preview" class="px-6 py-1.5 rounded-lg text-[13px] font-bold text-apple-label hover:text-white transition-all ios-btn">Preview</button>
+                <div class="hidden md:flex justify-center w-1/3 flex-shrink-0">
+                    <div class="flex items-center bg-black/30 p-1 md:p-1.5 rounded-xl border border-white/5 backdrop-blur-md shadow-inner">
+                        <button onclick="UI.setViewMode('editor')" id="btn-view-editor" class="px-4 lg:px-6 py-1 md:py-1.5 rounded-lg text-[12px] md:text-[13px] font-bold text-white bg-white/20 shadow-sm transition-all ios-btn">Code</button>
+                        <button onclick="UI.setViewMode('split')" id="btn-view-split" class="px-4 lg:px-6 py-1 md:py-1.5 rounded-lg text-[12px] md:text-[13px] font-bold text-apple-label hover:text-white transition-all ios-btn">Split</button>
+                        <button onclick="UI.setViewMode('preview')" id="btn-view-preview" class="px-4 lg:px-6 py-1 md:py-1.5 rounded-lg text-[12px] md:text-[13px] font-bold text-apple-label hover:text-white transition-all ios-btn">Preview</button>
                     </div>
                 </div>
                 
                 <!-- Right Controls -->
-                <div class="flex items-center justify-end gap-3 w-1/3">
-                    <div class="flex items-center gap-2 bg-apple-blue/10 border border-apple-blue/20 rounded-full px-3 py-1.5 shadow-inner">
-                        <label class="hidden sm:flex items-center gap-1.5 text-[12px] font-semibold text-apple-blue ios-btn cursor-pointer">
+                <div class="flex items-center justify-end gap-2 md:gap-3 w-auto lg:w-1/3 flex-shrink-0">
+                    <div class="flex items-center gap-1 md:gap-2 bg-apple-blue/10 border border-apple-blue/20 rounded-full px-2 md:px-3 py-1 md:py-1.5 shadow-inner">
+                        <label class="hidden lg:flex items-center gap-1.5 text-[12px] font-semibold text-apple-blue ios-btn cursor-pointer">
                             <input type="checkbox" id="auto-run-toggle" checked class="accent-apple-blue w-3.5 h-3.5"> Auto
                         </label>
-                        <div class="w-px h-4 bg-apple-blue/30 hidden sm:block mx-1.5"></div>
-                        <button id="run-btn" disabled class="ios-btn flex items-center gap-1.5 text-[14px] font-bold text-apple-blue opacity-50 cursor-not-allowed transition-all">
-                            <i data-lucide="play" class="w-4 h-4 fill-current"></i> <span class="hidden sm:block">Run</span>
+                        <div class="w-px h-4 bg-apple-blue/30 hidden lg:block mx-1"></div>
+                        <button id="run-btn" disabled class="ios-btn flex items-center gap-1 md:gap-1.5 text-[13px] md:text-[14px] font-bold text-apple-blue opacity-50 cursor-not-allowed transition-all">
+                            <i data-lucide="play" class="w-3.5 h-3.5 md:w-4 md:h-4 fill-current"></i> <span class="hidden sm:block">Run</span>
                         </button>
                     </div>
                     
-                    <button onclick="UI.toggleMobileView()" class="md:hidden ios-btn p-2.5 text-white bg-white/10 rounded-full shadow-inner"><i data-lucide="arrow-left-right" class="w-4 h-4"></i></button>
+                    <button onclick="UI.toggleMobileView()" class="md:hidden ios-btn p-2 text-white bg-white/10 rounded-full shadow-inner"><i data-lucide="arrow-left-right" class="w-4 h-4"></i></button>
                 </div>
             </header>
 
@@ -343,25 +385,29 @@
             <main class="flex-1 flex overflow-hidden relative z-10">
                 
                 <!-- Sidebar (Files List) -->
-                <aside id="sidebar" class="absolute md:relative w-[320px] md:w-[260px] h-full flex-shrink-0 flex flex-col bg-black/20 border-r border-apple-border z-40 transform -translate-x-full md:translate-x-0 transition-transform duration-500 ease-[cubic-bezier(0.32,0.72,0,1)]">
-                    <div class="px-5 pt-6 pb-4 flex justify-between items-center">
-                        <span class="text-[13px] font-bold text-apple-label uppercase tracking-widest">Explorer</span>
-                        <button onclick="Workspace.createFile()" class="ios-btn text-white bg-white/10 hover:bg-white/20 p-1.5 rounded-full shadow-sm" title="New File"><i data-lucide="plus" class="w-4 h-4"></i></button>
+                <aside id="sidebar" class="absolute md:relative w-[80vw] max-w-[320px] md:w-[260px] h-full flex-shrink-0 flex flex-col bg-black/20 border-r border-apple-border z-50 transform -translate-x-full md:translate-x-0 transition-transform duration-400 ease-[cubic-bezier(0.32,0.72,0,1)]">
+                    <div class="px-4 md:px-5 pt-5 md:pt-6 pb-3 md:pb-4 flex justify-between items-center">
+                        <span class="text-[11px] md:text-[13px] font-bold text-apple-label uppercase tracking-widest">Explorer</span>
+                        <div class="flex gap-1">
+                            <button onclick="Workspace.createFile()" class="ios-btn text-white bg-white/10 hover:bg-white/20 p-1.5 rounded-full shadow-sm" title="New File"><i data-lucide="plus" class="w-4 h-4"></i></button>
+                            <button onclick="UI.toggleMobileSidebar()" class="md:hidden ios-btn text-apple-label hover:text-white bg-white/5 p-1.5 rounded-full"><i data-lucide="x" class="w-4 h-4"></i></button>
+                        </div>
                     </div>
-                    <div id="file-list" class="flex-1 overflow-y-auto touch-pan-y px-3 space-y-1 pb-4"></div>
+                    
+                    <div id="file-list" class="flex-1 overflow-y-auto touch-pan-y px-2 md:px-3 space-y-1 pb-4"></div>
                     
                     <!-- Sidebar Footer (Developer Credit) -->
-                    <div class="p-4 border-t border-apple-border bg-black/10">
-                        <div class="flex items-center gap-3 px-2 opacity-80 hover:opacity-100 transition-opacity cursor-default">
-                            <div class="w-8 h-8 rounded-full bg-gradient-to-tr from-gray-800 to-black flex items-center justify-center border border-white/10 shadow-[0_0_10px_rgba(0,0,0,0.5)]">
-                                <span class="text-[10px] font-bold text-white tracking-widest">AR</span>
+                    <div class="p-3 md:p-4 border-t border-apple-border bg-black/10">
+                        <div class="flex items-center gap-2 md:gap-3 px-1 md:px-2 opacity-90 cursor-default">
+                            <div class="w-7 h-7 md:w-8 md:h-8 rounded-full bg-gradient-to-tr from-gray-800 to-black flex items-center justify-center border border-white/10 shadow-[0_0_10px_rgba(0,0,0,0.5)]">
+                                <span class="text-[9px] md:text-[10px] font-bold text-white tracking-widest">AR</span>
                             </div>
-                            <span class="text-[12px] font-medium text-apple-label">Crafted by <span class="text-white font-bold tracking-wide">Aravind</span></span>
+                            <span class="text-[11px] md:text-[12px] font-medium text-apple-label">Crafted by <span class="text-white font-bold tracking-wide">Aravind</span></span>
                         </div>
                     </div>
                 </aside>
 
-                <div id="sidebar-overlay" onclick="UI.toggleMobileSidebar()" class="absolute inset-0 bg-black/50 z-30 hidden md:hidden backdrop-blur-md transition-opacity opacity-0"></div>
+                <div id="sidebar-overlay" onclick="UI.toggleMobileSidebar()" class="absolute inset-0 bg-black/50 z-40 hidden md:hidden backdrop-blur-sm transition-opacity opacity-0"></div>
 
                 <!-- Editor & Preview Splitter -->
                 <div id="workspace-container" class="flex-1 flex flex-col md:flex-row min-w-0 w-full relative">
@@ -369,16 +415,16 @@
                     <!-- CODE EDITOR -->
                     <section id="editor-section" class="flex flex-col min-w-0 w-full md:w-1/2 h-full z-10 glass-dark border-r border-apple-border relative">
                         <!-- Tabs -->
-                        <div class="flex items-center justify-between bg-black/40 border-b border-apple-border h-12 pr-2 backdrop-blur-md z-20">
-                            <div id="editor-tabs" class="flex items-center h-full gap-1 pt-1.5 px-2 overflow-x-auto touch-pan-x scrollbar-hide flex-1"></div>
-                            <div class="flex items-center gap-1 pl-2 border-l border-white/10 hidden md:flex">
+                        <div class="flex items-center justify-between bg-black/40 border-b border-apple-border h-12 pr-2 backdrop-blur-md z-20 w-full min-w-0">
+                            <div id="editor-tabs" class="flex items-center h-full gap-1 pt-1.5 px-2 overflow-x-auto touch-pan-x scrollbar-hide flex-1 min-w-0"></div>
+                            <div class="flex items-center gap-1 pl-2 border-l border-white/10 hidden md:flex flex-shrink-0">
                                 <button onclick="Workspace.copyContent()" class="ios-btn p-1.5 text-apple-label hover:text-white rounded-lg hover:bg-white/10 transition-colors" title="Copy File Code"><i data-lucide="copy" class="w-4 h-4"></i></button>
                                 <button onclick="Workspace.downloadCurrentFile()" class="ios-btn p-1.5 text-apple-label hover:text-white rounded-lg hover:bg-white/10 transition-colors" title="Download This File"><i data-lucide="download" class="w-4 h-4"></i></button>
                             </div>
                         </div>
                         
                         <div class="flex-1 flex overflow-hidden relative editor-container bg-transparent">
-                            <div id="line-numbers" class="w-12 flex-shrink-0 flex flex-col items-end pr-3 py-[1.5rem] text-[13px] font-mono select-none text-apple-label opacity-40 z-10 leading-[1.6]"></div>
+                            <div id="line-numbers" class="w-10 md:w-12 flex-shrink-0 flex flex-col items-end pr-2 md:pr-3 py-[1.5rem] text-[12px] md:text-[13px] font-mono select-none text-apple-label opacity-40 z-10 leading-[1.6]"></div>
                             <div class="relative flex-1 h-full overflow-hidden">
                                 <pre id="editor-pre" class="editor-pre" aria-hidden="true"><code></code></pre>
                                 <textarea id="code-editor" class="editor-textarea" spellcheck="false" autocapitalize="off" autocomplete="off" autocorrect="off"></textarea>
@@ -396,21 +442,21 @@
                         <div id="loader" class="loader-bar"></div>
                         
                         <!-- Safari Bar -->
-                        <div class="h-12 bg-black/40 flex items-center px-4 justify-between border-b border-apple-border z-20 backdrop-blur-xl">
-                            <div class="flex items-center gap-1 w-1/4">
-                                <button onclick="Preview.setViewport('mobile')" id="vp-mobile" class="ios-btn p-1.5 rounded-lg text-apple-label hover:bg-white/10" title="iPhone"><i data-lucide="smartphone" class="w-4 h-4"></i></button>
-                                <button onclick="Preview.setViewport('tablet')" id="vp-tablet" class="ios-btn p-1.5 rounded-lg text-apple-label hover:bg-white/10" title="iPad"><i data-lucide="tablet" class="w-4 h-4"></i></button>
-                                <button onclick="Preview.setViewport('desktop')" id="vp-desktop" class="ios-btn p-1.5 rounded-lg text-apple-blue bg-apple-blue/10" title="Mac"><i data-lucide="monitor" class="w-4 h-4"></i></button>
+                        <div class="h-12 bg-black/40 flex items-center px-2 md:px-4 justify-between border-b border-apple-border z-20 backdrop-blur-xl w-full min-w-0">
+                            <div class="flex items-center gap-1 w-auto md:w-1/4 flex-shrink-0">
+                                <button onclick="Preview.setViewport('mobile')" id="vp-mobile" class="ios-btn p-1.5 rounded-lg text-apple-label hover:bg-white/10" title="iPhone"><i data-lucide="smartphone" class="w-4 h-4 md:w-4.5 md:h-4.5"></i></button>
+                                <button onclick="Preview.setViewport('tablet')" id="vp-tablet" class="ios-btn p-1.5 rounded-lg text-apple-label hover:bg-white/10" title="iPad"><i data-lucide="tablet" class="w-4 h-4 md:w-4.5 md:h-4.5"></i></button>
+                                <button onclick="Preview.setViewport('desktop')" id="vp-desktop" class="ios-btn p-1.5 rounded-lg text-apple-blue bg-apple-blue/10 hidden sm:block" title="Mac"><i data-lucide="monitor" class="w-4 h-4 md:w-4.5 md:h-4.5"></i></button>
                             </div>
 
-                            <div class="flex-1 max-w-sm mx-2 bg-black/50 border border-white/10 rounded-full h-8 flex items-center justify-center px-4 gap-2 ios-btn shadow-inner cursor-pointer" onclick="Engine.run()">
-                                <i data-lucide="lock" class="w-3 h-3 text-apple-label opacity-60"></i>
-                                <span class="text-[12px] font-medium text-apple-label">nova.local</span>
-                                <i data-lucide="rotate-cw" class="w-3.5 h-3.5 text-apple-label opacity-60 ml-auto"></i>
+                            <div class="flex-1 min-w-0 max-w-sm mx-1 md:mx-2 bg-black/50 border border-white/10 rounded-full h-8 flex items-center justify-center px-3 md:px-4 gap-1.5 md:gap-2 ios-btn shadow-inner cursor-pointer truncate" onclick="Engine.run()">
+                                <i data-lucide="lock" class="w-3 h-3 text-apple-label opacity-60 flex-shrink-0"></i>
+                                <span class="text-[11px] md:text-[12px] font-medium text-apple-label truncate">nova.local</span>
+                                <i data-lucide="rotate-cw" class="w-3 h-3 md:w-3.5 md:h-3.5 text-apple-label opacity-60 flex-shrink-0 ml-auto"></i>
                             </div>
 
-                            <div class="w-1/4 flex justify-end gap-1">
-                                <button onclick="Workspace.exportProject()" class="ios-btn p-1.5 text-apple-label hover:text-white bg-white/5 rounded-lg" title="Export HTML"><i data-lucide="download-cloud" class="w-4 h-4"></i></button>
+                            <div class="w-auto md:w-1/4 flex justify-end gap-0.5 md:gap-1 flex-shrink-0">
+                                <button onclick="Workspace.exportProject()" class="ios-btn p-1.5 text-apple-label hover:text-white bg-white/5 rounded-lg hidden sm:block" title="Export HTML"><i data-lucide="download-cloud" class="w-4 h-4"></i></button>
                                 <button onclick="Workspace.openNewTab()" class="ios-btn p-1.5 text-apple-label hover:text-white bg-white/5 rounded-lg" title="Open in new tab"><i data-lucide="external-link" class="w-4 h-4"></i></button>
                             </div>
                         </div>
@@ -427,10 +473,10 @@
                         <div class="h-[30%] min-h-[120px] max-h-[60%] flex flex-col bg-black/40 backdrop-blur-2xl border-t border-apple-border relative z-20">
                             <div class="absolute top-0 left-0 w-full h-2 cursor-row-resize -mt-1 z-10"></div>
                             <div class="flex justify-between items-center px-4 py-2 border-b border-white/5 bg-black/30">
-                                <div class="flex items-center gap-2"><i data-lucide="terminal-square" class="w-4 h-4 text-apple-label"></i><span class="text-[12px] text-apple-label font-bold tracking-widest uppercase">Console</span></div>
-                                <button onclick="Engine.clearConsole()" class="ios-btn p-1 text-apple-label hover:text-white"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+                                <div class="flex items-center gap-2"><i data-lucide="terminal-square" class="w-3.5 h-3.5 md:w-4 md:h-4 text-apple-label"></i><span class="text-[11px] md:text-[12px] text-apple-label font-bold tracking-widest uppercase">Console</span></div>
+                                <button onclick="Engine.clearConsole()" class="ios-btn p-1 text-apple-label hover:text-white"><i data-lucide="trash-2" class="w-3.5 h-3.5 md:w-4 md:h-4"></i></button>
                             </div>
-                            <div id="console-output" class="flex-1 overflow-y-auto touch-pan-y p-3 font-mono text-[13px] leading-relaxed flex flex-col gap-1.5"></div>
+                            <div id="console-output" class="flex-1 overflow-y-auto touch-pan-y p-2 md:p-3 font-mono text-[11px] md:text-[13px] leading-relaxed flex flex-col gap-1.5"></div>
                         </div>
                     </section>
                 </div>
@@ -440,24 +486,24 @@
 
     <!-- NATIVE DIALOG (Bouncy Spring) -->
     <div id="dialog-overlay" class="hidden fixed inset-0 modal-backdrop z-[100] flex items-center justify-center p-4 opacity-0 transition-opacity duration-400">
-        <div id="dialog-box" class="bg-[rgba(30,30,35,0.85)] backdrop-blur-3xl rounded-[2rem] w-full max-w-[320px] overflow-hidden modal-content modal-enter flex flex-col text-center shadow-glass border border-white/10 relative">
-            <div class="p-6 flex flex-col gap-2">
-                <h3 id="dialog-title" class="text-[20px] font-bold text-white tracking-tight">Title</h3>
-                <p id="dialog-message" class="text-[14px] text-apple-label leading-snug">Message</p>
-                <input type="text" id="dialog-input" autocorrect="off" autocapitalize="none" class="hidden w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-[16px] text-white focus:outline-none focus:border-apple-blue focus:ring-1 focus:ring-apple-blue transition-all mt-4 shadow-inner">
+        <div id="dialog-box" class="bg-[rgba(30,30,35,0.85)] backdrop-blur-3xl rounded-[1.5rem] md:rounded-[2rem] w-[90vw] max-w-[320px] overflow-hidden modal-content modal-enter flex flex-col text-center shadow-glass border border-white/10 relative">
+            <div class="p-5 md:p-6 flex flex-col gap-2">
+                <h3 id="dialog-title" class="text-[18px] md:text-[20px] font-bold text-white tracking-tight">Title</h3>
+                <p id="dialog-message" class="text-[13px] md:text-[14px] text-apple-label leading-snug">Message</p>
+                <input type="text" id="dialog-input" autocorrect="off" autocapitalize="none" class="hidden w-full bg-black/40 border border-white/10 rounded-xl px-4 py-2.5 md:py-3 text-[15px] md:text-[16px] text-white focus:outline-none focus:border-apple-blue focus:ring-1 focus:ring-apple-blue transition-all mt-3 md:mt-4 shadow-inner">
             </div>
             <div class="flex border-t border-white/10 bg-black/20">
-                <button id="dialog-cancel" class="flex-1 py-4 text-[17px] font-medium text-apple-label hover:text-white ios-btn border-r border-white/10">Cancel</button>
-                <button id="dialog-confirm" class="flex-1 py-4 text-[17px] font-bold text-apple-blue hover:text-white ios-btn">Confirm</button>
+                <button id="dialog-cancel" class="flex-1 py-3.5 md:py-4 text-[15px] md:text-[17px] font-medium text-apple-label hover:text-white ios-btn border-r border-white/10">Cancel</button>
+                <button id="dialog-confirm" class="flex-1 py-3.5 md:py-4 text-[15px] md:text-[17px] font-bold text-apple-blue hover:text-white ios-btn">Confirm</button>
             </div>
         </div>
     </div>
 
     <!-- Notification Pill -->
-    <div class="fixed top-6 left-1/2 transform -translate-x-1/2 z-[110] pointer-events-none w-full max-w-xs flex justify-center px-4">
-        <div id="toast" class="bg-[rgba(20,20,25,0.9)] backdrop-blur-2xl border border-white/10 px-5 py-3.5 rounded-full shadow-[0_15px_40px_rgba(0,0,0,0.8)] flex items-center gap-3 toast-pill">
-            <div id="toast-icon-wrap" class="bg-apple-blue/20 p-1 rounded-full"><i id="toast-icon" data-lucide="check" class="w-4 h-4 text-apple-blue"></i></div>
-            <span id="toast-message" class="text-[15px] font-semibold text-white tracking-tight">Success</span>
+    <div class="fixed top-4 md:top-6 left-1/2 transform -translate-x-1/2 z-[110] pointer-events-none w-full max-w-xs flex justify-center px-4">
+        <div id="toast" class="bg-[rgba(20,20,25,0.95)] backdrop-blur-2xl border border-white/10 px-4 md:px-5 py-2.5 md:py-3.5 rounded-full shadow-[0_15px_40px_rgba(0,0,0,0.8)] flex items-center gap-2.5 md:gap-3 toast-pill">
+            <div id="toast-icon-wrap" class="bg-apple-blue/20 p-1 rounded-full"><i id="toast-icon" data-lucide="check" class="w-3.5 h-3.5 md:w-4 md:h-4 text-apple-blue"></i></div>
+            <span id="toast-message" class="text-[13px] md:text-[15px] font-semibold text-white tracking-tight">Success</span>
         </div>
     </div>
 
@@ -550,7 +596,7 @@
         const Templates = {
             apple: [
                 { id: '1', name: 'index.html', language: 'html', content: `<!DOCTYPE html>\n<html lang="en">\n<head>\n  <meta charset="UTF-8">\n  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">\n  <title>App</title>\n</head>\n<body>\n  <div class="glass-card">\n    <div class="icon">🚀</div>\n    <h1>NOVA by Aravind</h1>\n    <p>A flagship browser-based development environment.</p>\n    <button onclick="runTest()">Initialize System</button>\n  </div>\n</body>\n</html>` },
-                { id: '2', name: 'style.css', language: 'css', content: `body {\n  background: transparent; color: #FFFFFF;\n  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;\n  display: flex; justify-content: center; align-items: center;\n  min-height: 100vh; margin: 0; -webkit-font-smoothing: antialiased;\n}\n.glass-card {\n  background: rgba(255,255,255,0.05); padding: 40px; border-radius: 32px;\n  text-align: center; max-width: 320px; width: 100%;\n  backdrop-filter: blur(40px) saturate(200%);\n  border: 1px solid rgba(255,255,255,0.1);\n  box-shadow: 0 20px 40px rgba(0,0,0,0.3);\n}\n.icon {\n  font-size: 48px; margin-bottom: 16px; filter: drop-shadow(0 0 10px rgba(10,132,255,0.8));\n}\nh1 {\n  font-size: 26px; font-weight: 800; margin: 0 0 8px;\n  letter-spacing: 0.5px;\n}\np {\n  color: rgba(235, 235, 245, 0.7); font-size: 15px;\n  line-height: 20px; margin-bottom: 32px;\n}\nbutton {\n  background: #0A84FF; color: #FFFFFF; border: none;\n  padding: 14px 20px; border-radius: 16px; font-size: 16px;\n  font-weight: 700; width: 100%; cursor: pointer; transition: 0.2s;\n  box-shadow: 0 4px 15px rgba(10,132,255,0.4);\n}\nbutton:active { transform: scale(0.96); opacity: 0.8; }` },
+                { id: '2', name: 'style.css', language: 'css', content: `body {\n  background: transparent; color: #FFFFFF;\n  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;\n  display: flex; justify-content: center; align-items: center;\n  min-height: 100vh; margin: 0; -webkit-font-smoothing: antialiased;\n}\n.glass-card {\n  background: rgba(255,255,255,0.05); padding: 30px; border-radius: 32px;\n  text-align: center; max-width: 90%; width: 320px;\n  backdrop-filter: blur(40px) saturate(200%);\n  border: 1px solid rgba(255,255,255,0.1);\n  box-shadow: 0 20px 40px rgba(0,0,0,0.3);\n}\n.icon {\n  font-size: 48px; margin-bottom: 16px; filter: drop-shadow(0 0 10px rgba(10,132,255,0.8));\n}\nh1 {\n  font-size: 26px; font-weight: 800; margin: 0 0 8px;\n  letter-spacing: 0.5px;\n}\np {\n  color: rgba(235, 235, 245, 0.7); font-size: 15px;\n  line-height: 20px; margin-bottom: 32px;\n}\nbutton {\n  background: #0A84FF; color: #FFFFFF; border: none;\n  padding: 14px 20px; border-radius: 16px; font-size: 16px;\n  font-weight: 700; width: 100%; cursor: pointer; transition: 0.2s;\n  box-shadow: 0 4px 15px rgba(10,132,255,0.4);\n}\nbutton:active { transform: scale(0.96); opacity: 0.8; }` },
                 { id: '3', name: 'main.js', language: 'javascript', content: `console.info('Application crafted by Aravind loaded.');\n\nfunction runTest() {\n  const payload = { developer: "Aravind", os: "iPadOS 18", blur: "Active", haptic: true };\n  console.log("System initialized.");\n  console.warn("Telemetry Data:", payload);\n}` }
             ]
         };
@@ -578,9 +624,11 @@
                 State.viewport = mode;
                 Els.vpContainer.className = `viewport-container viewport-${mode}`;
                 ['vp-mobile', 'vp-tablet', 'vp-desktop'].forEach(id => {
-                    document.getElementById(id).className = "ios-btn p-1.5 rounded-lg text-apple-label hover:bg-white/10";
+                    const el = document.getElementById(id);
+                    if(el) el.className = `ios-btn p-1.5 rounded-lg text-apple-label hover:bg-white/10 ${id==='vp-desktop'?'hidden sm:block':''}`;
                 });
-                document.getElementById(`vp-${mode}`).className = "ios-btn p-1.5 rounded-lg text-apple-blue bg-apple-blue/10";
+                const active = document.getElementById(`vp-${mode}`);
+                if(active) active.className = `ios-btn p-1.5 rounded-lg text-apple-blue bg-apple-blue/10 ${mode==='desktop'?'hidden sm:block':''}`;
             }
         };
 
@@ -603,10 +651,10 @@
                 if (State.autoRun) {
                     Els.runBtn.disabled = true;
                     Els.runBtn.classList.remove('run-pulse');
-                    Els.runBtn.className = "ios-btn flex items-center gap-1.5 text-[14px] font-bold text-apple-blue opacity-50 cursor-not-allowed transition-all";
+                    Els.runBtn.className = "ios-btn flex items-center gap-1.5 text-[13px] md:text-[14px] font-bold text-apple-blue opacity-50 cursor-not-allowed transition-all";
                 } else {
                     Els.runBtn.disabled = false;
-                    Els.runBtn.className = "ios-btn flex items-center gap-1.5 text-[14px] font-bold text-apple-blue hover:scale-105 run-pulse transition-all";
+                    Els.runBtn.className = "ios-btn flex items-center gap-1.5 text-[13px] md:text-[14px] font-bold text-apple-blue hover:scale-105 run-pulse transition-all";
                 }
             },
             
@@ -618,11 +666,11 @@
                 
                 if (type === 'error') {
                     icon.setAttribute('data-lucide', 'alert-circle');
-                    icon.className = 'w-4 h-4 text-[#FF3B30]';
+                    icon.className = 'w-3.5 h-3.5 md:w-4 md:h-4 text-[#FF3B30]';
                     wrap.className = 'bg-[#FF3B30]/20 p-1 rounded-full';
                 } else {
                     icon.setAttribute('data-lucide', 'check');
-                    icon.className = 'w-4 h-4 text-apple-blue';
+                    icon.className = 'w-3.5 h-3.5 md:w-4 md:h-4 text-apple-blue';
                     wrap.className = 'bg-apple-blue/20 p-1 rounded-full';
                 }
                 lucide.createIcons();
@@ -655,28 +703,28 @@
             },
 
             getIcon: (name) => {
-                if (name.endsWith('.html')) return '<i data-lucide="file-code-2" class="w-4 h-4 text-[#FF7AB2]"></i>';
-                if (name.endsWith('.css')) return '<i data-lucide="file-json" class="w-4 h-4 text-[#5DD8FF]"></i>';
-                if (name.endsWith('.js')) return '<i data-lucide="braces" class="w-4 h-4 text-[#D9C97C]"></i>';
-                if (name.endsWith('.json')) return '<i data-lucide="database" class="w-4 h-4 text-[#FFD60A]"></i>';
-                return '<i data-lucide="file-text" class="w-4 h-4 text-apple-label"></i>';
+                if (name.endsWith('.html')) return '<i data-lucide="file-code-2" class="w-4 h-4 md:w-4.5 md:h-4.5 text-[#FF7AB2]"></i>';
+                if (name.endsWith('.css')) return '<i data-lucide="file-json" class="w-4 h-4 md:w-4.5 md:h-4.5 text-[#5DD8FF]"></i>';
+                if (name.endsWith('.js')) return '<i data-lucide="braces" class="w-4 h-4 md:w-4.5 md:h-4.5 text-[#D9C97C]"></i>';
+                if (name.endsWith('.json')) return '<i data-lucide="database" class="w-4 h-4 md:w-4.5 md:h-4.5 text-[#FFD60A]"></i>';
+                return '<i data-lucide="file-text" class="w-4 h-4 md:w-4.5 md:h-4.5 text-apple-label"></i>';
             },
 
             renderFiles: () => {
                 Els.fileList.innerHTML = State.files.map(f => `
-                    <div onclick="Workspace.setActive('${f.id}'); window.innerWidth < 768 ? UI.toggleMobileSidebar() : null" class="flex items-center px-3 py-3 cursor-pointer group rounded-xl mb-1 transition-all duration-300 ${State.activeFileId === f.id ? 'bg-white/15 text-white shadow-inner border border-white/10' : 'text-apple-label hover:bg-white/10 border border-transparent'}">
-                        <div class="mr-3 opacity-100">${UI.getIcon(f.name)}</div>
-                        <span class="text-[14px] font-semibold flex-1 truncate tracking-wide">${f.name}</span>
+                    <div onclick="Workspace.setActive('${f.id}'); window.innerWidth < 768 ? UI.toggleMobileSidebar() : null" class="flex items-center px-3 py-3 md:py-2.5 cursor-pointer group rounded-xl mb-1 transition-all duration-300 ${State.activeFileId === f.id ? 'bg-white/15 text-white shadow-inner border border-white/10' : 'text-apple-label hover:bg-white/10 border border-transparent'}">
+                        <div class="mr-3 opacity-100 flex-shrink-0">${UI.getIcon(f.name)}</div>
+                        <span class="text-[14px] md:text-[13px] font-semibold flex-1 truncate tracking-wide">${f.name}</span>
                     </div>
                 `).join('');
             },
 
             renderTabs: () => {
                 Els.tabs.innerHTML = State.files.map(f => `
-                    <div onclick="Workspace.setActive('${f.id}')" class="flex items-center h-full px-4 cursor-pointer rounded-t-xl transition-colors border-r border-white/5 min-w-[130px] max-w-[180px] ${State.activeFileId === f.id ? 'bg-black/50 text-white border-t border-white/10' : 'text-apple-label hover:bg-black/20'}">
-                        <span class="mr-2 opacity-90">${UI.getIcon(f.name)}</span>
-                        <span class="text-[13px] font-medium truncate flex-1" ondblclick="Workspace.renameFile(event, '${f.id}')">${f.name}</span>
-                        <button onclick="Workspace.deleteFile(event, '${f.id}')" class="ml-2 opacity-0 hover:opacity-100 hover:text-[#FF3B30] ios-btn p-1 ${State.activeFileId === f.id ? 'opacity-60' : ''}"><i data-lucide="x" class="w-3.5 h-3.5"></i></button>
+                    <div onclick="Workspace.setActive('${f.id}')" class="flex items-center h-full px-3 md:px-4 cursor-pointer rounded-t-xl transition-colors border-r border-white/5 min-w-[110px] max-w-[160px] md:min-w-[130px] md:max-w-[180px] flex-shrink-0 ${State.activeFileId === f.id ? 'bg-black/50 text-white border-t border-white/10' : 'text-apple-label hover:bg-black/20'}">
+                        <span class="mr-2 opacity-90 flex-shrink-0">${UI.getIcon(f.name)}</span>
+                        <span class="text-[12px] md:text-[13px] font-medium truncate flex-1 min-w-0" ondblclick="Workspace.renameFile(event, '${f.id}')">${f.name}</span>
+                        <button onclick="Workspace.deleteFile(event, '${f.id}')" class="ml-1 md:ml-2 opacity-0 hover:opacity-100 hover:text-[#FF3B30] ios-btn p-1 flex-shrink-0 ${State.activeFileId === f.id ? 'opacity-60' : ''}"><i data-lucide="x" class="w-3.5 h-3.5"></i></button>
                     </div>
                 `).join('');
             },
@@ -768,30 +816,24 @@
                     box.classList.replace('scale-100', 'scale-105');
                     
                     if (e.dataTransfer.files.length > 0) {
-                        // Check if we need to create a new project (if dropping on home)
                         const creatingNew = State.currentView === 'home';
                         let newProjId = null;
                         
                         if (creatingNew) {
                             newProjId = 'proj_' + Date.now();
-                            State.projects[newProjId] = { id: newProjId, name: 'Imported Project', files: [], updated: Date.now() };
+                            State.projects[newProjId] = { id: newProjId, name: 'Imported Workspace', files: [], updated: Date.now() };
                         }
 
                         Array.from(e.dataTransfer.files).forEach(file => {
                             const reader = new FileReader();
                             reader.onload = (ev) => {
-                                if (creatingNew) {
-                                    Workspace.importFileTo(file.name, ev.target.result, newProjId);
-                                } else {
-                                    Workspace.importFile(file.name, ev.target.result);
-                                }
+                                if (creatingNew) { Workspace.importFileTo(file.name, ev.target.result, newProjId); } 
+                                else { Workspace.importFile(file.name, ev.target.result); }
                             };
                             reader.readAsText(file);
                         });
 
-                        if (creatingNew) {
-                            setTimeout(() => { Workspace.openProj(newProjId); UI.showToast("Project Imported"); }, 100);
-                        }
+                        if (creatingNew) { setTimeout(() => { Workspace.openProj(newProjId); UI.showToast("Project Imported"); }, 100); }
                     }
                 });
             },
@@ -806,7 +848,7 @@
             setViewMode: (m) => {
                 ['btn-view-editor', 'btn-view-split', 'btn-view-preview'].forEach(id => {
                     const el = document.getElementById(id);
-                    if(el) { el.className = "px-6 py-1.5 rounded-lg text-[13px] font-bold text-apple-label hover:text-white transition-all ios-btn"; el.style.backgroundColor = 'transparent'; el.style.boxShadow = 'none'; }
+                    if(el) { el.className = "px-4 lg:px-6 py-1 md:py-1.5 rounded-lg text-[12px] md:text-[13px] font-bold text-apple-label hover:text-white transition-all ios-btn"; el.style.backgroundColor = 'transparent'; el.style.boxShadow = 'none'; }
                 });
                 const activeBtn = document.getElementById(`btn-view-${m}`);
                 if(activeBtn) { activeBtn.style.backgroundColor = 'rgba(255,255,255,0.2)'; activeBtn.style.color = '#fff'; activeBtn.style.boxShadow = '0 1px 3px rgba(0,0,0,0.1)'; }
@@ -852,8 +894,8 @@
         const Workspace = {
             init: () => {
                 try {
-                    const s = localStorage.getItem('nova_final_data');
-                    if (s) { State.projects = JSON.parse(s); State.currentProjId = localStorage.getItem('nova_final_proj') || Object.keys(State.projects)[0]; }
+                    const s = localStorage.getItem('nova_final_data_x');
+                    if (s) { State.projects = JSON.parse(s); State.currentProjId = localStorage.getItem('nova_final_proj_x') || Object.keys(State.projects)[0]; }
                 } catch (e) {}
 
                 if (!State.projects || Object.keys(State.projects).length === 0) {
@@ -872,8 +914,8 @@
                         State.projects[State.currentProjId].files = State.files;
                         State.projects[State.currentProjId].updated = Date.now();
                     }
-                    localStorage.setItem('nova_final_data', JSON.stringify(State.projects));
-                    localStorage.setItem('nova_final_proj', State.currentProjId);
+                    localStorage.setItem('nova_final_data_x', JSON.stringify(State.projects));
+                    localStorage.setItem('nova_final_proj_x', State.currentProjId);
                 } catch (e) { console.error(e); }
             },
 
@@ -953,30 +995,30 @@
                 grid.innerHTML = sorted.map((p, index) => {
                     const gradClass = `proj-gradient-${index % 5}`;
                     const timeString = timeAgo(p.updated);
-                    const delay = index * 0.05; // Stagger delay
+                    const delay = index * 0.05; 
                     
                     return `
-                    <div class="project-card animate-stagger relative rounded-[2rem] bg-black/40 border border-white/10 overflow-hidden shadow-card flex flex-col h-[260px]" style="animation-delay: ${delay}s" onclick="Workspace.openProj('${p.id}')">
+                    <div class="project-card animate-stagger relative rounded-[2rem] bg-black/40 border border-white/10 overflow-hidden shadow-card flex flex-col h-[220px] md:h-[260px]" style="animation-delay: ${delay}s" onclick="Workspace.openProj('${p.id}')">
                         <!-- Card Header (Visual) -->
-                        <div class="h-32 ${gradClass} relative flex items-center justify-center">
+                        <div class="h-28 md:h-32 ${gradClass} relative flex items-center justify-center">
                             <div class="absolute inset-0 bg-black/20"></div>
-                            <div class="w-14 h-14 bg-white/20 backdrop-blur-md rounded-2xl flex items-center justify-center shadow-inner border border-white/20 z-10 transition-transform duration-500 hover:scale-110">
-                                <i data-lucide="layout-template" class="w-7 h-7 text-white"></i>
+                            <div class="w-12 h-12 md:w-14 md:h-14 bg-white/20 backdrop-blur-md rounded-2xl flex items-center justify-center shadow-inner border border-white/20 z-10 transition-transform duration-500 hover:scale-110">
+                                <i data-lucide="layout-template" class="w-6 h-6 md:w-7 md:h-7 text-white"></i>
                             </div>
                         </div>
                         
                         <!-- Card Body (Details) -->
-                        <div class="p-6 flex-1 flex flex-col justify-between">
-                            <div>
-                                <h3 class="text-white text-[19px] font-bold truncate mb-1.5">${p.name}</h3>
-                                <p class="text-[13px] text-apple-label font-medium">${p.files.length} items • Edited ${timeString}</p>
+                        <div class="p-5 md:p-6 flex-1 flex flex-col justify-between">
+                            <div class="min-w-0">
+                                <h3 class="text-white text-[17px] md:text-[19px] font-bold truncate mb-1 md:mb-1.5">${p.name}</h3>
+                                <p class="text-[12px] md:text-[13px] text-apple-label font-medium truncate">${p.files.length} items • Edited ${timeString}</p>
                             </div>
                             
                             <!-- Quick Actions -->
-                            <div class="flex items-center justify-end gap-2 mt-4 opacity-0 hover:opacity-100 transition-opacity" style="opacity: 0.8">
-                                <button onclick="event.stopPropagation(); Workspace.renameProj('${p.id}')" class="ios-btn p-2.5 rounded-full bg-white/10 hover:bg-white/20 text-white shadow-sm" title="Rename"><i data-lucide="pencil" class="w-4 h-4"></i></button>
-                                <button onclick="event.stopPropagation(); Workspace.exportHomeProj('${p.id}')" class="ios-btn p-2.5 rounded-full bg-white/10 hover:bg-white/20 text-white shadow-sm" title="Export"><i data-lucide="download" class="w-4 h-4"></i></button>
-                                <button onclick="event.stopPropagation(); Workspace.deleteProj('${p.id}')" class="ios-btn p-2.5 rounded-full bg-red-500/20 hover:bg-red-500/40 text-[#FF3B30] shadow-sm" title="Delete"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+                            <div class="flex items-center justify-end gap-1.5 md:gap-2 mt-3 md:mt-4 opacity-100 md:opacity-0 md:hover:opacity-100 transition-opacity" style="opacity: 0.9">
+                                <button onclick="event.stopPropagation(); Workspace.renameProj('${p.id}')" class="ios-btn p-2 md:p-2.5 rounded-full bg-white/10 hover:bg-white/20 text-white shadow-sm" title="Rename"><i data-lucide="pencil" class="w-3.5 h-3.5 md:w-4 md:h-4"></i></button>
+                                <button onclick="event.stopPropagation(); Workspace.exportHomeProj('${p.id}')" class="ios-btn p-2 md:p-2.5 rounded-full bg-white/10 hover:bg-white/20 text-white shadow-sm" title="Export"><i data-lucide="download" class="w-3.5 h-3.5 md:w-4 md:h-4"></i></button>
+                                <button onclick="event.stopPropagation(); Workspace.deleteProj('${p.id}')" class="ios-btn p-2 md:p-2.5 rounded-full bg-red-500/20 hover:bg-red-500/40 text-[#FF3B30] shadow-sm" title="Delete"><i data-lucide="trash-2" class="w-3.5 h-3.5 md:w-4 md:h-4"></i></button>
                             </div>
                         </div>
                     </div>`;
