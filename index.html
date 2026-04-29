@@ -95,7 +95,8 @@
             /* Spatial Spring Physics */
             --spatial-ease: cubic-bezier(0.25, 0.1, 0.25, 1);
             --spatial-spring: cubic-bezier(0.2, 0.8, 0.2, 1.05);
-            --spatial-bounce: cubic-bezier(0.175, 0.885, 0.32, 1.2);
+            /* Perfect Apple Spring Bounce Curve */
+            --spatial-bounce: cubic-bezier(0.34, 1.56, 0.64, 1); 
             /* Dynamic User Preferences */
             --editor-font-size: 16px; 
             --editor-wrap: pre;
@@ -125,10 +126,11 @@
         /* AMBIENT LIQUID ENVIRONMENT (Subtle Dark Mode Parallax)                */
         /* ===================================================================== */
         .liquid-bg { position: fixed; inset: -15vw; z-index: 0; overflow: hidden; background: #030305; pointer-events: none; transition: transform 0.3s ease-out; }
+        .liquid-bg::after { content: ''; position: absolute; inset: 0; background-image: radial-gradient(rgba(255,255,255,0.04) 1px, transparent 1px); background-size: 24px 24px; opacity: 0.5; mask-image: radial-gradient(circle at center, black, transparent 80%); -webkit-mask-image: radial-gradient(circle at center, black, transparent 80%); }
         
         .blob { 
             position: absolute; border-radius: 50%; 
-            filter: blur(140px); opacity: 0.15; 
+            filter: blur(140px); opacity: 0.2; 
             animation: float 40s var(--spatial-ease) infinite alternate; 
             will-change: transform; mix-blend-mode: screen; transform-style: preserve-3d;
             transition: background 1.5s var(--spatial-ease);
@@ -150,13 +152,14 @@
             background: rgba(22, 22, 24, 0.65);
             backdrop-filter: blur(40px) saturate(180%);
             -webkit-backdrop-filter: blur(40px) saturate(180%);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-top: 1px solid rgba(255, 255, 255, 0.12);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.1);
         }
         
         .vision-well {
-            background: rgba(8, 8, 10, 0.6);
-            box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.5), inset 0 0 0 1px rgba(255,255,255,0.05);
+            background: rgba(6, 6, 8, 0.7);
+            box-shadow: inset 0 4px 20px rgba(0, 0, 0, 0.8), inset 0 0 0 1px rgba(255,255,255,0.03);
             border-radius: 1.5rem;
         }
 
@@ -210,17 +213,17 @@
 
         /* Active Line Highlight perfectly calculated */
         .active-line-bg {
-            position: absolute; left: 0; right: 0; background: rgba(255,255,255,0.035); z-index: 0; pointer-events: none;
-            transition: top 0.1s linear; border-top: 1px solid rgba(255,255,255,0.02); border-bottom: 1px solid rgba(255,255,255,0.02);
+            position: absolute; left: 0; right: 0; background: rgba(255,255,255,0.05); z-index: 0; pointer-events: none;
+            transition: top 0.1s linear; border-top: 1px solid rgba(255,255,255,0.03); border-bottom: 1px solid rgba(255,255,255,0.03);
             height: 1.75em;
         }
         
         /* Premium Subtle Syntax Highlighting (Xcode Midnight style) */
-        .syn-keyword { color: #FF7AB2; font-weight: 600; } 
-        .syn-string { color: #FFD60A; } 
+        .syn-keyword { color: #FF7AB2; font-weight: 600; text-shadow: 0 0 10px rgba(255,122,178,0.3); } 
+        .syn-string { color: #FFD60A; text-shadow: 0 0 10px rgba(255,214,10,0.2); } 
         .syn-number { color: #32D74B; }
         .syn-comment { color: #8E8E93; font-style: italic; } 
-        .syn-function { color: #5DD8FF; font-weight: 500; }
+        .syn-function { color: #5DD8FF; font-weight: 600; text-shadow: 0 0 10px rgba(93,216,255,0.3); }
         .syn-tag { color: #5DD8FF; font-weight: 500; } 
         .syn-attr { color: #E5C07B; } 
         .syn-property { color: #D19A66; }
@@ -241,31 +244,41 @@
         .cmd-item.selected { background: rgba(10, 132, 255, 0.2); border-radius: 12px; }
 
         /* ===================================================================== */
-        /* VISIONOS PILLS, BUTTONS & INTERACTIONS                                */
+        /* VISIONOS PILLS, BUTTONS & INTERACTIONS (WITH BOUNCE PHYSICS)          */
         /* ===================================================================== */
         .vision-btn { 
-            background: rgba(255, 255, 255, 0.08); backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.05); box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+            background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.05); border-top: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.05);
             border-radius: 9999px; color: #FFF; font-weight: 500;
-            cursor: pointer; transition: all 0.3s var(--spatial-spring); transform-origin: center; display: inline-flex; align-items: center; justify-content: center;
+            cursor: pointer; transition: all 0.4s var(--spatial-bounce); transform-origin: center; display: inline-flex; align-items: center; justify-content: center;
         }
-        .vision-btn:hover { background: rgba(255, 255, 255, 0.15); transform: scale(1.04); border-color: rgba(255,255,255,0.1); }
-        .vision-btn:active { transform: scale(0.96); opacity: 0.7; transition: all 0.1s ease; }
+        .vision-btn:hover { background: rgba(255, 255, 255, 0.12); transform: scale(1.05); border-color: rgba(255,255,255,0.15); box-shadow: 0 4px 15px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.2); }
+        /* Deep squish on click */
+        .vision-btn:active { transform: scale(0.9); opacity: 0.8; transition: all 0.1s ease-out; }
         
-        .vision-btn-primary { background: var(--sys-color); border: 1px solid rgba(255,255,255,0.2); box-shadow: 0 4px 15px rgba(var(--sys-color-rgb), 0.3); }
-        .vision-btn-primary:hover { background: var(--sys-color); filter: brightness(1.1); transform: scale(1.04); box-shadow: 0 6px 20px rgba(var(--sys-color-rgb), 0.4); }
+        .vision-btn-primary { background: var(--sys-color); border: 1px solid rgba(255,255,255,0.2); box-shadow: 0 4px 20px rgba(var(--sys-color-rgb), 0.4), inset 0 1px 1px rgba(255,255,255,0.4); }
+        .vision-btn-primary:hover { background: var(--sys-color); filter: brightness(1.15); transform: scale(1.05); box-shadow: 0 8px 25px rgba(var(--sys-color-rgb), 0.5), inset 0 1px 2px rgba(255,255,255,0.5); }
+        .vision-btn-primary:active { transform: scale(0.9); transition: all 0.1s ease-out; }
 
-        .vision-card { transition: all 0.4s var(--spatial-spring); cursor: pointer; user-select: none; -webkit-user-select: none; transform-style: preserve-3d; }
-        .vision-card:hover { transform: translateY(-6px) scale(1.02); box-shadow: 0 25px 50px rgba(0,0,0,0.5), inset 0 1px 1px rgba(255,255,255,0.15); border-color: rgba(255,255,255,0.2); background: rgba(40,40,45,0.6); }
-        .vision-card:active { transform: scale(0.97); filter: brightness(0.9); transition: all 0.1s ease; }
+        .vision-card { transition: all 0.5s var(--spatial-bounce); cursor: pointer; user-select: none; -webkit-user-select: none; transform-style: preserve-3d; }
+        .vision-card:hover { transform: translateY(-6px) scale(1.02); box-shadow: 0 25px 50px rgba(0,0,0,0.6), inset 0 1px 1px rgba(255,255,255,0.15); border-color: rgba(255,255,255,0.2); background: rgba(35,35,40,0.6); }
+        .vision-card:active { transform: scale(0.95); filter: brightness(0.85); transition: all 0.1s ease-out; }
         
-        /* Smooth Sliding Segmented Control */
+        /* Bouncy Sliding Segmented Control */
         .segmented-control { position: relative; background-color: rgba(0, 0, 0, 0.4); padding: 4px; border-radius: 9999px; display: inline-flex; align-items: center; border: 1px solid rgba(255,255,255,0.04); flex-shrink: 0; box-shadow: inset 0 1px 3px rgba(0,0,0,0.5); }
-        .segmented-btn { position: relative; z-index: 2; padding: 6px 14px; border-radius: 9999px; font-size: 13px; font-weight: 500; color: rgba(255,255,255,0.5); transition: color 0.3s var(--spatial-ease); cursor: pointer; flex: 1; text-align: center; white-space: nowrap; }
-        @media (min-width: 1024px) { .segmented-btn { padding: 6px 20px; font-size: 13px; } }
+        .segmented-btn { position: relative; z-index: 2; padding: 6px 14px; border-radius: 9999px; font-size: 13px; font-weight: 500; color: rgba(255,255,255,0.5); transition: all 0.4s var(--spatial-bounce); cursor: pointer; flex: 1; text-align: center; white-space: nowrap; transform-origin: center; }
+        @media (min-width: 1024px) { .segmented-btn { padding: 6px 18px; font-size: 13px; } }
         .segmented-btn.active { color: #FFFFFF; font-weight: 600; }
-        .segment-pill { position: absolute; top: 4px; bottom: 4px; left: 4px; background-color: rgba(255, 255, 255, 0.15); backdrop-filter: blur(10px); border-radius: 9999px; transition: transform 0.4s var(--spatial-spring), width 0.4s var(--spatial-spring); box-shadow: 0 2px 8px rgba(0,0,0,0.2), inset 0 1px 1px rgba(255,255,255,0.25); border: 1px solid rgba(255,255,255,0.05); z-index: 1; }
+        .segmented-btn:active { transform: scale(0.88); transition: all 0.1s ease-out; }
+        /* The Pill background uses bounce physics to overshoot playfully when switching tabs */
+        .segment-pill { position: absolute; top: 4px; bottom: 4px; left: 4px; background-color: rgba(255, 255, 255, 0.15); backdrop-filter: blur(10px); border-radius: 9999px; transition: transform 0.6s var(--spatial-bounce), width 0.6s var(--spatial-bounce); box-shadow: 0 2px 8px rgba(0,0,0,0.2), inset 0 1px 1px rgba(255,255,255,0.25); border: 1px solid rgba(255,255,255,0.05); z-index: 1; }
         
+        /* Interactive Bouncy URL Bar */
+        .url-bar-bounce { transition: all 0.5s var(--spatial-bounce); cursor: pointer; transform-origin: center; }
+        .url-bar-bounce:hover { transform: scale(1.02); background: rgba(0,0,0,0.8); }
+        .url-bar-bounce:active { transform: scale(0.92); opacity: 0.8; transition: all 0.1s ease-out; }
+
         /* Sidebar Resizer */
         .sidebar-resizer { position: absolute; right: -5px; top: 0; bottom: 0; width: 10px; cursor: col-resize; z-index: 60; transition: background 0.3s; }
         .sidebar-resizer:hover, .sidebar-resizer.active { background: rgba(255,255,255,0.05); }
@@ -282,18 +295,18 @@
             background: rgba(25, 25, 28, 0.85); backdrop-filter: blur(60px) saturate(200%); -webkit-backdrop-filter: blur(60px) saturate(200%);
             border-radius: 24px; width: 320px; max-width: 90vw; overflow: hidden; border: 1px solid rgba(255,255,255,0.1);
             box-shadow: 0 30px 60px rgba(0,0,0,0.6), inset 0 1px 1px rgba(255,255,255,0.2);
-            transition: transform 0.5s var(--spatial-bounce), opacity 0.3s var(--spatial-ease);
+            transition: transform 0.5s var(--spatial-bounce), opacity 0.4s var(--spatial-ease);
         }
-        .modal-enter { transform: scale(1.05); opacity: 0; }
+        .modal-enter { transform: scale(1.1); opacity: 0; }
         .modal-active { transform: scale(1); opacity: 1; }
         
         /* Drop Overlay */
-        #drop-zone { position: fixed; inset: 0; z-index: 9999; background: rgba(0,0,0,0.8); backdrop-filter: blur(15px); display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.3s var(--spatial-ease); }
+        #drop-zone { position: fixed; inset: 0; z-index: 9999; background: rgba(0,0,0,0.8); backdrop-filter: blur(15px); display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.4s var(--spatial-ease); }
         #drop-zone.active { opacity: 1; pointer-events: auto; }
         
         /* Viewports */
         .viewport-container { display: flex; align-items: center; justify-content: center; width: 100%; height: 100%; transition: padding 0.5s var(--spatial-spring); }
-        .viewport-mobile iframe { max-width: 375px; max-height: 812px; border-radius: 36px; border: 12px solid #000; box-shadow: 0 20px 40px rgba(0,0,0,0.8); transition: all 0.5s var(--spatial-spring); }
+        .viewport-mobile iframe { max-width: 375px; max-height: 812px; border-radius: 40px; border: 12px solid #000; box-shadow: 0 20px 40px rgba(0,0,0,0.8); transition: all 0.5s var(--spatial-spring); }
         .viewport-tablet iframe { max-width: 820px; max-height: 1180px; border-radius: 20px; border: 12px solid #000; box-shadow: 0 20px 40px rgba(0,0,0,0.8); transition: all 0.5s var(--spatial-spring); }
         .viewport-desktop iframe { max-width: 100%; max-height: 100%; border-radius: 0; border: none; transition: all 0.5s var(--spatial-spring); }
         .viewport-container:fullscreen { padding: 0; }
@@ -310,16 +323,19 @@
         /* Console Input Focus */
         #console-input:focus { border-color: var(--sys-color); background: rgba(255,255,255,0.05); }
 
+        /* Premium Sleek Icon Stroke Weight (Apple SF Symbol Style) */
+        .lucide { stroke-width: 1.5 !important; }
+
         /* Toasts */
-        .toast-pill { transform: translateY(-150%) scale(0.95); opacity: 0; transition: all 0.5s var(--spatial-bounce); }
+        .toast-pill { transform: translateY(-150%) scale(0.95); opacity: 0; transition: all 0.6s var(--spatial-bounce); }
         .toast-active { transform: translateY(0) scale(1); opacity: 1; }
 
         /* File Gradients */
-        .proj-gradient-0 { background: linear-gradient(135deg, #0A84FF, #0055FF); }
-        .proj-gradient-1 { background: linear-gradient(135deg, #5E5CE6, #3E3CA6); }
-        .proj-gradient-2 { background: linear-gradient(135deg, #32ADE6, #227DA6); }
-        .proj-gradient-3 { background: linear-gradient(135deg, #FF9F0A, #BF7707); }
-        .proj-gradient-4 { background: linear-gradient(135deg, #FF375F, #BF2947); }
+        .proj-gradient-0 { background: radial-gradient(circle at 0% 0%, #0A84FF, #0033aa); }
+        .proj-gradient-1 { background: radial-gradient(circle at 0% 0%, #5E5CE6, #2a288c); }
+        .proj-gradient-2 { background: radial-gradient(circle at 0% 0%, #32ADE6, #165b7a); }
+        .proj-gradient-3 { background: radial-gradient(circle at 0% 0%, #FF9F0A, #995c00); }
+        .proj-gradient-4 { background: radial-gradient(circle at 0% 0%, #FF375F, #8c122b); }
     </style>
 </head>
 <body class="flex flex-col h-[100dvh] w-screen font-sans selection:bg-apple-blue/40">
@@ -544,6 +560,9 @@
                             
                             <!-- Actions Area -->
                             <div class="flex items-center gap-1 px-2 border-l border-white/5 bg-black/20 h-full flex-shrink-0 z-30">
+                                <button onclick="UI.toggleWrap(document.getElementById('wrap-toggle-hidden'))" class="vision-btn w-7 h-7 p-0 rounded-full border-none shadow-none bg-transparent hover:bg-white/10 text-apple-label hover:text-white flex-shrink-0" title="Toggle Word Wrap"><i data-lucide="wrap-text" class="w-3.5 h-3.5"></i></button>
+                                <input type="checkbox" id="wrap-toggle-hidden" class="hidden" onchange="UI.toggleWrap(this)">
+                                
                                 <button onclick="UI.formatCode()" class="vision-btn w-7 h-7 p-0 rounded-full border-none shadow-none bg-transparent hover:bg-white/10 text-yellow-400 flex-shrink-0" title="Format Code"><i data-lucide="wand-2" class="w-3.5 h-3.5"></i></button>
                                 <button onclick="Workspace.copyContent()" class="vision-btn w-7 h-7 p-0 rounded-full border-none shadow-none bg-transparent hover:bg-white/10 text-apple-label hover:text-white flex-shrink-0" title="Copy Current File"><i data-lucide="copy" class="w-3.5 h-3.5"></i></button>
                                 <button onclick="Workspace.downloadCurrentFile()" class="hidden md:flex vision-btn w-7 h-7 p-0 rounded-full border-none shadow-none bg-transparent hover:bg-white/10 text-apple-label hover:text-white flex-shrink-0" title="Download Current File"><i data-lucide="download" class="w-3.5 h-3.5"></i></button>
@@ -552,8 +571,8 @@
                         
                         <div class="flex-1 flex overflow-hidden relative editor-container md:rounded-b-xl" id="editor-wrapper">
                             <div id="active-line-highlight" class="active-line-bg h-[1.75em] hidden"></div>
-                            <div id="line-numbers" class="w-10 lg:w-12 flex-shrink-0 flex flex-col items-end pr-2 py-[1.5rem] text-[12px] font-mono select-none text-[#5C5C5E] bg-[#0C0C0E] border-r border-white/5 z-10 leading-[1.75]"></div>
-                            <div class="relative flex-1 h-full overflow-hidden bg-[#0C0C0E]">
+                            <div id="line-numbers" class="w-10 lg:w-12 flex-shrink-0 flex flex-col items-end pr-2 py-[1.5rem] text-[12px] font-mono select-none text-[#5C5C5E] bg-[#0A0A0C] border-r border-white/5 z-10 leading-[1.75]"></div>
+                            <div class="relative flex-1 h-full overflow-hidden bg-[#0A0A0C]">
                                 <pre id="editor-pre" class="editor-pre" aria-hidden="true"></pre>
                                 <textarea id="code-editor" class="editor-textarea" spellcheck="false" autocapitalize="off" autocomplete="off" autocorrect="off"></textarea>
                             </div>
@@ -580,8 +599,8 @@
 
                             <!-- Center: URL Bar with Clickable Refresh -->
                             <div class="flex-1 min-w-[120px] max-w-[250px] mx-2 flex justify-center">
-                                <div class="w-full bg-black/60 border border-white/5 rounded-full h-6 flex items-center justify-between px-3 gap-1.5 shadow-[inset_0_1px_3px_rgba(0,0,0,0.5)] truncate transition-colors hover:bg-black/80">
-                                    <div class="flex items-center gap-1.5 truncate">
+                                <div class="w-full bg-black/60 border border-white/5 rounded-full h-6 flex items-center justify-between px-3 gap-1.5 url-bar-bounce shadow-[inset_0_1px_3px_rgba(0,0,0,0.5)] truncate">
+                                    <div class="flex items-center gap-1.5 truncate flex-1" onclick="Engine.run()">
                                         <i data-lucide="lock" class="w-2.5 h-2.5 text-apple-blue opacity-80 flex-shrink-0"></i>
                                         <span class="text-[11px] font-medium text-white/80 truncate">nova.local</span>
                                     </div>
@@ -787,7 +806,10 @@
                     Dialog.els.box.classList.replace('modal-enter', 'modal-active');
                     if (type === 'prompt') Dialog.els.input.focus();
                 });
-            })
+            }),
+            alert: (title, msg) => Dialog.show('alert', title, msg),
+            confirm: (title, msg) => Dialog.show('confirm', title, msg),
+            prompt: (title, msg, def) => Dialog.show('prompt', title, msg, def)
         };
 
         // --- COMMAND PALETTE (Spotlight) ---
@@ -914,13 +936,13 @@
         const Templates = {
             vanilla: [
                 { id: '1', name: 'index.html', language: 'html', content: `<!DOCTYPE html>\n<html lang="en">\n<head>\n  <meta charset="UTF-8">\n  <meta name="viewport" content="width=device-width, initial-scale=1.0">\n  <title>Vanilla App</title>\n  <link rel="stylesheet" href="style.css">\n</head>\n<body>\n  <div class="view">\n    <div class="icon">✨</div>\n    <h1>Spatial Web Studio</h1>\n    <p>Developed by Aravind. Built for the future.</p>\n    <button onclick="runTest()">Initialize Engine</button>\n  </div>\n  <script src="main.js"><\/script>\n</body>\n</html>` },
-                { id: '2', name: 'style.css', language: 'css', content: `body {\n  background: #000000; color: #FFFFFF;\n  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif;\n  display: flex; justify-content: center; align-items: center;\n  min-height: 100vh; margin: 0; -webkit-font-smoothing: antialiased;\n}\n.view {\n  background: rgba(255,255,255,0.03);\n  padding: 40px; border-radius: 32px;\n  text-align: center; max-width: 340px; width: 100%;\n  backdrop-filter: blur(40px) saturate(180%);\n  border: 1px solid rgba(255,255,255,0.08);\n  box-shadow: 0 20px 60px rgba(0,0,0,0.6);\n}\n.icon {\n  font-size: 48px; margin-bottom: 16px;\n  filter: drop-shadow(0 0 15px rgba(255,255,255,0.2));\n}\nh1 {\n  font-size: 24px; font-weight: 700; margin: 0 0 8px;\n  letter-spacing: 0.3px;\n}\np {\n  color: rgba(235, 235, 245, 0.6); font-size: 14px;\n  line-height: 20px; margin-bottom: 32px;\n}\nbutton {\n  background: rgba(255,255,255,0.1); color: #FFFFFF;\n  border: 1px solid rgba(255,255,255,0.1);\n  padding: 12px 20px; border-radius: 999px; font-size: 15px;\n  font-weight: 500; width: 100%; cursor: pointer;\n  transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);\n}\nbutton:hover { background: rgba(255,255,255,0.15); transform: scale(1.02); }\nbutton:active { transform: scale(0.96); opacity: 0.8; }` },
+                { id: '2', name: 'style.css', language: 'css', content: `body {\n  background: #000000; color: #FFFFFF;\n  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif;\n  display: flex; justify-content: center; align-items: center;\n  min-height: 100vh; margin: 0; -webkit-font-smoothing: antialiased;\n}\n.view {\n  background: rgba(255,255,255,0.03);\n  padding: 40px; border-radius: 32px;\n  text-align: center; max-width: 340px; width: 100%;\n  backdrop-filter: blur(40px) saturate(180%);\n  border: 1px solid rgba(255,255,255,0.08);\n  box-shadow: 0 20px 60px rgba(0,0,0,0.6);\n}\n.icon {\n  font-size: 48px; margin-bottom: 16px;\n  filter: drop-shadow(0 0 15px rgba(255,255,255,0.2));\n}\nh1 {\n  font-size: 24px; font-weight: 700; margin: 0 0 8px;\n  letter-spacing: 0.3px;\n}\np {\n  color: rgba(235, 235, 245, 0.6); font-size: 14px;\n  line-height: 20px; margin-bottom: 32px;\n}\nbutton {\n  background: rgba(255,255,255,0.1); color: #FFFFFF;\n  border: 1px solid rgba(255,255,255,0.1);\n  padding: 12px 20px; border-radius: 999px; font-size: 15px;\n  font-weight: 500; width: 100%; cursor: pointer;\n  transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);\n}\nbutton:hover { background: rgba(255,255,255,0.15); transform: scale(1.05); }\nbutton:active { transform: scale(0.9); opacity: 0.8; transition: all 0.1s ease-out; }` },
                 { id: '3', name: 'main.js', language: 'javascript', content: `console.info('Studio engine loaded. Crafted by Aravind.');\n\nfunction runTest() {\n  const payload = { developer: "Aravind", environment: "VisionOS", haptic: true };\n  console.log("Environment initialized natively.");\n  console.warn("Telemetry Data:", payload);\n}` }
             ],
             react: [
                 { id: '1', name: 'index.html', language: 'html', content: `<!DOCTYPE html>\n<html lang="en">\n<head>\n  <meta charset="UTF-8">\n  <title>React App</title>\n  <script src="https://unpkg.com/react@18/umd/react.development.js"><\/script>\n  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"><\/script>\n  <script src="https://unpkg.com/@babel/standalone/babel.min.js"><\/script>\n  <link rel="stylesheet" href="style.css">\n</head>\n<body>\n  <div id="root"></div>\n  <script type="text/babel" src="app.js"><\/script>\n</body>\n</html>` },
                 { id: '2', name: 'app.js', language: 'javascript', content: `function App() {\n  const [count, setCount] = React.useState(0);\n  \n  return (\n    <div className="container">\n      <div className="card">\n        <h1>⚛️ React Playground</h1>\n        <p>Built with NOVA Studio</p>\n        <div className="counter">{count}</div>\n        <button onClick={() => setCount(c => c + 1)}>Increment</button>\n      </div>\n    </div>\n  );\n}\n\nconst root = ReactDOM.createRoot(document.getElementById('root'));\nroot.render(<App />);` },
-                { id: '3', name: 'style.css', language: 'css', content: `body {\n  background: #0f0f11; color: #fff;\n  font-family: system-ui, sans-serif;\n  display: flex; justify-content: center;\n  align-items: center; height: 100vh; margin: 0;\n}\n.card {\n  background: #1c1c1e; padding: 40px;\n  border-radius: 20px; text-align: center;\n  border: 1px solid rgba(255,255,255,0.1);\n}\nh1 { margin: 0 0 10px; color: #61dafb; }\np { color: #8e8e93; margin-bottom: 30px; }\n.counter {\n  font-size: 48px; font-weight: bold;\n  margin-bottom: 30px; color: #fff;\n}\nbutton {\n  background: #0a84ff; color: white; border: none;\n  padding: 12px 24px; border-radius: 99px;\n  font-size: 16px; font-weight: bold; cursor: pointer;\n}` }
+                { id: '3', name: 'style.css', language: 'css', content: `body {\n  background: #0f0f11; color: #fff;\n  font-family: system-ui, sans-serif;\n  display: flex; justify-content: center;\n  align-items: center; height: 100vh; margin: 0;\n}\n.card {\n  background: #1c1c1e; padding: 40px;\n  border-radius: 20px; text-align: center;\n  border: 1px solid rgba(255,255,255,0.1);\n}\nh1 { margin: 0 0 10px; color: #61dafb; }\np { color: #8e8e93; margin-bottom: 30px; }\n.counter {\n  font-size: 48px; font-weight: bold;\n  margin-bottom: 30px; color: #fff;\n}\nbutton {\n  background: #0a84ff; color: white; border: none;\n  padding: 12px 24px; border-radius: 99px;\n  font-size: 16px; font-weight: bold; cursor: pointer;\n  transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);\n}\nbutton:hover { background: #007aff; transform: scale(1.05); }\nbutton:active { transform: scale(0.9); transition: all 0.1s ease-out; }` }
             ]
         };
 
@@ -1063,10 +1085,10 @@
             },
 
             getIcon: (name) => {
-                if (name.endsWith('.html')) return '<i data-lucide="file-code-2" class="w-4 h-4 md:w-4.5 md:h-4.5 text-[#FF453A] drop-shadow"></i>';
-                if (name.endsWith('.css')) return '<i data-lucide="file-json" class="w-4 h-4 md:w-4.5 md:h-4.5 text-[#0A84FF] drop-shadow"></i>';
-                if (name.endsWith('.js')) return '<i data-lucide="braces" class="w-4 h-4 md:w-4.5 md:h-4.5 text-[#FFD60A] drop-shadow"></i>';
-                if (name.endsWith('.json')) return '<i data-lucide="database" class="w-4 h-4 md:w-4.5 md:h-4.5 text-[#32D74B] drop-shadow"></i>';
+                if (name.endsWith('.html')) return '<i data-lucide="file-code-2" class="w-4 h-4 md:w-4.5 md:h-4.5 text-[#FF7AB2] drop-shadow-sm"></i>';
+                if (name.endsWith('.css')) return '<i data-lucide="paintbrush-2" class="w-4 h-4 md:w-4.5 md:h-4.5 text-[#5DD8FF] drop-shadow-sm"></i>';
+                if (name.endsWith('.js')) return '<i data-lucide="file-terminal" class="w-4 h-4 md:w-4.5 md:h-4.5 text-[#FFD60A] drop-shadow-sm"></i>';
+                if (name.endsWith('.json')) return '<i data-lucide="braces" class="w-4 h-4 md:w-4.5 md:h-4.5 text-[#32D74B] drop-shadow-sm"></i>';
                 return '<i data-lucide="file-text" class="w-4 h-4 md:w-4.5 md:h-4.5 text-apple-label"></i>';
             },
 
@@ -1334,6 +1356,7 @@
             setViewMode: (m) => {
                 const modes = ['editor', 'split', 'preview'];
                 
+                // Animate Pill
                 const pill = document.getElementById('segment-pill');
                 const activeBtn = document.getElementById(`btn-view-${m}`);
                 if (pill && activeBtn) {
@@ -1428,6 +1451,19 @@
                 document.documentElement.style.setProperty('--editor-font-size', `${State.fontSize}px`);
                 document.getElementById('font-size-display').innerText = State.fontSize;
                 UI.updateActiveLine();
+            },
+
+            toggleWrap: (el) => {
+                State.isWrapped = el.checked;
+                document.documentElement.style.setProperty('--editor-wrap', State.isWrapped ? 'pre-wrap' : 'pre');
+                // Ensure UI sync
+                const checkbox = document.getElementById('wrap-toggle');
+                const hiddenCb = document.getElementById('wrap-toggle-hidden');
+                if(checkbox) checkbox.checked = State.isWrapped;
+                if(hiddenCb) hiddenCb.checked = State.isWrapped;
+                
+                UI.updateActiveLine();
+                UI.showToast(State.isWrapped ? "Word Wrap Enabled" : "Word Wrap Disabled", "info");
             }
         };
 
