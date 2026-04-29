@@ -226,8 +226,8 @@
         
         /* Sliding Segmented Control */
         .segmented-control { position: relative; background-color: rgba(0, 0, 0, 0.3); padding: 4px; border-radius: 9999px; display: inline-flex; align-items: center; box-shadow: inset 0 2px 5px rgba(0,0,0,0.5), 0 1px 0 rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.05); }
-        .segmented-btn { position: relative; z-index: 2; padding: 6px 16px; border-radius: 9999px; font-size: 13px; font-weight: 500; color: rgba(255,255,255,0.6); transition: color 0.3s var(--spatial-spring); cursor: pointer; flex: 1; text-align: center; white-space: nowrap; }
-        @media (min-width: 1024px) { .segmented-btn { padding: 6px 20px; } }
+        .segmented-btn { position: relative; z-index: 2; padding: 5px 12px; border-radius: 9999px; font-size: 13px; font-weight: 500; color: rgba(255,255,255,0.6); transition: color 0.3s var(--spatial-spring); cursor: pointer; flex: 1; text-align: center; white-space: nowrap; }
+        @media (min-width: 1024px) { .segmented-btn { padding: 5px 16px; } }
         .segmented-btn.active { color: #FFFFFF; font-weight: 600; text-shadow: 0 1px 2px rgba(0,0,0,0.3); }
         .segment-pill { position: absolute; top: 4px; bottom: 4px; left: 4px; background-color: rgba(255, 255, 255, 0.2); backdrop-filter: blur(10px); border-radius: 9999px; transition: transform 0.5s var(--spatial-spring), width 0.5s var(--spatial-spring); box-shadow: 0 4px 10px rgba(0,0,0,0.2), inset 0 1px 1px rgba(255,255,255,0.3); border: 1px solid rgba(255,255,255,0.1); z-index: 1; }
         
@@ -443,21 +443,21 @@
             <div id="sidebar-overlay" onclick="UI.toggleMobileSidebar()" class="absolute inset-0 bg-black/40 z-40 hidden md:hidden backdrop-blur-md transition-opacity opacity-0"></div>
 
             <!-- MAIN WORKSPACE ISLAND -->
-            <main class="flex-1 flex flex-col min-w-0 md:rounded-[2rem] lg:rounded-[2.5rem] vision-glass overflow-hidden z-10 relative">
+            <main class="flex-1 flex flex-col min-w-0 md:rounded-[2.5rem] vision-glass overflow-hidden z-10 relative">
                 
                 <!-- Desktop Floating Header (Dynamic Flex Constraints applied here to prevent squishing) -->
-                <header class="hidden md:flex h-[60px] lg:h-[70px] flex-shrink-0 items-center justify-between px-4 lg:px-6 border-b border-white/10 bg-black/10">
+                <header class="hidden md:flex h-[60px] lg:h-[70px] flex-shrink-0 items-center justify-between px-4 lg:px-6 border-b border-white/10 bg-black/10 gap-2 lg:gap-4">
                     
                     <!-- Left: Title -->
-                    <div class="flex items-center flex-1 min-w-0 gap-3">
+                    <div class="flex items-center flex-1 min-w-0 gap-2 lg:gap-3">
                         <button onclick="UI.toggleDesktopSidebar()" class="vision-btn w-9 h-9 p-0 rounded-full flex-shrink-0" title="Toggle Sidebar">
                             <i data-lucide="sidebar" class="w-4.5 h-4.5"></i>
                         </button>
-                        <span id="ide-project-title" class="text-[15px] lg:text-[17px] font-bold text-white truncate drop-shadow-md">Loading...</span>
+                        <span id="ide-project-title" class="text-[14px] lg:text-[16px] font-bold text-white truncate max-w-[140px] lg:max-w-[200px] drop-shadow-md">Loading...</span>
                     </div>
                     
                     <!-- Center: Segmented Control -->
-                    <div class="flex justify-center flex-none px-2 lg:px-4">
+                    <div class="flex justify-center flex-none px-1 lg:px-4">
                         <div class="segmented-control" id="main-segments">
                             <div id="segment-pill" class="segment-pill"></div>
                             <button onclick="UI.setViewMode('editor')" id="btn-view-editor" class="segmented-btn active">Code</button>
@@ -467,19 +467,20 @@
                     </div>
                     
                     <!-- Right: Controls -->
-                    <div class="flex items-center justify-end flex-1 min-w-0 gap-2 lg:gap-4">
+                    <div class="flex items-center justify-end flex-1 min-w-0 gap-1.5 lg:gap-3">
                         <!-- Cmd+K Hint -->
-                        <div class="hidden lg:flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/5 border border-white/10 cursor-pointer hover:bg-white/10 flex-shrink-0" onclick="CommandPalette.show()" title="Command Palette">
-                            <i data-lucide="search" class="w-3.5 h-3.5 text-apple-label"></i>
-                            <span class="text-[11px] font-bold text-apple-label whitespace-nowrap">Cmd K</span>
+                        <div class="hidden md:flex items-center justify-center w-9 h-9 xl:w-auto xl:px-3 xl:py-1.5 rounded-full bg-white/5 border border-white/10 cursor-pointer hover:bg-white/10 flex-shrink-0 vision-btn p-0" onclick="CommandPalette.show()" title="Command Palette (Cmd K)">
+                            <i data-lucide="search" class="w-4 h-4 xl:w-3.5 xl:h-3.5 text-apple-label"></i>
+                            <span class="hidden xl:block text-[11px] font-bold text-apple-label whitespace-nowrap ml-1.5">Cmd K</span>
                         </div>
                         <button onclick="UI.toggleSettings()" class="vision-btn w-9 h-9 p-0 rounded-full flex-shrink-0" title="IDE Settings"><i data-lucide="settings" class="w-4.5 h-4.5"></i></button>
-                        <div class="w-px h-5 bg-white/20 mx-0.5 lg:mx-1 hidden lg:block flex-shrink-0"></div>
-                        <label class="hidden lg:flex items-center gap-1.5 text-[13px] lg:text-[14px] font-medium text-apple-label vision-btn px-3 lg:px-4 py-1.5 lg:py-2 border-none bg-transparent shadow-none hover:text-white cursor-pointer flex-shrink-0 whitespace-nowrap">
-                            <input type="checkbox" id="auto-run-toggle" checked class="accent-apple-blue w-3.5 h-3.5 lg:w-4 lg:h-4"> Sync
+                        <div class="w-px h-5 bg-white/20 mx-0.5 lg:mx-1 hidden md:block flex-shrink-0"></div>
+                        <label class="hidden md:flex items-center gap-1.5 text-[13px] font-medium text-apple-label vision-btn px-2 lg:px-3 py-1.5 lg:py-2 border-none bg-transparent shadow-none hover:text-white cursor-pointer flex-shrink-0 whitespace-nowrap">
+                            <input type="checkbox" id="auto-run-toggle" checked class="accent-apple-blue w-3.5 h-3.5 lg:w-4 lg:h-4"> 
+                            <span class="hidden lg:inline">Sync</span>
                         </label>
-                        <button id="run-btn" disabled class="vision-btn px-4 lg:px-5 py-1.5 lg:py-2 text-apple-blue opacity-50 font-bold gap-1.5 lg:gap-2 text-[13px] lg:text-[14px] flex-shrink-0 whitespace-nowrap">
-                            <i data-lucide="play" class="w-3.5 h-3.5 lg:w-4 lg:h-4 fill-current"></i> Build
+                        <button id="run-btn" disabled class="vision-btn px-3 lg:px-4 py-1.5 lg:py-2 text-apple-blue opacity-50 font-bold gap-1.5 lg:gap-2 text-[13px] lg:text-[14px] flex-shrink-0 whitespace-nowrap">
+                            <i data-lucide="play" class="w-3.5 h-3.5 lg:w-4 lg:h-4 fill-current"></i> <span class="hidden lg:inline">Build</span>
                         </button>
                     </div>
                 </header>
