@@ -7,27 +7,26 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="NOVA">
-    <title>NOVA by Aravind - Subtle Premium Edition</title>
+    <title>NOVA by Aravind - Ultimate Spatial IDE</title>
 
     <!-- Refined Minimalist Apple App Icon -->
     <script>
         (function() {
-            // New Subtle Dark Theme Icon: Deep background, soft center glow, elegant glass sparkle
             const svgData = `<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'>
                 <defs>
                     <radialGradient id='glow' cx='50%' cy='50%' r='50%'>
-                        <stop offset='0%' stop-color='#0A84FF' stop-opacity='0.4'/>
+                        <stop offset='0%' stop-color='#0A84FF' stop-opacity='0.5'/>
                         <stop offset='100%' stop-color='#0A84FF' stop-opacity='0'/>
                     </radialGradient>
                     <linearGradient id='glass' x1='0%' y1='0%' x2='100%' y2='100%'>
-                        <stop offset='0%' stop-color='#ffffff' stop-opacity='0.25'/>
+                        <stop offset='0%' stop-color='#ffffff' stop-opacity='0.3'/>
                         <stop offset='100%' stop-color='#ffffff' stop-opacity='0.02'/>
                     </linearGradient>
                 </defs>
                 <rect width='512' height='512' fill='#050508'/>
                 <rect width='512' height='512' fill='url(#glow)'/>
-                <path d='M256 120 L300 212 L392 256 L300 300 L256 392 L212 300 L120 256 L212 212 Z' fill='url(#glass)' stroke='rgba(255,255,255,0.15)' stroke-width='4'/>
-                <circle cx='256' cy='256' r='30' fill='#ffffff' opacity='0.9'/>
+                <path d='M256 120 L300 212 L392 256 L300 300 L256 392 L212 300 L120 256 L212 212 Z' fill='url(#glass)' stroke='rgba(255,255,255,0.2)' stroke-width='4'/>
+                <circle cx='256' cy='256' r='30' fill='#ffffff' opacity='0.95'/>
             </svg>`;
             const svgUrl = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(svgData);
             const iconLink = document.createElement('link');
@@ -80,7 +79,7 @@
                             blue: 'var(--sys-color)',
                             bg: '#000000',
                             text: '#FFFFFF',
-                            label: 'rgba(235, 235, 245, 0.6)'
+                            label: 'rgba(235, 235, 245, 0.65)'
                         }
                     }
                 }
@@ -110,7 +109,7 @@
         /* Global Reset */
         * { box-sizing: border-box; }
         ::-webkit-scrollbar { width: 0px; height: 0px; display: none; }
-        body { background-color: #000; color: #FFF; overflow: hidden; overscroll-behavior: none; -webkit-font-smoothing: antialiased; margin: 0; padding: 0; perspective: 1000px; }
+        body { background-color: #000; color: #FFF; overflow: hidden; overscroll-behavior: none; -webkit-font-smoothing: antialiased; margin: 0; padding: 0; perspective: 1200px; }
 
         /* ===================================================================== */
         /* SPLASH SCREEN LAUNCH SEQUENCE                                         */
@@ -129,7 +128,7 @@
         
         .blob { 
             position: absolute; border-radius: 50%; 
-            filter: blur(140px); opacity: 0.15; /* Subdued for premium dark aesthetic */
+            filter: blur(140px); opacity: 0.15; 
             animation: float 40s var(--spatial-ease) infinite alternate; 
             will-change: transform; mix-blend-mode: screen; transform-style: preserve-3d;
             transition: background 1.5s var(--spatial-ease);
@@ -170,57 +169,76 @@
 
         @keyframes slideUpZ { from { opacity: 0; transform: translateY(15px) translateZ(-20px) scale(0.98); } to { opacity: 1; transform: translateY(0) translateZ(0) scale(1); } }
         .animate-stagger { opacity: 0; animation: slideUpZ 0.8s var(--spatial-spring) forwards; }
+        
+        /* Subtle Save Pulse */
+        @keyframes savePulse { 0% { box-shadow: inset 0 1.5px 0 var(--sys-color); background: rgba(255,255,255,0.05); } 100% { box-shadow: inset 0 0 0 transparent; background: transparent; } }
+        .saving-pulse { animation: savePulse 0.8s var(--spatial-ease); }
 
         /* ===================================================================== */
-        /* XCODE / PLAYGROUNDS EDITOR CORE                                       */
+        /* XCODE EDITOR CORE (FLAWLESS LINE SYNCHRONIZATION)                     */
         /* ===================================================================== */
         .editor-container { position: relative; width: 100%; height: 100%; overflow: hidden; z-index: 10; border-radius: inherit; }
         
+        .editor-textarea, .editor-pre, #line-numbers {
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace !important; 
+            font-size: var(--editor-font-size) !important; 
+            line-height: 1.75 !important; 
+            letter-spacing: 0px !important;
+            padding-top: 1.5rem !important;
+            padding-bottom: 1.5rem !important;
+        }
+
         .editor-textarea, .editor-pre {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            padding: 1.5rem 1rem !important; margin: 0 !important; border: none !important; outline: none !important;
-            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace !important; 
-            font-size: var(--editor-font-size) !important; line-height: 1.7 !important; letter-spacing: 0px !important;
-            white-space: var(--editor-wrap) !important; word-spacing: normal !important; 
-            word-break: normal !important; overflow-wrap: normal !important;
+            padding-left: 1.25rem !important; padding-right: 1.25rem !important;
+            margin: 0 !important; border: none !important; outline: none !important;
+            white-space: var(--editor-wrap) !important; 
+            word-spacing: normal !important; word-break: normal !important; overflow-wrap: normal !important;
             tab-size: 2 !important; box-sizing: border-box !important; overflow: auto !important;
             -webkit-overflow-scrolling: touch;
         }
         
+        #line-numbers {
+            padding-right: 0.75rem !important; padding-left: 0.5rem !important;
+            overflow-y: hidden !important; text-align: right;
+            color: #6E6E73;
+        }
+
         .editor-textarea { color: transparent; background: transparent; caret-color: var(--sys-color); z-index: 2; resize: none; touch-action: pan-y pan-x; }
-        .editor-textarea::selection { background-color: rgba(255, 255, 255, 0.15); color: transparent; border-radius: 4px; }
+        .editor-textarea::selection { background-color: rgba(10, 132, 255, 0.25); color: transparent; }
         .editor-pre { z-index: 1; pointer-events: none; color: #FFFFFF; }
 
-        /* Active Line Highlight */
+        /* Active Line Highlight perfectly calculated */
         .active-line-bg {
-            position: absolute; left: 0; right: 0; background: rgba(255,255,255,0.03); z-index: 0; pointer-events: none;
-            transition: top 0.1s linear; border-top: 1px solid rgba(255,255,255,0.01); border-bottom: 1px solid rgba(255,255,255,0.01);
+            position: absolute; left: 0; right: 0; background: rgba(255,255,255,0.035); z-index: 0; pointer-events: none;
+            transition: top 0.1s linear; border-top: 1px solid rgba(255,255,255,0.02); border-bottom: 1px solid rgba(255,255,255,0.02);
+            height: 1.75em;
         }
         
-        /* High Contrast Spatial Syntax */
-        .syn-keyword { color: #FF453A; font-weight: 600; } 
-        .syn-string { color: #32D74B; } 
-        .syn-number { color: #FFD60A; }
+        /* Premium Subtle Syntax Highlighting (Xcode Midnight style) */
+        .syn-keyword { color: #FF7AB2; font-weight: 600; } 
+        .syn-string { color: #FFD60A; } 
+        .syn-number { color: #32D74B; }
         .syn-comment { color: #8E8E93; font-style: italic; } 
-        .syn-function { color: #0A84FF; font-weight: 500; }
-        .syn-tag { color: #0A84FF; font-weight: 600; } 
-        .syn-attr { color: #FF9F0A; } 
-        .syn-property { color: #BF5AF2; }
+        .syn-function { color: #5DD8FF; font-weight: 500; }
+        .syn-tag { color: #5DD8FF; font-weight: 500; } 
+        .syn-attr { color: #E5C07B; } 
+        .syn-property { color: #D19A66; }
 
         /* ===================================================================== */
         /* COMMAND PALETTE (Spotlight)                                           */
         /* ===================================================================== */
         .cmd-palette {
             background: rgba(30, 30, 35, 0.85); backdrop-filter: blur(60px) saturate(180%); -webkit-backdrop-filter: blur(60px) saturate(180%);
-            border-radius: 16px; width: 600px; max-width: 90vw; overflow: hidden; border: 1px solid rgba(255,255,255,0.1);
-            box-shadow: 0 40px 80px rgba(0,0,0,0.6);
+            border-radius: 20px; width: 600px; max-width: 90vw; overflow: hidden; border: 1px solid rgba(255,255,255,0.1);
+            box-shadow: 0 40px 80px rgba(0,0,0,0.6), inset 0 1px 1px rgba(255,255,255,0.2);
             transition: transform 0.4s var(--spatial-spring), opacity 0.3s var(--spatial-ease);
         }
         .cmd-enter { transform: scale(1.05) translateZ(20px); opacity: 0; }
         .cmd-active { transform: scale(1) translateZ(0); opacity: 1; }
 
-        .cmd-item { transition: all 0.2s ease; cursor: pointer; }
-        .cmd-item.selected { background: var(--sys-color); color: white; }
+        .cmd-item { transition: all 0.2s var(--spatial-ease); cursor: pointer; }
+        .cmd-item.selected { background: rgba(10, 132, 255, 0.2); border-radius: 12px; }
 
         /* ===================================================================== */
         /* VISIONOS PILLS, BUTTONS & INTERACTIONS                                */
@@ -231,45 +249,46 @@
             border-radius: 9999px; color: #FFF; font-weight: 500;
             cursor: pointer; transition: all 0.3s var(--spatial-spring); transform-origin: center; display: inline-flex; align-items: center; justify-content: center;
         }
-        .vision-btn:hover { background: rgba(255, 255, 255, 0.15); transform: scale(1.03); border-color: rgba(255,255,255,0.1); }
+        .vision-btn:hover { background: rgba(255, 255, 255, 0.15); transform: scale(1.04); border-color: rgba(255,255,255,0.1); }
         .vision-btn:active { transform: scale(0.96); opacity: 0.7; transition: all 0.1s ease; }
         
         .vision-btn-primary { background: var(--sys-color); border: 1px solid rgba(255,255,255,0.2); box-shadow: 0 4px 15px rgba(var(--sys-color-rgb), 0.3); }
-        .vision-btn-primary:hover { background: var(--sys-color); filter: brightness(1.1); transform: scale(1.03); box-shadow: 0 6px 20px rgba(var(--sys-color-rgb), 0.4); }
+        .vision-btn-primary:hover { background: var(--sys-color); filter: brightness(1.1); transform: scale(1.04); box-shadow: 0 6px 20px rgba(var(--sys-color-rgb), 0.4); }
 
         .vision-card { transition: all 0.4s var(--spatial-spring); cursor: pointer; user-select: none; -webkit-user-select: none; transform-style: preserve-3d; }
-        .vision-card:hover { transform: translateY(-5px) scale(1.01); box-shadow: 0 20px 40px rgba(0,0,0,0.5); border-color: rgba(255,255,255,0.15); background: rgba(40,40,45,0.6); }
+        .vision-card:hover { transform: translateY(-6px) scale(1.02); box-shadow: 0 25px 50px rgba(0,0,0,0.5), inset 0 1px 1px rgba(255,255,255,0.15); border-color: rgba(255,255,255,0.2); background: rgba(40,40,45,0.6); }
         .vision-card:active { transform: scale(0.97); filter: brightness(0.9); transition: all 0.1s ease; }
         
-        /* Sliding Segmented Control */
-        .segmented-control { position: relative; background-color: rgba(0, 0, 0, 0.4); padding: 4px; border-radius: 9999px; display: inline-flex; align-items: center; border: 1px solid rgba(255,255,255,0.05); }
-        .segmented-btn { position: relative; z-index: 2; padding: 6px 14px; border-radius: 9999px; font-size: 13px; font-weight: 500; color: rgba(255,255,255,0.6); transition: color 0.3s var(--spatial-spring); cursor: pointer; flex: 1; text-align: center; white-space: nowrap; }
-        @media (min-width: 1024px) { .segmented-btn { padding: 6px 18px; } }
+        /* Smooth Sliding Segmented Control */
+        .segmented-control { position: relative; background-color: rgba(0, 0, 0, 0.4); padding: 4px; border-radius: 9999px; display: inline-flex; align-items: center; border: 1px solid rgba(255,255,255,0.04); flex-shrink: 0; box-shadow: inset 0 1px 3px rgba(0,0,0,0.5); }
+        .segmented-btn { position: relative; z-index: 2; padding: 6px 14px; border-radius: 9999px; font-size: 13px; font-weight: 500; color: rgba(255,255,255,0.5); transition: color 0.3s var(--spatial-ease); cursor: pointer; flex: 1; text-align: center; white-space: nowrap; }
+        @media (min-width: 1024px) { .segmented-btn { padding: 6px 20px; font-size: 13px; } }
         .segmented-btn.active { color: #FFFFFF; font-weight: 600; }
-        .segment-pill { position: absolute; top: 4px; bottom: 4px; left: 4px; background-color: rgba(255, 255, 255, 0.15); backdrop-filter: blur(10px); border-radius: 9999px; transition: transform 0.4s var(--spatial-spring), width 0.4s var(--spatial-spring); box-shadow: 0 2px 8px rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.05); z-index: 1; }
+        .segment-pill { position: absolute; top: 4px; bottom: 4px; left: 4px; background-color: rgba(255, 255, 255, 0.15); backdrop-filter: blur(10px); border-radius: 9999px; transition: transform 0.4s var(--spatial-spring), width 0.4s var(--spatial-spring); box-shadow: 0 2px 8px rgba(0,0,0,0.2), inset 0 1px 1px rgba(255,255,255,0.25); border: 1px solid rgba(255,255,255,0.05); z-index: 1; }
         
         /* Sidebar Resizer */
         .sidebar-resizer { position: absolute; right: -5px; top: 0; bottom: 0; width: 10px; cursor: col-resize; z-index: 60; transition: background 0.3s; }
-        .sidebar-resizer:hover, .sidebar-resizer.active { background: rgba(255,255,255,0.1); }
+        .sidebar-resizer:hover, .sidebar-resizer.active { background: rgba(255,255,255,0.05); }
 
         /* Spatial Resizer (Main Splitter) */
         #resizer { width: 44px; margin-left: -22px; margin-right: -22px; cursor: col-resize; background: transparent; position: relative; z-index: 30; display: flex; justify-content: center; align-items: center; touch-action: none; }
-        #resizer .resizer-line { width: 4px; height: 48px; background: rgba(255,255,255,0.15); border-radius: 999px; transition: all 0.3s var(--spatial-spring); pointer-events: none; }
-        #resizer:active .resizer-line, #resizer.dragging .resizer-line { background: var(--sys-color); transform: scale(1.1); box-shadow: 0 0 10px var(--sys-color); border-color: transparent; }
+        #resizer .resizer-line { width: 4px; height: 48px; background: rgba(255,255,255,0.1); border-radius: 999px; transition: all 0.3s var(--spatial-spring); pointer-events: none; }
+        #resizer:hover .resizer-line { background: rgba(255,255,255,0.3); height: 56px; }
+        #resizer:active .resizer-line, #resizer.dragging .resizer-line { background: var(--sys-color); transform: scaleX(1.5); height: 100%; box-shadow: 0 0 15px var(--sys-color); border-color: transparent; }
         
         /* VisionOS Alert Dialogs & Settings */
         .modal-backdrop { backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); background: rgba(0,0,0,0.6); transition: opacity 0.3s var(--spatial-ease); }
         .vision-alert-box { 
-            background: rgba(30, 30, 35, 0.85); backdrop-filter: blur(50px) saturate(200%); -webkit-backdrop-filter: blur(50px) saturate(200%);
-            border-radius: 20px; width: 320px; max-width: 90vw; overflow: hidden; border: 1px solid rgba(255,255,255,0.1);
-            box-shadow: 0 30px 60px rgba(0,0,0,0.6);
+            background: rgba(25, 25, 28, 0.85); backdrop-filter: blur(60px) saturate(200%); -webkit-backdrop-filter: blur(60px) saturate(200%);
+            border-radius: 24px; width: 320px; max-width: 90vw; overflow: hidden; border: 1px solid rgba(255,255,255,0.1);
+            box-shadow: 0 30px 60px rgba(0,0,0,0.6), inset 0 1px 1px rgba(255,255,255,0.2);
             transition: transform 0.5s var(--spatial-bounce), opacity 0.3s var(--spatial-ease);
         }
         .modal-enter { transform: scale(1.05); opacity: 0; }
         .modal-active { transform: scale(1); opacity: 1; }
         
         /* Drop Overlay */
-        #drop-zone { position: fixed; inset: 0; z-index: 9999; background: rgba(0,0,0,0.8); backdrop-filter: blur(10px); display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.3s var(--spatial-ease); }
+        #drop-zone { position: fixed; inset: 0; z-index: 9999; background: rgba(0,0,0,0.8); backdrop-filter: blur(15px); display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.3s var(--spatial-ease); }
         #drop-zone.active { opacity: 1; pointer-events: auto; }
         
         /* Viewports */
@@ -334,19 +353,19 @@
     <!-- COMMAND PALETTE OVERLAY -->
     <div id="cmd-palette-overlay" class="hidden fixed inset-0 modal-backdrop z-[200] flex items-start justify-center pt-[15vh] opacity-0 transition-opacity duration-300">
         <div id="cmd-palette-box" class="cmd-palette cmd-enter flex flex-col relative">
-            <div class="flex items-center px-4 py-4 border-b border-white/10">
+            <div class="flex items-center px-5 py-4 border-b border-white/10">
                 <i data-lucide="search" class="w-5 h-5 text-apple-label mr-3"></i>
                 <input type="text" id="cmd-input" class="bg-transparent border-none text-white text-[16px] w-full outline-none font-medium placeholder-white/30" placeholder="Search files or run commands..." autocomplete="off" spellcheck="false">
                 <div class="px-2 py-1 rounded bg-white/10 text-apple-label text-[10px] font-bold tracking-widest ml-2 border border-white/10">ESC</div>
             </div>
-            <div id="cmd-results" class="max-h-[300px] overflow-y-auto py-2 px-2 flex flex-col gap-1">
+            <div id="cmd-results" class="max-h-[350px] overflow-y-auto py-2 px-2 flex flex-col gap-1">
                 <!-- Injected via JS -->
             </div>
         </div>
     </div>
 
     <!-- MAIN APP CONTAINER -->
-    <div class="absolute inset-0 flex flex-col overflow-hidden bg-transparent perspective-[1000px] opacity-0 transition-opacity duration-1000" id="main-app">
+    <div class="absolute inset-0 flex flex-col overflow-hidden bg-transparent perspective-[1200px] opacity-0 transition-opacity duration-1000" id="main-app">
         
         <!-- ========================================== -->
         <!-- VIEW 1: HOME DASHBOARD                     -->
@@ -388,7 +407,7 @@
                             <span class="text-[11px] sm:text-[12px] font-medium text-apple-label">Developed by <span class="text-white font-bold tracking-wide uppercase">Aravind</span></span>
                         </div>
                     </div>
-                    <button onclick="Workspace.createProject()" class="vision-btn vision-btn-primary px-5 py-3 gap-2 w-full sm:w-auto text-[14px] sm:text-[15px] flex-shrink-0">
+                    <button onclick="UI.showNewProjectModal()" class="vision-btn vision-btn-primary px-5 py-3 gap-2 w-full sm:w-auto text-[14px] sm:text-[15px] flex-shrink-0">
                         <i data-lucide="plus" class="w-4 h-4"></i> New Workspace
                     </button>
                 </div>
@@ -404,7 +423,7 @@
         <!-- ========================================== -->
         <!-- VIEW 2: IDE SPATIAL WORKSPACE              -->
         <!-- ========================================== -->
-        <div id="ide-view" class="view-transition view-hidden z-30 absolute inset-0 flex flex-col md:flex-row md:gap-4 md:p-4 lg:p-6 pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)]">
+        <div id="ide-view" class="view-transition view-hidden z-30 absolute inset-0 flex flex-col md:flex-row md:gap-4 lg:gap-6 md:p-4 lg:p-6 pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)]">
             
             <!-- Mobile Navigation Header (Hidden on iPad/Desktop) -->
             <header class="md:hidden h-[56px] flex-shrink-0 flex items-center justify-between px-3 z-40 border-b border-white/10 relative vision-glass rounded-none w-full">
@@ -427,7 +446,7 @@
             </header>
 
             <!-- FLOATING SIDEBAR ISLAND -->
-            <aside id="sidebar" class="absolute md:relative w-[85vw] max-w-[320px] md:max-w-none h-full flex-shrink-0 flex flex-col vision-glass md:rounded-[1.5rem] z-50 transform -translate-x-full md:translate-x-0 transition-transform duration-500 ease-[cubic-bezier(0.25,0.1,0.25,1)]" style="width: var(--sidebar-width);">
+            <aside id="sidebar" class="absolute md:relative w-[85vw] max-w-[320px] md:max-w-none h-full flex-shrink-0 flex flex-col vision-glass md:rounded-[1.5rem] lg:rounded-[2rem] z-50 transform -translate-x-full md:translate-x-0 transition-transform duration-500 ease-[cubic-bezier(0.25,0.1,0.25,1)]" style="width: var(--sidebar-width);">
                 <!-- Dynamic Resizer handle -->
                 <div id="sidebar-resizer" class="sidebar-resizer hidden md:block"></div>
 
@@ -460,7 +479,7 @@
             <div id="sidebar-overlay" onclick="UI.toggleMobileSidebar()" class="absolute inset-0 bg-black/50 z-40 hidden md:hidden backdrop-blur-sm transition-opacity opacity-0"></div>
 
             <!-- MAIN WORKSPACE ISLAND -->
-            <main class="flex-1 flex flex-col min-w-0 md:rounded-[1.5rem] vision-glass overflow-hidden z-10 relative">
+            <main class="flex-1 flex flex-col min-w-0 md:rounded-[1.5rem] lg:rounded-[2rem] vision-glass overflow-hidden z-10 relative">
                 
                 <!-- Desktop Floating Header (Strict Flex Layout for Overlap Prevention) -->
                 <header class="hidden md:flex h-[56px] lg:h-[60px] flex-shrink-0 items-center px-3 lg:px-4 border-b border-white/5 bg-black/20 w-full min-w-0">
@@ -532,8 +551,8 @@
                         </div>
                         
                         <div class="flex-1 flex overflow-hidden relative editor-container md:rounded-b-xl" id="editor-wrapper">
-                            <div id="active-line-highlight" class="active-line-bg h-[1.7em] hidden"></div>
-                            <div id="line-numbers" class="w-10 lg:w-12 flex-shrink-0 flex flex-col items-end pr-2 py-[1.5rem] text-[12px] font-mono select-none text-[#5C5C5E] bg-[#0C0C0E] border-r border-white/5 z-10 leading-[1.7]"></div>
+                            <div id="active-line-highlight" class="active-line-bg h-[1.75em] hidden"></div>
+                            <div id="line-numbers" class="w-10 lg:w-12 flex-shrink-0 flex flex-col items-end pr-2 py-[1.5rem] text-[12px] font-mono select-none text-[#5C5C5E] bg-[#0C0C0E] border-r border-white/5 z-10 leading-[1.75]"></div>
                             <div class="relative flex-1 h-full overflow-hidden bg-[#0C0C0E]">
                                 <pre id="editor-pre" class="editor-pre" aria-hidden="true"></pre>
                                 <textarea id="code-editor" class="editor-textarea" spellcheck="false" autocapitalize="off" autocomplete="off" autocorrect="off"></textarea>
@@ -559,12 +578,16 @@
                                 <button onclick="Preview.setViewport('desktop')" id="vp-desktop" class="vision-btn w-7 h-7 p-0 rounded-full border-none shadow-none bg-apple-blue/20 text-apple-blue hidden xl:flex flex-shrink-0" title="Mac"><i data-lucide="monitor" class="w-3.5 h-3.5"></i></button>
                             </div>
 
-                            <!-- Center: URL Bar -->
+                            <!-- Center: URL Bar with Clickable Refresh -->
                             <div class="flex-1 min-w-[120px] max-w-[250px] mx-2 flex justify-center">
-                                <div class="w-full bg-black/60 border border-white/5 rounded-full h-6 flex items-center justify-center px-3 gap-1.5 ios-btn cursor-pointer shadow-[inset_0_1px_3px_rgba(0,0,0,0.5)] truncate transition-colors hover:bg-black/80" onclick="Engine.run()">
-                                    <i data-lucide="lock" class="w-2.5 h-2.5 text-apple-blue opacity-80 flex-shrink-0"></i>
-                                    <span class="text-[11px] font-medium text-white/80 truncate">nova.local</span>
-                                    <i data-lucide="rotate-cw" class="w-2.5 h-2.5 text-apple-label opacity-60 flex-shrink-0 ml-auto hidden sm:block"></i>
+                                <div class="w-full bg-black/60 border border-white/5 rounded-full h-6 flex items-center justify-between px-3 gap-1.5 shadow-[inset_0_1px_3px_rgba(0,0,0,0.5)] truncate transition-colors hover:bg-black/80">
+                                    <div class="flex items-center gap-1.5 truncate">
+                                        <i data-lucide="lock" class="w-2.5 h-2.5 text-apple-blue opacity-80 flex-shrink-0"></i>
+                                        <span class="text-[11px] font-medium text-white/80 truncate">nova.local</span>
+                                    </div>
+                                    <button onclick="Engine.run()" class="ios-btn text-apple-label hover:text-white p-0.5 -mr-1" title="Refresh Preview">
+                                        <i data-lucide="rotate-cw" class="w-2.5 h-2.5"></i>
+                                    </button>
                                 </div>
                             </div>
 
@@ -595,8 +618,9 @@
                             
                             <!-- Interactive Console Input -->
                             <div class="h-9 bg-[#121212] border-t border-white/5 flex items-center px-3 absolute bottom-0 left-0 right-0 z-10">
-                                <i data-lucide="chevron-right" class="w-3.5 h-3.5 text-apple-blue mr-2 opacity-70"></i>
+                                <i data-lucide="chevron-right" class="w-3.5 h-3.5 text-apple-blue mr-2 opacity-70 flex-shrink-0"></i>
                                 <input type="text" id="console-input" class="bg-transparent border-none text-white text-[12px] w-full outline-none font-mono placeholder-white/30" placeholder="Evaluate JS..." autocomplete="off" spellcheck="false">
+                                <button onclick="UI.executeConsole()" class="vision-btn w-6 h-6 p-0 rounded-md border-none shadow-none bg-apple-blue/20 hover:bg-apple-blue/40 text-apple-blue flex-shrink-0 ml-2" title="Run (Enter)"><i data-lucide="send" class="w-3 h-3"></i></button>
                             </div>
                         </div>
                     </section>
@@ -605,36 +629,57 @@
         </div>
     </div> <!-- End Main Wrapper -->
 
+    <!-- SPATIAL NEW PROJECT MODAL (With Templates) -->
+    <div id="new-project-overlay" class="hidden fixed inset-0 modal-backdrop z-[120] flex items-center justify-center p-4 opacity-0 transition-opacity duration-300">
+        <div id="new-project-box" class="vision-alert-box modal-content modal-enter flex flex-col relative w-[340px]">
+            <div class="p-5 border-b border-white/10 flex justify-between items-center">
+                <h3 class="text-[17px] font-bold text-white tracking-tight flex items-center gap-2"><i data-lucide="folder-plus" class="w-4.5 h-4.5 text-apple-blue"></i> New Workspace</h3>
+                <button onclick="UI.hideNewProjectModal()" class="vision-btn w-7 h-7 p-0 rounded-full bg-white/10 border-none shadow-none hover:bg-white/20"><i data-lucide="x" class="w-4 h-4"></i></button>
+            </div>
+            <div class="p-5 flex flex-col gap-4">
+                <div>
+                    <label class="text-[12px] text-apple-label font-bold tracking-widest uppercase mb-2 block">Name</label>
+                    <input type="text" id="new-proj-name" placeholder="Untitled App" autocomplete="off" class="w-full bg-black/50 border border-white/10 rounded-xl px-4 py-2.5 text-[14px] text-white focus:outline-none focus:border-apple-blue transition-all shadow-[inset_0_2px_5px_rgba(0,0,0,0.5)]">
+                </div>
+                <div>
+                    <label class="text-[12px] text-apple-label font-bold tracking-widest uppercase mb-2 block">Template</label>
+                    <select id="new-proj-template" class="w-full bg-black/50 border border-white/10 rounded-xl px-3 py-2.5 text-[14px] text-white focus:outline-none focus:border-apple-blue transition-all shadow-[inset_0_2px_5px_rgba(0,0,0,0.5)] appearance-none cursor-pointer">
+                        <option value="vanilla">Vanilla Web (HTML/CSS/JS)</option>
+                        <option value="react">React.js (Babel CDN)</option>
+                    </select>
+                </div>
+            </div>
+            <div class="flex border-t border-white/10 bg-white/5">
+                <button onclick="UI.hideNewProjectModal()" class="flex-1 py-3 text-[15px] text-apple-blue ios-btn border-r border-white/10 font-normal rounded-none bg-transparent shadow-none">Cancel</button>
+                <button onclick="Workspace.confirmCreateProject()" class="flex-1 py-3 text-[15px] font-bold text-apple-blue ios-btn rounded-none bg-transparent shadow-none">Create</button>
+            </div>
+        </div>
+    </div>
+
     <!-- SPATIAL SETTINGS MODAL -->
     <div id="settings-overlay" class="hidden fixed inset-0 modal-backdrop z-[120] flex items-center justify-center p-4 opacity-0 transition-opacity duration-300">
-        <div id="settings-box" class="vision-alert-box modal-content modal-enter flex flex-col relative w-[320px]">
+        <div id="settings-box" class="vision-alert-box modal-content modal-enter flex flex-col relative w-[340px]">
             <div class="p-5 border-b border-white/10 flex justify-between items-center">
-                <h3 class="text-[17px] font-bold text-white tracking-tight flex items-center gap-2"><i data-lucide="sliders-horizontal" class="w-4.5 h-4.5 text-apple-blue"></i> Editor Settings</h3>
+                <h3 class="text-[17px] font-bold text-white tracking-tight flex items-center gap-2"><i data-lucide="sliders-horizontal" class="w-4.5 h-4.5 text-apple-blue"></i> Settings</h3>
                 <button onclick="UI.toggleSettings()" class="vision-btn w-7 h-7 p-0 rounded-full bg-white/10 border-none shadow-none hover:bg-white/20"><i data-lucide="x" class="w-4 h-4"></i></button>
             </div>
             <div class="p-5 flex flex-col gap-5">
-                <!-- Font Size -->
                 <div class="flex justify-between items-center">
                     <div>
                         <p class="text-[14px] text-white font-medium">Font Size</p>
                         <p class="text-[11px] text-apple-label">Adjust editor text scale</p>
                     </div>
-                    <div class="flex items-center gap-2.5 bg-black/40 rounded-full px-2.5 py-1 border border-white/10">
+                    <div class="flex items-center gap-2 bg-black/40 rounded-full px-2 py-1 border border-white/10">
                         <button onclick="UI.changeFontSize(-1)" class="text-apple-blue hover:text-white px-1 py-1"><i data-lucide="minus" class="w-3.5 h-3.5"></i></button>
                         <span id="font-size-display" class="text-white font-mono text-[13px] w-5 text-center">16</span>
                         <button onclick="UI.changeFontSize(1)" class="text-apple-blue hover:text-white px-1 py-1"><i data-lucide="plus" class="w-3.5 h-3.5"></i></button>
                     </div>
                 </div>
-                <!-- Word Wrap -->
-                <div class="flex justify-between items-center">
-                    <div>
-                        <p class="text-[14px] text-white font-medium">Word Wrap</p>
-                        <p class="text-[11px] text-apple-label">Wrap long lines of code</p>
-                    </div>
-                    <label class="relative inline-flex items-center cursor-pointer">
-                        <input type="checkbox" id="wrap-toggle" class="sr-only peer" onchange="UI.toggleWrap(this)">
-                        <div class="w-10 h-5 bg-black/50 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-apple-label after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-apple-blue border border-white/10 shadow-inner"></div>
-                    </label>
+                
+                <div class="border-t border-white/5 pt-4">
+                    <label class="text-[12px] text-apple-label font-bold tracking-widest uppercase mb-2 block">Head Tags (CDN/Scripts)</label>
+                    <textarea id="settings-head-tags" placeholder="<script src='https://cdn.tailwindcss.com'></script>" class="w-full h-24 bg-black/50 border border-white/10 rounded-xl px-3 py-2 text-[12px] font-mono text-white/80 focus:outline-none focus:border-apple-blue transition-all shadow-[inset_0_2px_5px_rgba(0,0,0,0.5)] resize-none" spellcheck="false" onchange="Workspace.saveHeadTags(this.value)"></textarea>
+                    <p class="text-[10px] text-apple-label mt-1.5">Injected globally into the &lt;head&gt; of your app.</p>
                 </div>
             </div>
         </div>
@@ -742,10 +787,7 @@
                     Dialog.els.box.classList.replace('modal-enter', 'modal-active');
                     if (type === 'prompt') Dialog.els.input.focus();
                 });
-            }),
-            alert: (title, msg) => Dialog.show('alert', title, msg),
-            confirm: (title, msg) => Dialog.show('confirm', title, msg),
-            prompt: (title, msg, def) => Dialog.show('prompt', title, msg, def)
+            })
         };
 
         // --- COMMAND PALETTE (Spotlight) ---
@@ -797,10 +839,10 @@
                 // 1. Files
                 const files = State.files.filter(f => f.name.toLowerCase().includes(q));
                 if (files.length > 0) {
-                    html += `<div class="text-[10px] font-bold text-apple-label px-3 py-1 uppercase tracking-widest">Files</div>`;
+                    html += `<div class="text-[10px] font-bold text-apple-label px-3 py-1.5 uppercase tracking-widest">Files</div>`;
                     files.forEach((f, i) => {
                         html += `
-                        <div class="cmd-item flex items-center px-3 py-2 rounded-lg ${i===0 && q!=='' ? 'selected' : 'hover:bg-white/10'}" data-action="file" data-id="${f.id}">
+                        <div class="cmd-item flex items-center px-3 py-2.5 rounded-lg ${i===0 && q!=='' ? 'selected' : 'hover:bg-white/10'}" data-action="file" data-id="${f.id}">
                             <div class="w-5 flex justify-center opacity-80">${UI.getIcon(f.name)}</div>
                             <span class="text-[13px] font-medium text-white ml-2">${f.name}</span>
                         </div>`;
@@ -810,18 +852,20 @@
                 // 2. Commands
                 const allCmds = [
                     { name: 'Create New File', icon: 'file-plus', action: 'new-file' },
-                    { name: 'Run / Build Code', icon: 'play', action: 'run' },
-                    { name: 'Format Code (Auto-Indent)', icon: 'wand-2', action: 'format' },
-                    { name: 'Export Workspace', icon: 'download-cloud', action: 'export' },
-                    { name: 'Toggle Settings', icon: 'settings', action: 'settings' },
+                    { name: 'Format Code', icon: 'wand-2', action: 'format' },
+                    { name: 'Toggle Word Wrap', icon: 'wrap-text', action: 'wrap' },
+                    { name: 'Clear Console', icon: 'trash-2', action: 'clear-console' },
+                    { name: 'Toggle Fullscreen Preview', icon: 'maximize', action: 'fullscreen' },
+                    { name: 'Export Full Workspace', icon: 'download-cloud', action: 'export' },
+                    { name: 'Open Settings', icon: 'settings', action: 'settings' },
                     { name: 'Go to Home Dashboard', icon: 'layout-grid', action: 'home' }
                 ];
                 const cmds = allCmds.filter(c => c.name.toLowerCase().includes(q));
                 if (cmds.length > 0) {
-                    html += `<div class="text-[10px] font-bold text-apple-label px-3 py-1 uppercase tracking-widest mt-2">Commands</div>`;
+                    html += `<div class="text-[10px] font-bold text-apple-label px-3 py-1.5 uppercase tracking-widest mt-2">Commands</div>`;
                     cmds.forEach(c => {
                         html += `
-                        <div class="cmd-item flex items-center px-3 py-2 rounded-lg hover:bg-white/10" data-action="cmd" data-id="${c.action}">
+                        <div class="cmd-item flex items-center px-3 py-2.5 rounded-lg hover:bg-white/10" data-action="cmd" data-id="${c.action}">
                             <i data-lucide="${c.icon}" class="w-3.5 h-3.5 text-apple-label mx-1"></i>
                             <span class="text-[13px] font-medium text-white ml-2.5">${c.name}</span>
                         </div>`;
@@ -850,6 +894,15 @@
                     if (id === 'new-file') Workspace.createFile();
                     if (id === 'run') Engine.run();
                     if (id === 'format') UI.formatCode();
+                    if (id === 'wrap') { 
+                        // Simulate toggling the UI checkbox
+                        State.isWrapped = !State.isWrapped;
+                        document.documentElement.style.setProperty('--editor-wrap', State.isWrapped ? 'pre-wrap' : 'pre');
+                        UI.updateActiveLine();
+                        UI.showToast(State.isWrapped ? "Word Wrap Enabled" : "Word Wrap Disabled", "info");
+                    }
+                    if (id === 'clear-console') Engine.clearConsole();
+                    if (id === 'fullscreen') Preview.toggleFullscreen();
                     if (id === 'export') Workspace.exportProject();
                     if (id === 'settings') UI.toggleSettings();
                     if (id === 'home') UI.switchView('home');
@@ -859,10 +912,15 @@
 
         // --- TEMPLATES ---
         const Templates = {
-            apple: [
-                { id: '1', name: 'index.html', language: 'html', content: `<!DOCTYPE html>\n<html lang="en">\n<head>\n  <meta charset="UTF-8">\n  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">\n  <title>App</title>\n  <link rel="stylesheet" href="style.css">\n</head>\n<body>\n  <div class="view">\n    <div class="icon">✨</div>\n    <h1>Spatial Web Studio</h1>\n    <p>Developed by Aravind. Built for the future of web experiences.</p>\n    <button onclick="runTest()">Initialize Engine</button>\n  </div>\n  <script src="main.js"><\/script>\n</body>\n</html>` },
+            vanilla: [
+                { id: '1', name: 'index.html', language: 'html', content: `<!DOCTYPE html>\n<html lang="en">\n<head>\n  <meta charset="UTF-8">\n  <meta name="viewport" content="width=device-width, initial-scale=1.0">\n  <title>Vanilla App</title>\n  <link rel="stylesheet" href="style.css">\n</head>\n<body>\n  <div class="view">\n    <div class="icon">✨</div>\n    <h1>Spatial Web Studio</h1>\n    <p>Developed by Aravind. Built for the future.</p>\n    <button onclick="runTest()">Initialize Engine</button>\n  </div>\n  <script src="main.js"><\/script>\n</body>\n</html>` },
                 { id: '2', name: 'style.css', language: 'css', content: `body {\n  background: #000000; color: #FFFFFF;\n  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif;\n  display: flex; justify-content: center; align-items: center;\n  min-height: 100vh; margin: 0; -webkit-font-smoothing: antialiased;\n}\n.view {\n  background: rgba(255,255,255,0.03);\n  padding: 40px; border-radius: 32px;\n  text-align: center; max-width: 340px; width: 100%;\n  backdrop-filter: blur(40px) saturate(180%);\n  border: 1px solid rgba(255,255,255,0.08);\n  box-shadow: 0 20px 60px rgba(0,0,0,0.6);\n}\n.icon {\n  font-size: 48px; margin-bottom: 16px;\n  filter: drop-shadow(0 0 15px rgba(255,255,255,0.2));\n}\nh1 {\n  font-size: 24px; font-weight: 700; margin: 0 0 8px;\n  letter-spacing: 0.3px;\n}\np {\n  color: rgba(235, 235, 245, 0.6); font-size: 14px;\n  line-height: 20px; margin-bottom: 32px;\n}\nbutton {\n  background: rgba(255,255,255,0.1); color: #FFFFFF;\n  border: 1px solid rgba(255,255,255,0.1);\n  padding: 12px 20px; border-radius: 999px; font-size: 15px;\n  font-weight: 500; width: 100%; cursor: pointer;\n  transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);\n}\nbutton:hover { background: rgba(255,255,255,0.15); transform: scale(1.02); }\nbutton:active { transform: scale(0.96); opacity: 0.8; }` },
                 { id: '3', name: 'main.js', language: 'javascript', content: `console.info('Studio engine loaded. Crafted by Aravind.');\n\nfunction runTest() {\n  const payload = { developer: "Aravind", environment: "VisionOS", haptic: true };\n  console.log("Environment initialized natively.");\n  console.warn("Telemetry Data:", payload);\n}` }
+            ],
+            react: [
+                { id: '1', name: 'index.html', language: 'html', content: `<!DOCTYPE html>\n<html lang="en">\n<head>\n  <meta charset="UTF-8">\n  <title>React App</title>\n  <script src="https://unpkg.com/react@18/umd/react.development.js"><\/script>\n  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"><\/script>\n  <script src="https://unpkg.com/@babel/standalone/babel.min.js"><\/script>\n  <link rel="stylesheet" href="style.css">\n</head>\n<body>\n  <div id="root"></div>\n  <script type="text/babel" src="app.js"><\/script>\n</body>\n</html>` },
+                { id: '2', name: 'app.js', language: 'javascript', content: `function App() {\n  const [count, setCount] = React.useState(0);\n  \n  return (\n    <div className="container">\n      <div className="card">\n        <h1>⚛️ React Playground</h1>\n        <p>Built with NOVA Studio</p>\n        <div className="counter">{count}</div>\n        <button onClick={() => setCount(c => c + 1)}>Increment</button>\n      </div>\n    </div>\n  );\n}\n\nconst root = ReactDOM.createRoot(document.getElementById('root'));\nroot.render(<App />);` },
+                { id: '3', name: 'style.css', language: 'css', content: `body {\n  background: #0f0f11; color: #fff;\n  font-family: system-ui, sans-serif;\n  display: flex; justify-content: center;\n  align-items: center; height: 100vh; margin: 0;\n}\n.card {\n  background: #1c1c1e; padding: 40px;\n  border-radius: 20px; text-align: center;\n  border: 1px solid rgba(255,255,255,0.1);\n}\nh1 { margin: 0 0 10px; color: #61dafb; }\np { color: #8e8e93; margin-bottom: 30px; }\n.counter {\n  font-size: 48px; font-weight: bold;\n  margin-bottom: 30px; color: #fff;\n}\nbutton {\n  background: #0a84ff; color: white; border: none;\n  padding: 12px 24px; border-radius: 99px;\n  font-size: 16px; font-weight: bold; cursor: pointer;\n}` }
             ]
         };
 
@@ -871,7 +929,7 @@
             projects: {}, currentProjId: null, files: [], activeFileId: null,
             autoRun: true, consoleLogs: [], runTimer: null, blobUrl: null, theme: 'blue',
             viewport: 'desktop', mobileViewMode: 'editor', currentView: 'home',
-            fontSize: 16, isWrapped: false // Default to 16px to prevent iOS Zoom!
+            fontSize: 16, isWrapped: false 
         };
 
         const Els = {
@@ -1005,11 +1063,11 @@
             },
 
             getIcon: (name) => {
-                if (name.endsWith('.html')) return '<i data-lucide="file-code-2" class="w-4 h-4 text-[#FF453A]"></i>';
-                if (name.endsWith('.css')) return '<i data-lucide="file-json" class="w-4 h-4 text-[#0A84FF]"></i>';
-                if (name.endsWith('.js')) return '<i data-lucide="braces" class="w-4 h-4 text-[#FFD60A]"></i>';
-                if (name.endsWith('.json')) return '<i data-lucide="database" class="w-4 h-4 text-[#32D74B]"></i>';
-                return '<i data-lucide="file-text" class="w-4 h-4 text-apple-label"></i>';
+                if (name.endsWith('.html')) return '<i data-lucide="file-code-2" class="w-4 h-4 md:w-4.5 md:h-4.5 text-[#FF453A] drop-shadow"></i>';
+                if (name.endsWith('.css')) return '<i data-lucide="file-json" class="w-4 h-4 md:w-4.5 md:h-4.5 text-[#0A84FF] drop-shadow"></i>';
+                if (name.endsWith('.js')) return '<i data-lucide="braces" class="w-4 h-4 md:w-4.5 md:h-4.5 text-[#FFD60A] drop-shadow"></i>';
+                if (name.endsWith('.json')) return '<i data-lucide="database" class="w-4 h-4 md:w-4.5 md:h-4.5 text-[#32D74B] drop-shadow"></i>';
+                return '<i data-lucide="file-text" class="w-4 h-4 md:w-4.5 md:h-4.5 text-apple-label"></i>';
             },
 
             renderFiles: () => {
@@ -1040,10 +1098,23 @@
             updateActiveLine: () => {
                 if(!Els.activeLine) return;
                 const linesUntilCursor = Els.editor.value.substr(0, Els.editor.selectionStart).split("\n").length;
-                const lineHeight = 1.7 * parseFloat(getComputedStyle(Els.editor).fontSize); // 1.7 is line-height
-                const topOffset = (linesUntilCursor - 1) * lineHeight;
+                const baseFontSize = parseFloat(getComputedStyle(document.documentElement).fontSize) || 16;
+                const paddingTop = 1.5 * baseFontSize; 
+                const editorFontSize = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--editor-font-size')) || 16;
+                const lineHeight = 1.75 * editorFontSize; 
+                
+                const topOffset = paddingTop + ((linesUntilCursor - 1) * lineHeight);
                 Els.activeLine.style.top = `${topOffset}px`;
                 Els.activeLine.classList.remove('hidden');
+            },
+
+            pulseSave: () => {
+                const activeTab = document.querySelector('#editor-tabs > div.bg-\\[\\#0C0C0E\\]');
+                if(activeTab) {
+                    activeTab.classList.remove('saving-pulse');
+                    void activeTab.offsetWidth; 
+                    activeTab.classList.add('saving-pulse');
+                }
             },
 
             formatCode: () => {
@@ -1076,7 +1147,10 @@
                     if(f) {
                         f.content = e.target.value;
                         Els.pre.innerHTML = Highlighter.highlight(f.content, f.language);
-                        UI.updateLines(); Workspace.save();
+                        UI.updateLines(); 
+                        
+                        Workspace.save();
+                        UI.pulseSave();
                         
                         if (State.autoRun) { 
                             clearTimeout(State.runTimer); if(Els.loader) Els.loader.style.display = 'block'; 
@@ -1091,25 +1165,55 @@
 
                 Els.editor.addEventListener('scroll', () => { 
                     Els.lines.scrollTop = Els.editor.scrollTop; 
-                    Els.pre.scrollTop = Els.editor.scrollTop; Els.pre.scrollLeft = Els.editor.scrollLeft;
-                    if(Els.activeLine) Els.activeLine.style.transform = `translateY(-${Els.editor.scrollTop}px)`;
+                    Els.pre.scrollTop = Els.editor.scrollTop; 
+                    Els.pre.scrollLeft = Els.editor.scrollLeft;
+                    
+                    if(Els.activeLine) {
+                        Els.activeLine.style.transform = `translateY(-${Els.editor.scrollTop}px)`;
+                    }
                 });
 
                 Els.editor.addEventListener('click', UI.updateActiveLine);
                 Els.editor.addEventListener('keyup', UI.updateActiveLine);
 
+                // Smart Auto-Indentation & Bracket Closing Engine
                 Els.editor.addEventListener('keydown', (e) => {
+                    const val = Els.editor.value;
+                    const start = Els.editor.selectionStart;
+                    const end = Els.editor.selectionEnd;
+                    
+                    // Smart Tab
                     if (e.key === 'Tab') {
-                        e.preventDefault(); const s = Els.editor.selectionStart;
-                        Els.editor.value = Els.editor.value.substring(0, s) + "  " + Els.editor.value.substring(Els.editor.selectionEnd);
-                        Els.editor.selectionStart = Els.editor.selectionEnd = s + 2;
+                        e.preventDefault();
+                        Els.editor.value = val.substring(0, start) + "  " + val.substring(end);
+                        Els.editor.selectionStart = Els.editor.selectionEnd = start + 2;
+                        Els.editor.dispatchEvent(new Event('input'));
+                    } 
+                    // Auto-Close Brackets
+                    else if (['(', '{', '[', '"', "'"].includes(e.key)) {
+                        const pairs = { '(': ')', '{': '}', '[': ']', '"': '"', "'": "'" };
+                        e.preventDefault();
+                        Els.editor.value = val.substring(0, start) + e.key + pairs[e.key] + val.substring(end);
+                        Els.editor.selectionStart = Els.editor.selectionEnd = start + 1;
                         Els.editor.dispatchEvent(new Event('input'));
                     }
-                    const p = { '(': ')', '{': '}', '[': ']', '"': '"', "'": "'" };
-                    if (p[e.key]) {
-                        e.preventDefault(); const s = Els.editor.selectionStart;
-                        Els.editor.value = Els.editor.value.substring(0, s) + e.key + p[e.key] + Els.editor.value.substring(Els.editor.selectionEnd);
-                        Els.editor.selectionStart = Els.editor.selectionEnd = s + 1;
+                    // Smart Enter (Auto-Indent & Bracket formatting)
+                    else if (e.key === 'Enter') {
+                        e.preventDefault();
+                        const linesBefore = val.substring(0, start).split('\n');
+                        const currentLine = linesBefore[linesBefore.length - 1];
+                        const indentMatch = currentLine.match(/^\s*/);
+                        let indent = indentMatch ? indentMatch[0] : '';
+
+                        if (currentLine.trim().endsWith('{') || currentLine.trim().endsWith('[')) {
+                            const nextIndent = indent;
+                            indent += '  '; // Add 2 spaces indent
+                            Els.editor.value = val.substring(0, start) + '\n' + indent + '\n' + nextIndent + val.substring(end);
+                            Els.editor.selectionStart = Els.editor.selectionEnd = start + indent.length + 1;
+                        } else {
+                            Els.editor.value = val.substring(0, start) + '\n' + indent + val.substring(end);
+                            Els.editor.selectionStart = Els.editor.selectionEnd = start + indent.length + 1;
+                        }
                         Els.editor.dispatchEvent(new Event('input'));
                     }
                 });
@@ -1200,19 +1304,28 @@
                 if(!input) return;
                 input.addEventListener('keydown', (e) => {
                     if(e.key === 'Enter') {
-                        const code = input.value.trim();
-                        if(code) {
-                            Els.iframe.contentWindow.postMessage({ source: 'nova-console', type: 'eval', code: code }, '*');
-                            input.value = '';
-                        }
+                        UI.executeConsole();
                     }
                 });
+            },
+            
+            executeConsole: () => {
+                const input = document.getElementById('console-input');
+                const code = input.value.trim();
+                if(code) {
+                    Els.iframe.contentWindow.postMessage({ source: 'nova-console', type: 'eval', code: code }, '*');
+                    input.value = '';
+                }
             },
 
             setupShortcuts: () => {
                 window.addEventListener('keydown', (e) => {
+                    // Cmd/Ctrl + S
                     if ((e.ctrlKey || e.metaKey) && e.key === 's') { e.preventDefault(); Engine.run(); UI.showToast("Saved & Built"); }
+                    // Cmd/Ctrl + B
                     if ((e.ctrlKey || e.metaKey) && e.key === 'b') { e.preventDefault(); UI.toggleDesktopSidebar(); }
+                    // Cmd/Ctrl + Shift + F
+                    if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key.toLowerCase() === 'f') { e.preventDefault(); UI.formatCode(); }
                 });
                 const mobileRun = document.getElementById('run-btn-mobile');
                 if(mobileRun) mobileRun.addEventListener('click', () => { if(!State.autoRun) Engine.run(); });
@@ -1221,7 +1334,6 @@
             setViewMode: (m) => {
                 const modes = ['editor', 'split', 'preview'];
                 
-                // Animate Pill
                 const pill = document.getElementById('segment-pill');
                 const activeBtn = document.getElementById(`btn-view-${m}`);
                 if (pill && activeBtn) {
@@ -1271,10 +1383,34 @@
                 Els.sidebar.style.display = isHidden ? 'flex' : 'none';
             },
 
+            // Modal Toggles
+            showNewProjectModal: () => {
+                const s = document.getElementById('new-project-overlay');
+                const box = document.getElementById('new-project-box');
+                document.getElementById('new-proj-name').value = '';
+                s.classList.remove('hidden');
+                requestAnimationFrame(() => {
+                    s.classList.remove('opacity-0');
+                    box.classList.replace('modal-enter', 'modal-active');
+                    document.getElementById('new-proj-name').focus();
+                });
+            },
+            
+            hideNewProjectModal: () => {
+                const s = document.getElementById('new-project-overlay');
+                const box = document.getElementById('new-project-box');
+                s.classList.add('opacity-0');
+                box.classList.replace('modal-active', 'modal-enter');
+                setTimeout(() => s.classList.add('hidden'), 300);
+            },
+
             toggleSettings: () => {
                 const s = document.getElementById('settings-overlay');
                 const box = document.getElementById('settings-box');
                 if(s.classList.contains('hidden')) {
+                    const currentTags = State.projects[State.currentProjId]?.headTags || '';
+                    document.getElementById('settings-head-tags').value = currentTags;
+                    
                     s.classList.remove('hidden');
                     requestAnimationFrame(() => {
                         s.classList.remove('opacity-0');
@@ -1292,12 +1428,6 @@
                 document.documentElement.style.setProperty('--editor-font-size', `${State.fontSize}px`);
                 document.getElementById('font-size-display').innerText = State.fontSize;
                 UI.updateActiveLine();
-            },
-
-            toggleWrap: (el) => {
-                State.isWrapped = el.checked;
-                document.documentElement.style.setProperty('--editor-wrap', State.isWrapped ? 'pre-wrap' : 'pre');
-                UI.updateActiveLine();
             }
         };
 
@@ -1305,13 +1435,13 @@
         const Workspace = {
             init: () => {
                 try {
-                    const s = localStorage.getItem('nova_spatial_final');
-                    if (s) { State.projects = JSON.parse(s); State.currentProjId = localStorage.getItem('nova_spatial_proj_final') || Object.keys(State.projects)[0]; }
+                    const s = localStorage.getItem('nova_spatial_master');
+                    if (s) { State.projects = JSON.parse(s); State.currentProjId = localStorage.getItem('nova_spatial_proj_master') || Object.keys(State.projects)[0]; }
                 } catch (e) {}
 
                 if (!State.projects || Object.keys(State.projects).length === 0) {
                     const id = 'proj_' + Date.now();
-                    State.projects = { [id]: { id, name: 'Spatial Demo', files: Templates.apple, updated: Date.now() } };
+                    State.projects = { [id]: { id, name: 'Vanilla Demo', files: Templates.vanilla, headTags: '', updated: Date.now() } };
                     State.currentProjId = id; Workspace.save();
                 }
                 
@@ -1324,8 +1454,8 @@
                         State.projects[State.currentProjId].files = State.files;
                         State.projects[State.currentProjId].updated = Date.now();
                     }
-                    localStorage.setItem('nova_spatial_final', JSON.stringify(State.projects));
-                    localStorage.setItem('nova_spatial_proj_final', State.currentProjId);
+                    localStorage.setItem('nova_spatial_master', JSON.stringify(State.projects));
+                    localStorage.setItem('nova_spatial_proj_master', State.currentProjId);
                 } catch (e) { console.error(e); }
             },
 
@@ -1343,6 +1473,90 @@
             },
 
             setActive: (id) => { State.activeFileId = id; UI.render(); },
+
+            createProject: () => {
+                UI.showNewProjectModal();
+            },
+            
+            confirmCreateProject: () => {
+                const nameInput = document.getElementById('new-proj-name').value;
+                const template = document.getElementById('new-proj-template').value;
+                const finalName = nameInput.trim() || 'Untitled Workspace';
+                
+                const id = 'proj_' + Date.now();
+                // Clone the template files so they aren't referenced directly
+                const clonedFiles = JSON.parse(JSON.stringify(Templates[template]));
+                
+                State.projects[id] = { id, name: finalName, files: clonedFiles, headTags: '', updated: Date.now() };
+                Workspace.save(); 
+                UI.hideNewProjectModal();
+                Workspace.openProj(id); 
+                UI.showToast(`Created ${template === 'react' ? 'React' : 'Vanilla'} Workspace`);
+            },
+
+            openProj: (id) => {
+                State.currentProjId = id;
+                Workspace.save(); 
+                UI.switchView('ide');
+            },
+
+            renameProj: async (id) => {
+                const name = await Dialog.prompt("Rename Workspace", "Enter a new name:", State.projects[id].name);
+                if (name && name.trim()) { 
+                    State.projects[id].name = name.trim(); Workspace.save(); Workspace.renderHomeGrid(); 
+                    const ideTitle = document.getElementById('ide-project-title');
+                    const mobTitle = document.getElementById('mobile-project-title');
+                    if(State.currentProjId === id) {
+                        if(ideTitle) ideTitle.innerText = name.trim();
+                        if(mobTitle) mobTitle.innerText = name.trim();
+                    } 
+                }
+            },
+
+            deleteProj: async (id) => {
+                if (Object.keys(State.projects).length <= 1) return Dialog.alert("Action Denied", "You must have at least one workspace.");
+                if (await Dialog.confirm("Delete Workspace", `Delete "${State.projects[id].name}" permanently?`)) {
+                    delete State.projects[id];
+                    if (State.currentProjId === id) { State.currentProjId = Object.keys(State.projects)[0]; }
+                    Workspace.save(); Workspace.renderHomeGrid(); UI.showToast("Deleted");
+                }
+            },
+
+            renderHomeGrid: () => {
+                const sorted = Object.values(State.projects).sort((a,b) => b.updated - a.updated);
+                const grid = document.getElementById('home-project-grid');
+                
+                grid.innerHTML = sorted.map((p, index) => {
+                    const gradClass = `proj-gradient-${index % 5}`;
+                    const timeString = timeAgo(p.updated);
+                    const delay = index * 0.05; 
+                    
+                    return `
+                    <div class="vision-card animate-stagger vision-glass rounded-[1.5rem] overflow-hidden flex flex-col h-[180px] md:h-[200px] border border-white/10" style="animation-delay: ${delay}s" onclick="Workspace.openProj('${p.id}')">
+                        <div class="h-[75px] md:h-[80px] ${gradClass} relative flex items-center justify-start px-5 border-b border-white/20">
+                            <div class="w-10 h-10 md:w-12 md:h-12 bg-apple-blue rounded-[10px] md:rounded-xl flex items-center justify-center text-white shadow-md border border-white/20">
+                                <i data-lucide="layers" class="w-5 h-5 md:w-6 md:h-6"></i>
+                            </div>
+                        </div>
+                        <div class="p-4 md:p-5 flex-1 flex flex-col justify-between bg-black/20">
+                            <div class="min-w-0">
+                                <h3 class="text-white text-[15px] md:text-[17px] font-bold truncate mb-0.5 text-shadow-sm">${p.name}</h3>
+                                <p class="text-[12px] md:text-[13px] text-apple-label font-medium truncate">${p.files.length} items • Edited ${timeString}</p>
+                            </div>
+                            <div class="flex items-center justify-end gap-1 md:gap-2 mt-2 opacity-0 hover:opacity-100 transition-opacity duration-300">
+                                <button onclick="event.stopPropagation(); Workspace.renameProj('${p.id}')" class="vision-btn w-8 h-8 p-0 rounded-full border-none shadow-none bg-white/10 hover:bg-white/20 text-white" title="Rename"><i data-lucide="pencil" class="w-3.5 h-3.5"></i></button>
+                                <button onclick="event.stopPropagation(); Workspace.exportHomeProj('${p.id}')" class="vision-btn w-8 h-8 p-0 rounded-full border-none shadow-none bg-white/10 hover:bg-white/20 text-white" title="Export Full Project"><i data-lucide="download-cloud" class="w-3.5 h-3.5"></i></button>
+                                <button onclick="event.stopPropagation(); Workspace.deleteProj('${p.id}')" class="vision-btn w-8 h-8 p-0 rounded-full border-none shadow-none bg-red-500/20 hover:bg-red-500/40 text-[#FF453A]" title="Delete"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i></button>
+                            </div>
+                        </div>
+                    </div>`;
+                }).join('');
+                
+                if(sorted.length === 0) {
+                    grid.innerHTML = `<div class="col-span-full text-center py-20 animate-stagger"><i data-lucide="layers" class="w-14 h-14 text-white/20 mx-auto mb-4"></i><h3 class="text-lg font-bold text-white mb-2">No Workspaces</h3><p class="text-[14px] text-apple-label">Create a new workspace to get started.</p></div>`;
+                }
+                lucide.createIcons();
+            },
 
             createFile: async () => {
                 const name = await Dialog.prompt("New File", "Enter file name:", "script.js");
@@ -1402,77 +1616,12 @@
                     Workspace.save(); UI.render();
                 }
             },
-
-            renderHomeGrid: () => {
-                const sorted = Object.values(State.projects).sort((a,b) => b.updated - a.updated);
-                const grid = document.getElementById('home-project-grid');
-                
-                grid.innerHTML = sorted.map((p, index) => {
-                    const gradClass = `proj-gradient-${index % 5}`;
-                    const timeString = timeAgo(p.updated);
-                    const delay = index * 0.05; 
-                    
-                    return `
-                    <div class="vision-card animate-stagger vision-glass rounded-[1.5rem] overflow-hidden flex flex-col h-[180px] md:h-[200px] border border-white/10" style="animation-delay: ${delay}s" onclick="Workspace.openProj('${p.id}')">
-                        <div class="h-[75px] md:h-[80px] ${gradClass} relative flex items-center justify-start px-5 border-b border-white/20">
-                            <div class="w-10 h-10 md:w-12 md:h-12 bg-apple-blue rounded-[10px] md:rounded-xl flex items-center justify-center text-white shadow-md border border-white/20">
-                                <i data-lucide="layers" class="w-5 h-5 md:w-6 md:h-6"></i>
-                            </div>
-                        </div>
-                        <div class="p-4 md:p-5 flex-1 flex flex-col justify-between bg-black/20">
-                            <div class="min-w-0">
-                                <h3 class="text-white text-[15px] md:text-[17px] font-bold truncate mb-0.5 text-shadow-sm">${p.name}</h3>
-                                <p class="text-[12px] md:text-[13px] text-apple-label font-medium truncate">${p.files.length} items • Edited ${timeString}</p>
-                            </div>
-                            <div class="flex items-center justify-end gap-1 md:gap-2 mt-2 opacity-0 hover:opacity-100 transition-opacity duration-300">
-                                <button onclick="event.stopPropagation(); Workspace.renameProj('${p.id}')" class="vision-btn w-8 h-8 p-0 rounded-full border-none shadow-none bg-white/10 hover:bg-white/20 text-white" title="Rename"><i data-lucide="pencil" class="w-3.5 h-3.5"></i></button>
-                                <button onclick="event.stopPropagation(); Workspace.exportHomeProj('${p.id}')" class="vision-btn w-8 h-8 p-0 rounded-full border-none shadow-none bg-white/10 hover:bg-white/20 text-white" title="Export Full Project"><i data-lucide="download-cloud" class="w-3.5 h-3.5"></i></button>
-                                <button onclick="event.stopPropagation(); Workspace.deleteProj('${p.id}')" class="vision-btn w-8 h-8 p-0 rounded-full border-none shadow-none bg-red-500/20 hover:bg-red-500/40 text-[#FF453A]" title="Delete"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i></button>
-                            </div>
-                        </div>
-                    </div>`;
-                }).join('');
-                
-                if(sorted.length === 0) {
-                    grid.innerHTML = `<div class="col-span-full text-center py-20 animate-stagger"><i data-lucide="layers" class="w-14 h-14 text-white/20 mx-auto mb-4"></i><h3 class="text-lg font-bold text-white mb-2">No Workspaces</h3><p class="text-[14px] text-apple-label">Create a new workspace to get started.</p></div>`;
-                }
-                lucide.createIcons();
-            },
-
-            createProject: async () => {
-                const name = await Dialog.prompt("New Workspace", "Enter a name for the workspace:", "Untitled App");
-                if(name) {
-                    const id = 'proj_' + Date.now();
-                    State.projects[id] = { id, name: name.trim(), files: [{id:'1',name:'index.html',language:'html',content:'<h1>New App by Aravind</h1>'}], updated: Date.now() };
-                    Workspace.save(); Workspace.openProj(id); UI.showToast("Created");
-                }
-            },
-
-            openProj: (id) => {
-                State.currentProjId = id;
-                Workspace.save(); 
-                UI.switchView('ide');
-            },
-
-            renameProj: async (id) => {
-                const name = await Dialog.prompt("Rename Workspace", "Enter a new name:", State.projects[id].name);
-                if (name && name.trim()) { 
-                    State.projects[id].name = name.trim(); Workspace.save(); Workspace.renderHomeGrid(); 
-                    const ideTitle = document.getElementById('ide-project-title');
-                    const mobTitle = document.getElementById('mobile-project-title');
-                    if(State.currentProjId === id) {
-                        if(ideTitle) ideTitle.innerText = name.trim();
-                        if(mobTitle) mobTitle.innerText = name.trim();
-                    } 
-                }
-            },
-
-            deleteProj: async (id) => {
-                if (Object.keys(State.projects).length <= 1) return Dialog.alert("Action Denied", "You must have at least one workspace.");
-                if (await Dialog.confirm("Delete Workspace", `Delete "${State.projects[id].name}" permanently?`)) {
-                    delete State.projects[id];
-                    if (State.currentProjId === id) { State.currentProjId = Object.keys(State.projects)[0]; }
-                    Workspace.save(); Workspace.renderHomeGrid(); UI.showToast("Deleted");
+            
+            saveHeadTags: (val) => {
+                if(State.projects[State.currentProjId]) {
+                    State.projects[State.currentProjId].headTags = val;
+                    Workspace.save();
+                    if(State.autoRun) Engine.run();
                 }
             },
             
@@ -1492,8 +1641,9 @@
                 const html = p.files.find(f => f.name === 'index.html')?.content || '';
                 const css = p.files.filter(f => f.name.endsWith('.css')).map(f => f.content).join('\n');
                 const js = p.files.filter(f => f.name.endsWith('.js')).map(f => f.content).join('\n');
+                const customHead = p.headTags || '';
                 
-                const doc = `<!DOCTYPE html>\n<html>\n<head>\n<meta charset="utf-8">\n<meta name="viewport" content="width=device-width, initial-scale=1.0">\n<style>${css}</style>\n</head>\n<body>\n${html}\n<script>${js}<\/script>\n</body>\n</html>`;
+                const doc = `<!DOCTYPE html>\n<html>\n<head>\n<meta charset="utf-8">\n<meta name="viewport" content="width=device-width, initial-scale=1.0">\n${customHead}\n<style>${css}</style>\n</head>\n<body>\n${html}\n<script>${js}<\/script>\n</body>\n</html>`;
                 
                 const blob = new Blob([doc], { type: 'text/html' });
                 const a = document.createElement('a'); a.href = URL.createObjectURL(blob);
@@ -1509,10 +1659,13 @@
         // --- COMPILER ENGINE ---
         const Engine = {
             getDoc: () => {
+                const p = State.projects[State.currentProjId];
                 const html = State.files.find(f => f.name === 'index.html')?.content || State.files.filter(f=>f.name.endsWith('.html'))[0]?.content || '';
                 const css = State.files.filter(f => f.name.endsWith('.css')).map(f => f.content).join('\n');
                 const js = State.files.filter(f => f.name.endsWith('.js')).map(f => f.content).join('\n');
-                return `<!DOCTYPE html>\n<html>\n<head>\n<meta charset="utf-8">\n<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">\n<style>${css}</style>\n<script>\nwindow.onerror=function(m,u,l){window.parent.postMessage({src:'nova',type:'error',msg:m+' (Line: '+l+')'},'*');return false;};\nconst ol=console.log,ow=console.warn,oe=console.error,oi=console.info;\nfunction fmt(a){return Array.from(a).map(x=>{if(typeof x==='object'){try{return JSON.stringify(x,null,2)}catch(e){return String(x)}}return String(x)}).join(' ')}\nconsole.log=function(...a){window.parent.postMessage({src:'nova',type:'log',msg:fmt(a)},'*');ol.apply(console,a)};\nconsole.warn=function(...a){window.parent.postMessage({src:'nova',type:'warn',msg:fmt(a)},'*');ow.apply(console,a)};\nconsole.error=function(...a){window.parent.postMessage({src:'nova',type:'error',msg:fmt(a)},'*');oe.apply(console,a)};\nconsole.info=function(...a){window.parent.postMessage({src:'nova',type:'info',msg:fmt(a)},'*');oi.apply(console,a)};\n\nwindow.addEventListener('message', e => { if(e.data.source==='nova-console' && e.data.type==='eval') { try{ const res=eval(e.data.code); console.log(res); }catch(err){console.error(err.message);} } });\n<\/script>\n</head>\n<body>\n${html}\n<script>${js}<\/script>\n</body>\n</html>`;
+                const customHead = p?.headTags || '';
+
+                return `<!DOCTYPE html>\n<html>\n<head>\n<meta charset="utf-8">\n<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">\n${customHead}\n<style>${css}</style>\n<script>\nwindow.onerror=function(m,u,l){window.parent.postMessage({src:'nova',type:'error',msg:m+' (Line: '+l+')'},'*');return false;};\nconst ol=console.log,ow=console.warn,oe=console.error,oi=console.info;\nfunction fmt(a){return Array.from(a).map(x=>{if(typeof x==='object'){try{return JSON.stringify(x,null,2)}catch(e){return String(x)}}return String(x)}).join(' ')}\nconsole.log=function(...a){window.parent.postMessage({src:'nova',type:'log',msg:fmt(a)},'*');ol.apply(console,a)};\nconsole.warn=function(...a){window.parent.postMessage({src:'nova',type:'warn',msg:fmt(a)},'*');ow.apply(console,a)};\nconsole.error=function(...a){window.parent.postMessage({src:'nova',type:'error',msg:fmt(a)},'*');oe.apply(console,a)};\nconsole.info=function(...a){window.parent.postMessage({src:'nova',type:'info',msg:fmt(a)},'*');oi.apply(console,a)};\n\nwindow.addEventListener('message', e => { if(e.data.source==='nova-console' && e.data.type==='eval') { try{ const res=eval(e.data.code); console.log(res); }catch(err){console.error(err.message);} } });\n<\/script>\n</head>\n<body>\n${html}\n<script>${js}<\/script>\n</body>\n</html>`;
             },
             run: () => {
                 if (Els.loader) Els.loader.style.display = 'block'; 
