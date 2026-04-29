@@ -12,7 +12,7 @@
     <!-- Dynamic PWA Native App Icon -->
     <script>
         (function() {
-            const svgData = `<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><rect width='512' height='512' rx='256' fill='#1C1C1E'/><path d='M256 120l25 111 111 25-111 25-25 111-25-111-111-25 111-25z' fill='#0A84FF'/></svg>`;
+            const svgData = `<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><defs><linearGradient id='bg' x1='0%' y1='0%' x2='100%' y2='100%'><stop offset='0%' stop-color='#080812'/><stop offset='100%' stop-color='#030305'/></linearGradient><radialGradient id='b1' cx='15%' cy='15%' r='65%'><stop offset='0%' stop-color='#0A84FF' stop-opacity='0.9'/><stop offset='100%' stop-color='#0A84FF' stop-opacity='0'/></radialGradient><radialGradient id='b2' cx='85%' cy='85%' r='65%'><stop offset='0%' stop-color='#BF5AF2' stop-opacity='0.9'/><stop offset='100%' stop-color='#BF5AF2' stop-opacity='0'/></radialGradient><radialGradient id='b3' cx='85%' cy='15%' r='55%'><stop offset='0%' stop-color='#32ADE6' stop-opacity='0.8'/><stop offset='100%' stop-color='#32ADE6' stop-opacity='0'/></radialGradient><linearGradient id='glass' x1='0%' y1='0%' x2='100%' y2='100%'><stop offset='0%' stop-color='#ffffff' stop-opacity='0.5'/><stop offset='50%' stop-color='#ffffff' stop-opacity='0.1'/><stop offset='100%' stop-color='#ffffff' stop-opacity='0.3'/></linearGradient></defs><rect width='512' height='512' fill='url(#bg)'/><rect width='512' height='512' fill='url(#b1)'/><rect width='512' height='512' fill='url(#b2)'/><rect width='512' height='512' fill='url(#b3)'/><path d='M256 60 C 256 200 200 256 60 256 C 200 256 256 312 256 452 C 256 312 312 256 452 256 C 312 256 256 200 256 60 Z' fill='url(#glass)' stroke='rgba(255,255,255,0.6)' stroke-width='6'/><path d='M256 120 C 256 215 215 256 120 256 C 215 256 256 297 256 392 C 256 297 297 256 392 256 C 297 256 256 215 256 120 Z' fill='#FFFFFF'/><path d='M390 100 C 390 120 370 120 370 120 C 370 120 370 140 390 140 C 390 140 410 140 410 120 C 410 120 390 120 390 100 Z' fill='#FFF' opacity='0.8'/><path d='M130 380 C 130 395 115 395 115 395 C 115 395 115 410 130 410 C 130 410 145 410 145 395 C 145 395 130 395 130 380 Z' fill='#FFF' opacity='0.5'/></svg>`;
             const svgUrl = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(svgData);
             const iconLink = document.createElement('link');
             iconLink.rel = 'icon'; iconLink.type = 'image/svg+xml'; iconLink.href = svgUrl;
@@ -63,8 +63,6 @@
                         apple: {
                             blue: 'var(--sys-color)',
                             bg: '#000000',
-                            border: 'rgba(255, 255, 255, 0.15)',
-                            borderLight: 'rgba(255, 255, 255, 0.08)',
                             text: '#FFFFFF',
                             label: 'rgba(235, 235, 245, 0.6)'
                         }
@@ -83,8 +81,8 @@
             --spatial-ease: cubic-bezier(0.25, 0.1, 0.25, 1);
             --spatial-spring: cubic-bezier(0.2, 0.8, 0.2, 1.05);
             --spatial-bounce: cubic-bezier(0.175, 0.885, 0.32, 1.2);
-            /* Dynamic User Preferences - 16px prevents iOS Auto-Zoom */
-            --editor-font-size: 16px;
+            /* Dynamic User Preferences */
+            --editor-font-size: 16px; /* 16px strictly prevents iOS Auto-Zoom */
             --editor-wrap: pre;
             --sidebar-width: 280px;
         }
@@ -226,10 +224,10 @@
         .vision-card:hover { transform: translateY(-8px) translateZ(20px) scale(1.02); box-shadow: inset 0 1px 2px rgba(255,255,255,0.4), 0 30px 60px rgba(0,0,0,0.6); border-color: rgba(255,255,255,0.3); background: rgba(40,40,45,0.5); }
         .vision-card:active { transform: scale(0.96) translateZ(0); filter: brightness(0.8); transition: all 0.1s ease; }
         
-        /* Sliding Segmented Control (Optimized padding for iPad) */
+        /* Sliding Segmented Control */
         .segmented-control { position: relative; background-color: rgba(0, 0, 0, 0.3); padding: 4px; border-radius: 9999px; display: inline-flex; align-items: center; box-shadow: inset 0 2px 5px rgba(0,0,0,0.5), 0 1px 0 rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.05); }
-        .segmented-btn { position: relative; z-index: 2; padding: 4px 12px; border-radius: 9999px; font-size: 12px; font-weight: 500; color: rgba(255,255,255,0.6); transition: color 0.3s var(--spatial-spring); cursor: pointer; flex: 1; text-align: center; white-space: nowrap; }
-        @media (min-width: 1024px) { .segmented-btn { padding: 6px 20px; font-size: 13px; } }
+        .segmented-btn { position: relative; z-index: 2; padding: 5px 12px; border-radius: 9999px; font-size: 13px; font-weight: 500; color: rgba(255,255,255,0.6); transition: color 0.3s var(--spatial-spring); cursor: pointer; flex: 1; text-align: center; white-space: nowrap; }
+        @media (min-width: 1024px) { .segmented-btn { padding: 6px 20px; } }
         .segmented-btn.active { color: #FFFFFF; font-weight: 600; text-shadow: 0 1px 2px rgba(0,0,0,0.3); }
         .segment-pill { position: absolute; top: 4px; bottom: 4px; left: 4px; background-color: rgba(255, 255, 255, 0.2); backdrop-filter: blur(10px); border-radius: 9999px; transition: transform 0.5s var(--spatial-spring), width 0.5s var(--spatial-spring); box-shadow: 0 4px 10px rgba(0,0,0,0.2), inset 0 1px 1px rgba(255,255,255,0.3); border: 1px solid rgba(255,255,255,0.1); z-index: 1; }
         
@@ -338,7 +336,7 @@
         <!-- ========================================== -->
         <div id="home-view" class="view-transition view-active flex flex-col px-4 pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)] md:p-8 lg:p-10">
             
-            <!-- Floating Home Header - Highly Optimized Flex Constraints -->
+            <!-- Floating Home Header -->
             <header class="vision-glass rounded-full h-[64px] flex-shrink-0 flex items-center justify-between px-6 z-40 w-full max-w-6xl mx-auto mt-2 md:mt-0">
                 <div class="flex items-center gap-3 flex-shrink-0 min-w-0">
                     <div class="w-9 h-9 rounded-[10px] bg-apple-blue flex items-center justify-center shadow-[0_0_15px_var(--sys-color)] border border-white/30 flex-shrink-0">
@@ -368,7 +366,7 @@
                         <h1 class="text-[34px] md:text-[52px] font-bold text-white tracking-tight leading-tight mb-2 drop-shadow-xl truncate">Workspaces</h1>
                         <p class="text-apple-label text-[15px] md:text-[18px] font-medium drop-shadow-md truncate">Spatial environments for your projects.</p>
                         <!-- Aravind Spatial Badge -->
-                        <div class="mt-4 inline-flex items-center gap-2.5 px-4 py-2 rounded-full vision-glass border-white/20">
+                        <div class="mt-4 inline-flex items-center gap-2.5 px-4 py-2 rounded-full vision-glass border-white/20 shadow-sm cursor-default">
                             <i data-lucide="code-2" class="w-4 h-4 text-apple-blue drop-shadow-[0_0_8px_var(--sys-color)]"></i>
                             <span class="text-[12px] sm:text-[13px] font-medium text-apple-label">Developed by <span class="text-white font-bold tracking-wide uppercase">Aravind</span></span>
                         </div>
@@ -406,7 +404,7 @@
                     <button id="run-btn-mobile" disabled class="vision-btn p-1.5 px-3 text-apple-blue opacity-50 font-bold gap-1.5 text-[13px]">
                         <i data-lucide="play" class="w-3.5 h-3.5 fill-current"></i> Run
                     </button>
-                    <button onclick="UI.toggleMobileView()" class="vision-btn w-9 h-9 p-0 rounded-full"><i data-lucide="arrow-left-right" class="w-4 h-4"></i></button>
+                    <button onclick="UI.toggleMobileView()" class="vision-btn w-9 h-9 p-0 rounded-full flex-shrink-0"><i data-lucide="arrow-left-right" class="w-4 h-4"></i></button>
                 </div>
             </header>
 
@@ -416,27 +414,27 @@
                 <div id="sidebar-resizer" class="sidebar-resizer hidden md:block"></div>
 
                 <!-- Sidebar Header -->
-                <div class="px-5 lg:px-6 pt-5 lg:pt-6 pb-4 flex justify-between items-center border-b border-white/10">
-                    <button onclick="UI.switchView('home')" class="hidden md:flex vision-btn w-9 h-9 p-0 rounded-full hover:bg-white/20" title="Home">
+                <div class="px-5 lg:px-6 pt-5 lg:pt-6 pb-4 flex justify-between items-center border-b border-white/10 min-w-0">
+                    <button onclick="UI.switchView('home')" class="hidden md:flex vision-btn w-9 h-9 p-0 rounded-full hover:bg-white/20 flex-shrink-0" title="Home">
                         <i data-lucide="layout-grid" class="w-4 h-4"></i>
                     </button>
-                    <span class="text-[14px] lg:text-[15px] font-bold text-white tracking-tight uppercase hidden md:block">Files</span>
+                    <span class="text-[14px] lg:text-[15px] font-bold text-white tracking-tight uppercase hidden md:block truncate px-2">Files</span>
                     <span class="text-[16px] font-bold text-white tracking-tight md:hidden">Explorer</span>
-                    <div class="flex gap-1.5 lg:gap-2">
+                    <div class="flex gap-1.5 lg:gap-2 flex-shrink-0">
                         <button onclick="Workspace.createFile()" class="vision-btn w-9 h-9 lg:w-10 lg:h-10 p-0 rounded-full"><i data-lucide="plus" class="w-4.5 h-4.5"></i></button>
                         <button onclick="UI.toggleMobileSidebar()" class="md:hidden vision-btn w-9 h-9 p-0 rounded-full"><i data-lucide="x" class="w-4.5 h-4.5"></i></button>
                     </div>
                 </div>
                 
-                <div id="file-list" class="flex-1 overflow-y-auto touch-pan-y px-3 lg:px-4 space-y-1.5 pt-3 pb-4"></div>
+                <div id="file-list" class="flex-1 overflow-y-auto touch-pan-y px-3 lg:px-4 space-y-1.5 pt-3 pb-4 min-w-0"></div>
                 
                 <!-- Aravind Sidebar Badge -->
-                <div class="p-4 lg:p-5 border-t border-white/10 bg-black/20 pb-[max(1rem,env(safe-area-inset-bottom))]">
-                    <div class="flex items-center gap-3 cursor-default">
-                        <div class="w-7 h-7 lg:w-8 lg:h-8 rounded-full bg-gradient-to-tr from-gray-700 to-black flex items-center justify-center border border-white/20 shadow-md">
+                <div class="p-4 lg:p-5 border-t border-white/10 bg-black/20 pb-[max(1rem,env(safe-area-inset-bottom))] min-w-0">
+                    <div class="flex items-center gap-3 cursor-default truncate">
+                        <div class="w-7 h-7 lg:w-8 lg:h-8 rounded-full bg-gradient-to-tr from-gray-700 to-black flex items-center justify-center border border-white/20 shadow-md flex-shrink-0">
                             <span class="text-[9px] lg:text-[10px] font-extrabold text-white tracking-widest">AR</span>
                         </div>
-                        <span class="text-[12px] lg:text-[13px] text-apple-label font-medium">Crafted by <span class="text-white font-bold tracking-wide">Aravind</span></span>
+                        <span class="text-[12px] lg:text-[13px] text-apple-label font-medium truncate">Crafted by <span class="text-white font-bold tracking-wide">Aravind</span></span>
                     </div>
                 </div>
             </aside>
@@ -446,19 +444,19 @@
             <!-- MAIN WORKSPACE ISLAND -->
             <main class="flex-1 flex flex-col min-w-0 md:rounded-[2rem] lg:rounded-[2.5rem] vision-glass overflow-hidden z-10 relative">
                 
-                <!-- Desktop Floating Header (Dynamic Flex Constraints applied here to prevent squishing) -->
-                <header class="hidden md:flex h-[60px] lg:h-[70px] flex-shrink-0 items-center justify-between px-3 lg:px-6 border-b border-white/10 bg-black/10 gap-2 w-full min-w-0">
+                <!-- Desktop Floating Header (Strict Absolute Center prevents overlap) -->
+                <header class="hidden md:flex h-[60px] lg:h-[70px] flex-shrink-0 items-center justify-between px-3 lg:px-6 border-b border-white/10 bg-black/10 w-full min-w-0 relative">
                     
                     <!-- Left: Title -->
-                    <div class="flex items-center min-w-0 gap-2 lg:gap-3 flex-shrink">
+                    <div class="flex items-center min-w-0 gap-2 lg:gap-3 flex-1 pr-2">
                         <button onclick="UI.toggleDesktopSidebar()" class="vision-btn w-9 h-9 p-0 rounded-full flex-shrink-0" title="Toggle Sidebar">
                             <i data-lucide="sidebar" class="w-4 h-4 lg:w-4.5 lg:h-4.5"></i>
                         </button>
                         <span id="ide-project-title" class="text-[14px] lg:text-[16px] font-bold text-white truncate drop-shadow-md">Loading...</span>
                     </div>
                     
-                    <!-- Center: Segmented Control -->
-                    <div class="flex justify-center flex-shrink-0 mx-auto px-1">
+                    <!-- Center: Segmented Control (Absolutely centered) -->
+                    <div class="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 flex justify-center z-10">
                         <div class="segmented-control" id="main-segments">
                             <div id="segment-pill" class="segment-pill"></div>
                             <button onclick="UI.setViewMode('editor')" id="btn-view-editor" class="segmented-btn active">Code</button>
@@ -468,20 +466,27 @@
                     </div>
                     
                     <!-- Right: Controls -->
-                    <div class="flex items-center justify-end flex-shrink-0 gap-1.5 lg:gap-3">
-                        <!-- Cmd+K Hint -->
-                        <div class="hidden md:flex items-center justify-center w-9 h-9 xl:w-auto xl:px-3 xl:py-1.5 rounded-full bg-white/5 border border-white/10 cursor-pointer hover:bg-white/10 flex-shrink-0 vision-btn p-0" onclick="CommandPalette.show()" title="Command Palette (Cmd K)">
-                            <i data-lucide="search" class="w-4 h-4 xl:w-3.5 xl:h-3.5 text-apple-label"></i>
-                            <span class="hidden xl:block text-[11px] font-bold text-apple-label whitespace-nowrap ml-1.5">Cmd K</span>
+                    <div class="flex items-center justify-end flex-1 min-w-0 gap-1.5 lg:gap-3 pl-2 z-10">
+                        <!-- Cmd+K Hint (Hidden on iPad to save space) -->
+                        <div class="hidden xl:flex items-center justify-center w-auto px-3 py-1.5 rounded-full bg-white/5 border border-white/10 cursor-pointer hover:bg-white/10 flex-shrink-0 vision-btn p-0" onclick="CommandPalette.show()" title="Command Palette (Cmd K)">
+                            <i data-lucide="search" class="w-3.5 h-3.5 text-apple-label"></i>
+                            <span class="text-[11px] font-bold text-apple-label whitespace-nowrap ml-1.5">Cmd K</span>
                         </div>
+                        <!-- Search Icon for iPad -->
+                        <button class="hidden md:flex xl:hidden vision-btn w-9 h-9 p-0 rounded-full flex-shrink-0" onclick="CommandPalette.show()" title="Search"><i data-lucide="search" class="w-4 h-4"></i></button>
+
                         <button onclick="UI.toggleSettings()" class="vision-btn w-9 h-9 p-0 rounded-full flex-shrink-0" title="IDE Settings"><i data-lucide="settings" class="w-4 h-4 lg:w-4.5 lg:h-4.5"></i></button>
                         <div class="w-px h-5 bg-white/20 mx-0.5 lg:mx-1 hidden lg:block flex-shrink-0"></div>
-                        <label class="hidden md:flex items-center gap-1.5 text-[12px] lg:text-[14px] font-medium text-apple-label vision-btn px-2 lg:px-4 py-1.5 lg:py-2 border-none bg-transparent shadow-none hover:text-white cursor-pointer flex-shrink-0 whitespace-nowrap">
+                        
+                        <!-- Sync Checkbox -->
+                        <label class="hidden lg:flex items-center gap-1.5 text-[12px] lg:text-[14px] font-medium text-apple-label vision-btn px-2 lg:px-4 py-1.5 lg:py-2 border-none bg-transparent shadow-none hover:text-white cursor-pointer flex-shrink-0 whitespace-nowrap">
                             <input type="checkbox" id="auto-run-toggle" checked class="accent-apple-blue w-3.5 h-3.5 lg:w-4 lg:h-4"> 
-                            <span class="hidden lg:inline">Sync</span>
+                            <span class="hidden xl:inline">Sync</span>
                         </label>
-                        <button id="run-btn" disabled class="vision-btn px-3 lg:px-5 py-1.5 lg:py-2 text-apple-blue opacity-50 font-bold gap-1 lg:gap-2 text-[13px] lg:text-[14px] flex-shrink-0 whitespace-nowrap">
-                            <i data-lucide="play" class="w-3.5 h-3.5 lg:w-4 lg:h-4 fill-current"></i> <span class="hidden lg:inline">Build</span>
+                        
+                        <!-- Build Button -->
+                        <button id="run-btn" disabled class="vision-btn px-3 xl:px-5 py-1.5 lg:py-2 text-apple-blue opacity-50 font-bold gap-1 lg:gap-2 text-[13px] lg:text-[14px] flex-shrink-0 whitespace-nowrap">
+                            <i data-lucide="play" class="w-3.5 h-3.5 lg:w-4 lg:h-4 fill-current"></i> <span class="hidden xl:inline">Build</span>
                         </button>
                     </div>
                 </header>
@@ -491,13 +496,16 @@
                     
                     <!-- CODE EDITOR WELL -->
                     <section id="editor-section" class="flex flex-col min-w-0 w-full md:w-1/2 h-full z-10 vision-well relative md:rounded-[1.5rem] overflow-hidden">
-                        <!-- File Tabs -->
-                        <div class="flex items-center bg-black/40 border-b border-black h-[46px] lg:h-[50px] px-2 overflow-x-auto touch-pan-x scrollbar-hide z-20 w-full min-w-0 shadow-sm rounded-t-2xl">
-                            <div id="editor-tabs" class="flex items-center h-full flex-1 min-w-0 gap-1 pl-1 lg:pl-2"></div>
-                            <div class="flex items-center gap-1 lg:gap-2 px-2 lg:px-3 border-l border-white/10 hidden md:flex flex-shrink-0">
-                                <button onclick="UI.formatCode()" class="vision-btn w-7 h-7 lg:w-8 lg:h-8 p-0 rounded-full border-none shadow-none bg-white/5 hover:bg-white/20 text-yellow-400" title="Format Code"><i data-lucide="wand-2" class="w-3.5 h-3.5 lg:w-4 lg:h-4"></i></button>
-                                <button onclick="Workspace.copyContent()" class="vision-btn w-7 h-7 lg:w-8 lg:h-8 p-0 rounded-full border-none shadow-none bg-white/5 hover:bg-white/20"><i data-lucide="copy" class="w-3.5 h-3.5 lg:w-4 lg:h-4"></i></button>
-                                <button onclick="Workspace.downloadCurrentFile()" class="vision-btn w-7 h-7 lg:w-8 lg:h-8 p-0 rounded-full border-none shadow-none bg-white/5 hover:bg-white/20 hidden lg:flex"><i data-lucide="download" class="w-3.5 h-3.5 lg:w-4 lg:h-4"></i></button>
+                        <!-- File Tabs Header -->
+                        <div class="flex items-center justify-between bg-black/40 border-b border-black h-[46px] lg:h-[50px] w-full min-w-0 shadow-sm rounded-t-2xl">
+                            <!-- Tabs Area -->
+                            <div id="editor-tabs" class="flex items-center h-full flex-1 min-w-0 gap-1 pl-1 lg:pl-2 overflow-x-auto touch-pan-x scrollbar-hide z-20"></div>
+                            
+                            <!-- Action Buttons -->
+                            <div class="flex items-center gap-1 lg:gap-2 px-2 lg:px-3 border-l border-white/10 bg-black/20 h-full flex-shrink-0">
+                                <button onclick="UI.formatCode()" class="vision-btn w-7 h-7 lg:w-8 lg:h-8 p-0 rounded-full border-none shadow-none bg-white/5 hover:bg-white/20 text-yellow-400 flex-shrink-0" title="Format Code"><i data-lucide="wand-2" class="w-3.5 h-3.5 lg:w-4 lg:h-4"></i></button>
+                                <button onclick="Workspace.copyContent()" class="vision-btn w-7 h-7 lg:w-8 lg:h-8 p-0 rounded-full border-none shadow-none bg-white/5 hover:bg-white/20 flex-shrink-0" title="Copy"><i data-lucide="copy" class="w-3.5 h-3.5 lg:w-4 lg:h-4"></i></button>
+                                <button onclick="Workspace.downloadCurrentFile()" class="hidden md:flex vision-btn w-7 h-7 lg:w-8 lg:h-8 p-0 rounded-full border-none shadow-none bg-white/5 hover:bg-white/20 flex-shrink-0" title="Download"><i data-lucide="download" class="w-3.5 h-3.5 lg:w-4 lg:h-4"></i></button>
                             </div>
                         </div>
                         
@@ -521,24 +529,27 @@
                         <div id="loader" class="loader-bar rounded-tl-2xl"></div>
                         
                         <!-- Safari Bar -->
-                        <div class="h-[46px] lg:h-[50px] bg-black/40 flex items-center px-2 lg:px-4 justify-between border-b border-black z-20 w-full min-w-0 shadow-sm rounded-t-2xl">
-                            <div class="flex items-center gap-1 w-auto lg:w-1/4 flex-shrink-0">
-                                <button onclick="Preview.setViewport('mobile')" id="vp-mobile" class="vision-btn w-7 h-7 lg:w-8 lg:h-8 p-0 rounded-full border-none shadow-none bg-white/5" title="iPhone"><i data-lucide="smartphone" class="w-3.5 h-3.5 lg:w-4 lg:h-4"></i></button>
-                                <button onclick="Preview.setViewport('tablet')" id="vp-tablet" class="vision-btn w-7 h-7 lg:w-8 lg:h-8 p-0 rounded-full border-none shadow-none bg-white/5" title="iPad"><i data-lucide="tablet" class="w-3.5 h-3.5 lg:w-4 lg:h-4"></i></button>
-                                <button onclick="Preview.setViewport('desktop')" id="vp-desktop" class="vision-btn w-7 h-7 lg:w-8 lg:h-8 p-0 rounded-full border-none shadow-none bg-apple-blue/20 text-apple-blue hidden xl:flex" title="Mac"><i data-lucide="monitor" class="w-3.5 h-3.5 lg:w-4 lg:h-4"></i></button>
+                        <div class="h-[46px] lg:h-[50px] bg-black/40 flex items-center justify-between border-b border-black z-20 w-full min-w-0 shadow-sm rounded-t-2xl px-2 lg:px-4">
+                            <!-- Left -->
+                            <div class="flex items-center gap-1 w-1/4 min-w-0 flex-shrink-0">
+                                <button onclick="Preview.setViewport('mobile')" id="vp-mobile" class="vision-btn w-7 h-7 lg:w-8 lg:h-8 p-0 rounded-full border-none shadow-none bg-white/5 flex-shrink-0" title="iPhone"><i data-lucide="smartphone" class="w-3.5 h-3.5 lg:w-4 lg:h-4"></i></button>
+                                <button onclick="Preview.setViewport('tablet')" id="vp-tablet" class="vision-btn w-7 h-7 lg:w-8 lg:h-8 p-0 rounded-full border-none shadow-none bg-white/5 flex-shrink-0" title="iPad"><i data-lucide="tablet" class="w-3.5 h-3.5 lg:w-4 lg:h-4"></i></button>
+                                <button onclick="Preview.setViewport('desktop')" id="vp-desktop" class="vision-btn w-7 h-7 lg:w-8 lg:h-8 p-0 rounded-full border-none shadow-none bg-apple-blue/20 text-apple-blue hidden xl:flex flex-shrink-0" title="Mac"><i data-lucide="monitor" class="w-3.5 h-3.5 lg:w-4 lg:h-4"></i></button>
                             </div>
 
-                            <div class="flex-1 min-w-0 max-w-[180px] lg:max-w-sm mx-2 flex justify-center">
-                                <div class="w-full max-w-full lg:max-w-sm bg-black/50 border border-white/10 rounded-full h-7 flex items-center justify-center px-3 lg:px-4 gap-1.5 lg:gap-2 ios-btn cursor-pointer shadow-[inset_0_2px_5px_rgba(0,0,0,0.5)] truncate" onclick="Engine.run()">
+                            <!-- Center URL Bar -->
+                            <div class="flex-1 min-w-0 max-w-[200px] lg:max-w-sm mx-2 flex justify-center">
+                                <div class="w-full bg-black/50 border border-white/10 rounded-full h-7 flex items-center justify-center px-3 lg:px-4 gap-1.5 lg:gap-2 ios-btn cursor-pointer shadow-[inset_0_2px_5px_rgba(0,0,0,0.5)] truncate" onclick="Engine.run()">
                                     <i data-lucide="lock" class="w-3 h-3 text-apple-blue opacity-80 flex-shrink-0"></i>
                                     <span class="text-[11px] lg:text-[13px] font-medium text-white truncate">nova.local</span>
-                                    <i data-lucide="rotate-cw" class="w-3 h-3 text-apple-label opacity-60 flex-shrink-0 ml-auto"></i>
+                                    <i data-lucide="rotate-cw" class="w-3 h-3 text-apple-label opacity-60 flex-shrink-0 ml-auto hidden sm:block"></i>
                                 </div>
                             </div>
 
-                            <div class="w-auto lg:w-1/4 flex justify-end gap-1 lg:gap-1.5 flex-shrink-0">
-                                <button onclick="Preview.toggleFullscreen()" class="vision-btn w-7 h-7 lg:w-8 lg:h-8 p-0 rounded-full border-none shadow-none bg-white/5 hover:bg-white/20" title="Fullscreen"><i data-lucide="maximize" class="w-3.5 h-3.5 lg:w-4 lg:h-4"></i></button>
-                                <button onclick="Workspace.openNewTab()" class="vision-btn w-7 h-7 lg:w-8 lg:h-8 p-0 rounded-full border-none shadow-none text-apple-blue bg-apple-blue/10" title="Open in Safari"><i data-lucide="compass" class="w-3.5 h-3.5 lg:w-4 lg:h-4"></i></button>
+                            <!-- Right -->
+                            <div class="flex items-center justify-end gap-1 lg:gap-1.5 w-1/4 min-w-0 flex-shrink-0">
+                                <button onclick="Preview.toggleFullscreen()" class="vision-btn w-7 h-7 lg:w-8 lg:h-8 p-0 rounded-full border-none shadow-none bg-white/5 hover:bg-white/20 flex-shrink-0" title="Fullscreen"><i data-lucide="maximize" class="w-3.5 h-3.5 lg:w-4 lg:h-4"></i></button>
+                                <button onclick="Workspace.openNewTab()" class="vision-btn w-7 h-7 lg:w-8 lg:h-8 p-0 rounded-full border-none shadow-none text-apple-blue bg-apple-blue/10 flex-shrink-0" title="Open in Safari"><i data-lucide="compass" class="w-3.5 h-3.5 lg:w-4 lg:h-4"></i></button>
                             </div>
                         </div>
 
@@ -551,16 +562,16 @@
                         </div>
                         
                         <!-- Console Output with Interactive Input -->
-                        <div class="h-[35%] min-h-[120px] max-h-[60%] flex flex-col bg-black/50 border-t border-black relative z-20 rounded-b-2xl">
+                        <div class="h-[35%] min-h-[120px] max-h-[60%] flex flex-col bg-black/50 border-t border-black relative z-20">
                             <div class="absolute top-0 left-0 w-full h-2 cursor-row-resize -mt-1 z-10"></div>
                             <div class="flex justify-between items-center px-5 py-2 border-b border-white/5 bg-black/40">
-                                <div class="flex items-center gap-2"><i data-lucide="terminal-square" class="w-4 h-4 text-apple-label"></i><span class="text-[11px] text-apple-label font-bold tracking-widest uppercase">Console</span></div>
-                                <button onclick="Engine.clearConsole()" class="vision-btn w-7 h-7 p-0 rounded-full border-none shadow-none hover:bg-white/10 text-apple-label hover:text-white"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i></button>
+                                <div class="flex items-center gap-2"><i data-lucide="terminal-square" class="w-3.5 h-3.5 lg:w-4 lg:h-4 text-apple-label"></i><span class="text-[10px] lg:text-[11px] text-apple-label font-bold tracking-widest uppercase">Console</span></div>
+                                <button onclick="Engine.clearConsole()" class="vision-btn w-6 h-6 lg:w-7 lg:h-7 p-0 rounded-full border-none shadow-none hover:bg-white/10 text-apple-label hover:text-white"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i></button>
                             </div>
-                            <div id="console-output" class="flex-1 overflow-y-auto touch-pan-y p-3 font-mono text-[12px] leading-relaxed flex flex-col gap-1.5 bg-[#08080A] shadow-[inset_0_5px_10px_rgba(0,0,0,0.5)] pb-10"></div>
+                            <div id="console-output" class="flex-1 overflow-y-auto touch-pan-y p-3 font-mono text-[11px] lg:text-[12px] leading-relaxed flex flex-col gap-1.5 bg-[#08080A] shadow-[inset_0_5px_10px_rgba(0,0,0,0.5)] pb-10"></div>
                             
                             <!-- Interactive Console Input -->
-                            <div class="h-9 lg:h-10 bg-[#121212] border-t border-white/5 flex items-center px-3 absolute bottom-0 left-0 right-0 rounded-b-2xl z-10">
+                            <div class="h-9 lg:h-10 bg-[#121212] border-t border-white/5 flex items-center px-3 absolute bottom-0 left-0 right-0 z-10">
                                 <i data-lucide="chevron-right" class="w-3.5 h-3.5 lg:w-4 lg:h-4 text-apple-blue mr-2 opacity-70"></i>
                                 <input type="text" id="console-input" class="bg-transparent border-none text-white text-[12px] lg:text-[13px] w-full outline-none font-mono placeholder-white/30" placeholder="Evaluate JavaScript..." autocomplete="off" spellcheck="false">
                             </div>
@@ -609,23 +620,23 @@
     <!-- NATIVE VISION OS ALERT DIALOG -->
     <div id="dialog-overlay" class="hidden fixed inset-0 modal-backdrop z-[150] flex items-center justify-center p-4 opacity-0 transition-opacity duration-400">
         <div id="dialog-box" class="vision-alert-box modal-content modal-enter flex flex-col text-center relative">
-            <div class="p-6 flex flex-col items-center">
-                <h3 id="dialog-title" class="text-[19px] font-bold text-white tracking-tight leading-snug">Title</h3>
-                <p id="dialog-message" class="text-[14px] text-white/70 mt-1.5 leading-snug font-medium">Message</p>
-                <input type="text" id="dialog-input" autocorrect="off" autocapitalize="none" spellcheck="false" class="hidden w-full bg-black/50 border border-white/10 rounded-xl px-4 py-3 text-[15px] text-white focus:outline-none focus:border-apple-blue transition-all mt-5 shadow-[inset_0_2px_5px_rgba(0,0,0,0.5)]">
+            <div class="p-5 md:p-6 flex flex-col items-center">
+                <h3 id="dialog-title" class="text-[18px] md:text-[19px] font-bold text-white tracking-tight leading-snug">Title</h3>
+                <p id="dialog-message" class="text-[13px] md:text-[14px] text-white/70 mt-1.5 leading-snug font-medium">Message</p>
+                <input type="text" id="dialog-input" autocorrect="off" autocapitalize="none" spellcheck="false" class="hidden w-full bg-black/50 border border-white/10 rounded-xl px-4 py-2.5 md:py-3 text-[14px] md:text-[15px] text-white focus:outline-none focus:border-apple-blue transition-all mt-4 md:mt-5 shadow-[inset_0_2px_5px_rgba(0,0,0,0.5)]">
             </div>
             <div class="flex border-t border-white/10 bg-white/5">
-                <button id="dialog-cancel" class="flex-1 py-4 text-[17px] text-apple-blue ios-btn border-r border-white/10 font-normal rounded-none bg-transparent shadow-none">Cancel</button>
-                <button id="dialog-confirm" class="flex-1 py-4 text-[17px] font-bold text-apple-blue ios-btn rounded-none bg-transparent shadow-none">OK</button>
+                <button id="dialog-cancel" class="flex-1 py-3.5 md:py-4 text-[16px] md:text-[17px] text-apple-blue ios-btn border-r border-white/10 font-normal rounded-none bg-transparent shadow-none">Cancel</button>
+                <button id="dialog-confirm" class="flex-1 py-3.5 md:py-4 text-[16px] md:text-[17px] font-bold text-apple-blue ios-btn rounded-none bg-transparent shadow-none">OK</button>
             </div>
         </div>
     </div>
 
     <!-- Notification Platter -->
     <div class="fixed top-4 md:top-8 left-1/2 transform -translate-x-1/2 z-[200] pointer-events-none w-full max-w-xs flex justify-center px-4">
-        <div id="toast" class="vision-glass px-5 py-3 rounded-full flex items-center gap-3 toast-pill border-white/20">
+        <div id="toast" class="vision-glass px-4 md:px-5 py-2.5 md:py-3 rounded-full flex items-center gap-2.5 md:gap-3 toast-pill border-white/20">
             <div id="toast-icon-wrap" class="bg-apple-blue/20 p-1.5 rounded-full shadow-[0_0_10px_var(--sys-color)]"><i id="toast-icon" data-lucide="check" class="w-4 h-4 text-apple-blue"></i></div>
-            <span id="toast-message" class="text-[15px] font-semibold text-white tracking-tight drop-shadow-md">Success</span>
+            <span id="toast-message" class="text-[14px] md:text-[15px] font-semibold text-white tracking-tight drop-shadow-md">Success</span>
         </div>
     </div>
 
